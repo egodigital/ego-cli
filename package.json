@@ -1,0 +1,38 @@
+{
+  "name": "ego-cli",
+  "version": "0.0.1",
+  "description": "Command Line Interface, which is designed to handle Dev(Op) tasks much faster.",
+  "main": "dist/index.js",
+  "private": false,
+  "scripts": {
+    "build": "(rm -r ./dist || true) && tsc"
+  },
+  "keywords": [
+    "azure",
+    "devops",
+    "cli",
+    "command",
+    "line",
+    "interface",
+    "task"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/egodigital/ego-cli.git"
+  },
+  "author": "e.GO Digital GmbH, Aachen, Germany",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/egodigital/ego-cli/issues"
+  },
+  "homepage": "https://github.com/egodigital/ego-cli#readme",
+  "dependencies": {
+    "lodash": "^4.17.11"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.129",
+    "@types/node": "^10.14.6",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
+  }
+}
