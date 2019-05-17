@@ -1,6 +1,6 @@
 {
   "name": "ego-cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Command Line Interface, which is designed to handle Dev(Ops) tasks much faster.",
   "main": "dist/index.js",
   "private": false,
@@ -10,6 +10,9 @@
   "bin": {
     "ego": "./bin/ego"
   },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "azure",
     "devops",
@@ -30,11 +33,20 @@
   },
   "homepage": "https://github.com/egodigital/ego-cli#readme",
   "dependencies": {
-    "lodash": "^4.17.11"
+    "deepmerge": "^3.2.0",
+    "fs-extra": "^8.0.1",
+    "global-dirs": "^1.0.0",
+    "inquirer": "^6.3.1",
+    "lodash": "^4.17.11",
+    "signale": "^1.4.0"
   },
   "devDependencies": {
+    "@types/deepmerge": "^2.2.0",
+    "@types/fs-extra": "^7.0.0",
+    "@types/inquirer": "^6.0.2",
     "@types/lodash": "^4.14.129",
     "@types/node": "^10.14.6",
+    "@types/signale": "^1.2.1",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"
   }

@@ -21,8 +21,12 @@
 export interface Command {
     /**
      * Executes the command.
+     *
+     * @param {CommandExecutionContext} context The context.
+     *
+     * @return {CommandExecuteResult|PromiseLike<CommandExecuteResult>} The result.
      */
-    execute(): CommandExecuteResult | PromiseLike<CommandExecuteResult>;
+    readonly execute: (context: CommandExecutionContext) => CommandExecuteResult | PromiseLike<CommandExecuteResult>;
 }
 
 /**
@@ -30,11 +34,21 @@ export interface Command {
  */
 export type CommandExecuteResult = void | null | undefined | number;
 
+/**
+ * Execution context of a command.
+ */
+export interface CommandExecutionContext {
+    /**
+     * The root directory of the command.
+     */
+    readonly root: string;
+}
+
 
 /**
  * A basic command.
  */
 export abstract class CommandBase implements Command {
     /** @inheritdoc */
-    public abstract execute(): Promise<CommandExecuteResult>;
+    public abstract execute(context: CommandExecutionContext): Promise<CommandExecuteResult>;
 }

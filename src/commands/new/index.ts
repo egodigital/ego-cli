@@ -15,7 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-import { CommandBase } from '../../contracts';
+import * as inquirer from 'inquirer';
+import { CommandBase, CommandExecutionContext } from '../../contracts';
+import { globalModuleExists, spawn } from '../../util';
 
 
 /**
@@ -23,7 +25,37 @@ import { CommandBase } from '../../contracts';
  */
 export class Command extends CommandBase {
     /** @inheritdoc */
-    public async execute(): Promise<void> {
-        console.log('Hello, new!');
+    public async execute(ctx: CommandExecutionContext): Promise<void> {
+        if (!globalModuleExists('yo')) {
+            const ANSWER = await inquirer.prompt([{
+                type: 'confirm',
+                name: 'ego_confirm',
+                message: 'Install Yeoman generator?',
+                default: true,
+            }]);
+
+            if (!ANSWER['ego_confirm']) {
+                return;
+            }
+
+            spawn('npm', ['install', '-g', 'yo']);
+        }
+
+        if (!globalModuleExists('generator-ego')) {
+            const ANSWER = await inquirer.prompt([{
+                type: 'confirm',
+                name: 'ego_confirm',
+                message: 'Install e.GO generator for Yeoman?',
+                default: true,
+            }]);
+
+            if (!ANSWER['ego_confirm']) {
+                return;
+            }
+
+            spawn('npm', ['install', '-g', 'generator-ego']);
+        }
+
+        spawn('yo', ['ego']);
     }
 }

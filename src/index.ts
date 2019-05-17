@@ -65,11 +65,23 @@ const ALLOWED_COMMANDS = [
     }
 
     const COMMAND: ego_contracts.Command = new COMMAND_CLASS();
+    if (_.isNil(COMMAND.execute)) {
+        console.warn(`Command '${command}'.execute() not implemented!`);
+
+        process.exit(6);
+    }
+
+    const CTX: ego_contracts.CommandExecutionContext = {
+        root: path.resolve(
+            path.dirname(MODULE_FILE)
+        ),
+    };
+
     try {
         const EXIT_CODE = parseInt(
             String(
                 await Promise.resolve(
-                    COMMAND.execute()
+                    COMMAND.execute(CTX)
                 )
             ).trim()
         );
