@@ -15,6 +15,9 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import { ParsedArgs } from 'minimist';
+
+
 /**
  * A command.
  */
@@ -39,6 +42,14 @@ export type CommandExecuteResult = void | null | undefined | number;
  */
 export interface CommandExecutionContext {
     /**
+     * The parsed arguments.
+     */
+    readonly args: ParsedArgs;
+    /**
+     * App information.
+     */
+    readonly package: PackageJSON;
+    /**
      * The root directory of the command.
      */
     readonly root: string;
@@ -53,6 +64,14 @@ export interface PackageJSON {
      */
     version: string;
 }
+
+
+/**
+ * The list of supported commands.
+ */
+export const SUPPORTED_COMMANDS = [
+    'new',
+];
 
 
 /**

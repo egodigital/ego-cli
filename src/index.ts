@@ -17,15 +17,11 @@
 
 import * as _ from 'lodash';
 import * as fs from 'fs';
+import * as minimist from 'minimist';
 import * as path from 'path';
-import { Command, CommandExecutionContext, PackageJSON } from './contracts';
+import { Command, CommandExecutionContext, PackageJSON, SUPPORTED_COMMANDS } from './contracts';
 import { showHelp } from './help';
 import { writeLine } from './util';
-
-
-const ALLOWED_COMMANDS = [
-    'new',
-];
 
 
 (async () => {
@@ -70,7 +66,7 @@ const ALLOWED_COMMANDS = [
         process.exit(4);
     }
 
-    if (ALLOWED_COMMANDS.indexOf(command) < 0) {
+    if (SUPPORTED_COMMANDS.indexOf(command) < 0) {
         console.warn(`Unknown '${command}' command!`);
 
         process.exit(5);
@@ -102,6 +98,10 @@ const ALLOWED_COMMANDS = [
     }
 
     const CTX: CommandExecutionContext = {
+        args: minimist(
+            process.argv.slice(3),
+        ),
+        package: APP,
         root: path.resolve(
             path.dirname(MODULE_FILE)
         ),
