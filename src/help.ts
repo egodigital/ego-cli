@@ -26,7 +26,7 @@ import { writeLine } from './util';
  */
 export function showHelp(app: PackageJSON) {
     writeLine(`Version ${app.version}`);
-    writeLine(`Syntax:    ego COMMAND [args] [options]`);
+    writeLine(`Syntax:    ego COMMAND [options]`);
     writeLine();
 
     writeLine(`General options:`);

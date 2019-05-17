@@ -1,7 +1,7 @@
 {
   "name": "ego-cli",
   "displayName": "e.GO CLI",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "Command Line Interface, which is designed to handle Dev(Ops) tasks much faster.",
   "main": "dist/index.js",
   "private": false,
@@ -48,7 +48,7 @@
     "@types/inquirer": "^6.0.2",
     "@types/lodash": "^4.14.129",
     "@types/minimist": "^1.2.0",
-    "@types/node": "^10.14.6",
+    "@types/node": "^10.14.7",
     "@types/signale": "^1.2.1",
     "tslint": "^5.16.0",
     "typescript": "^3.4.5"

@@ -19,9 +19,9 @@ import * as _ from 'lodash';
 import * as fs from 'fs';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { Command, CommandExecutionContext, PackageJSON, SUPPORTED_COMMANDS } from './contracts';
+import { Command, CommandExecuteContext, PackageJSON, SUPPORTED_COMMANDS } from './contracts';
 import { showHelp } from './help';
-import { writeLine } from './util';
+import { toStringSafe, writeLine } from './util';
 
 
 (async () => {
@@ -53,28 +53,25 @@ import { writeLine } from './util';
         process.exit(0);
     }
 
-    let command = process.argv[2];
-    if (_.isNil(command)) {
-        command = '';
-    }
-    command = command.toLowerCase()
+    const COMMAND_NAME = toStringSafe(process.argv[2])
+        .toLowerCase()
         .trim();
 
-    if ('' === command) {
+    if ('' === COMMAND_NAME) {
         console.warn('No command defined!');
 
         process.exit(4);
     }
 
-    if (SUPPORTED_COMMANDS.indexOf(command) < 0) {
-        console.warn(`Unknown '${command}' command!`);
+    if (SUPPORTED_COMMANDS.indexOf(COMMAND_NAME) < 0) {
+        console.warn(`Unknown '${COMMAND_NAME}' command!`);
 
         process.exit(5);
     }
 
     const MODULE_FILE = require.resolve(
         path.join(
-            __dirname, 'commands', command, 'index.js'
+            __dirname, 'commands', COMMAND_NAME, 'index.js'
         )
     );
     if (!fs.existsSync(MODULE_FILE)) {
@@ -83,24 +80,36 @@ import { writeLine } from './util';
         process.exit(6);
     }
 
-    const COMMAND_CLASS = require(MODULE_FILE).Command;
+    const COMMAND_CLASS = require(MODULE_FILE).EgoCommand;
     if (_.isNil(COMMAND_CLASS)) {
-        console.warn(`Command '${command}' not implemented!`);
+        console.warn(`Command '${COMMAND_NAME}' not implemented!`);
 
         process.exit(7);
     }
 
     const COMMAND: Command = new COMMAND_CLASS();
     if (_.isNil(COMMAND.execute)) {
-        console.warn(`Command '${command}'.execute() not implemented!`);
+        console.warn(`Command '${COMMAND_NAME}'.execute() not implemented!`);
 
         process.exit(8);
     }
 
-    const CTX: CommandExecutionContext = {
+    const CTX: CommandExecuteContext = {
         args: minimist(
             process.argv.slice(3),
         ),
+        exit: (code = 0) => {
+            code = parseInt(
+                toStringSafe(code)
+                    .trim()
+            );
+            if (isNaN(code)) {
+                code = 0;
+            }
+
+            process.exit(9 + code);
+        },
+        name: COMMAND_NAME,
         package: APP,
         root: path.resolve(
             path.dirname(MODULE_FILE)
@@ -109,7 +118,7 @@ import { writeLine } from './util';
 
     try {
         const EXIT_CODE = parseInt(
-            String(
+            toStringSafe(
                 await Promise.resolve(
                     COMMAND.execute(CTX)
                 )

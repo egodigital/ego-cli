@@ -23,28 +23,47 @@ import { ParsedArgs } from 'minimist';
  */
 export interface Command {
     /**
+     * A description text.
+     */
+    readonly description: string;
+
+    /**
      * Executes the command.
      *
-     * @param {CommandExecutionContext} context The context.
+     * @param {CommandExecuteContext} context The context.
      *
      * @return {CommandExecuteResult|PromiseLike<CommandExecuteResult>} The result.
      */
-    readonly execute: (context: CommandExecutionContext) => CommandExecuteResult | PromiseLike<CommandExecuteResult>;
+    readonly execute: (context: CommandExecuteContext) => CommandExecuteResult | PromiseLike<CommandExecuteResult>;
+
+    /**
+     * Shows help screen for the command.
+     *
+     * @param {CommandShowHelpContext} context The context.
+     *
+     * @return {CommandShowHelpResult|PromiseLike<CommandShowHelpResult>} The result.
+     */
+    readonly showHelp: (context: CommandShowHelpContext) => CommandShowHelpResult | PromiseLike<CommandShowHelpResult>;
 }
 
 /**
- * The result of an Command.#execute() invocation.
+ * Context for an Command.#execute() invocation.
  */
-export type CommandExecuteResult = void | null | undefined | number;
-
-/**
- * Execution context of a command.
- */
-export interface CommandExecutionContext {
+export interface CommandExecuteContext {
     /**
      * The parsed arguments.
      */
     readonly args: ParsedArgs;
+    /**
+     * Exists the process.
+     *
+     * @param {number} code The custom, relative exit code. Default: 0
+     */
+    readonly exit: (code?: number) => void;
+    /**
+     * The normalized name.
+     */
+    readonly name: string;
     /**
      * App information.
      */
@@ -54,6 +73,26 @@ export interface CommandExecutionContext {
      */
     readonly root: string;
 }
+
+/**
+ * The result of an Command.#execute() invocation.
+ */
+export type CommandExecuteResult = void | null | undefined | number;
+
+/**
+ * Context for an Command.#showHelp() invocation.
+ */
+export interface CommandShowHelpContext {
+    /**
+     * App information.
+     */
+    readonly package: PackageJSON;
+}
+
+/**
+ * The result of an Command.#showHelp() invocation.
+ */
+export type CommandShowHelpResult = void | null | undefined | number;
 
 /**
  * 'package.json' file.
@@ -70,6 +109,7 @@ export interface PackageJSON {
  * The list of supported commands.
  */
 export const SUPPORTED_COMMANDS = [
+    'help',
     'new',
 ];
 
@@ -79,5 +119,11 @@ export const SUPPORTED_COMMANDS = [
  */
 export abstract class CommandBase implements Command {
     /** @inheritdoc */
-    public abstract execute(context: CommandExecutionContext): Promise<CommandExecuteResult>;
+    public abstract description: string;
+
+    /** @inheritdoc */
+    public abstract execute(context: CommandExecuteContext): Promise<CommandExecuteResult>;
+
+    /** @inheritdoc */
+    public abstract showHelp(context: CommandShowHelpContext): Promise<CommandShowHelpResult>;
 }

@@ -16,16 +16,19 @@
  */
 
 import * as inquirer from 'inquirer';
-import { CommandBase, CommandExecutionContext } from '../../contracts';
-import { globalModuleExists, spawn } from '../../util';
+import { CommandBase, CommandExecuteContext } from '../../contracts';
+import { globalModuleExists, spawn, writeLine } from '../../util';
 
 
 /**
- * New command.
+ * e.GO Yeoman generator command.
  */
-export class Command extends CommandBase {
+export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public async execute(ctx: CommandExecutionContext): Promise<void> {
+    public readonly description = 'Starts the e.GO generator for Yeoman.';
+
+    /** @inheritdoc */
+    public async execute(ctx: CommandExecuteContext): Promise<void> {
         // Yeoman installed?
         if (!globalModuleExists('yo')) {
             const ANSWER = await inquirer.prompt([{
@@ -60,5 +63,10 @@ export class Command extends CommandBase {
 
         // run e.GO generator
         spawn('yo', ['ego']);
+    }
+
+    /** @inheritdoc */
+    public async showHelp(): Promise<void> {
+        writeLine('Example:    ego new');
     }
 }
