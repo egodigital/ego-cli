@@ -1,17 +1,17 @@
 /**
- * This file is part of the ego-cli distribution (https://github.com/egodigital/ego-cli).
- * Copyright (c) e.GO Digital GmbH, Aachen, Germany
+ * This file is part of the ego-cli distribution.
+ * Copyright (c) e.GO Digital GmbH, Aachen, Germany (https://www.e-go-digital.com/)
  *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, version 3.
+ * ego-cli is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, version 3.
  *
- * This program is distributed in the hope that it will be useful, but
+ * ego-cli is distributed in the hope that it will be useful, but
  * WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public License
+ * You should have received a copy of the GNU Lesser General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -26,6 +26,7 @@ import { globalModuleExists, spawn } from '../../util';
 export class Command extends CommandBase {
     /** @inheritdoc */
     public async execute(ctx: CommandExecutionContext): Promise<void> {
+        // Yeoman installed?
         if (!globalModuleExists('yo')) {
             const ANSWER = await inquirer.prompt([{
                 type: 'confirm',
@@ -41,6 +42,7 @@ export class Command extends CommandBase {
             spawn('npm', ['install', '-g', 'yo']);
         }
 
+        // e.GO generator installed?
         if (!globalModuleExists('generator-ego')) {
             const ANSWER = await inquirer.prompt([{
                 type: 'confirm',
@@ -56,6 +58,7 @@ export class Command extends CommandBase {
             spawn('npm', ['install', '-g', 'generator-ego']);
         }
 
+        // run e.GO generator
         spawn('yo', ['ego']);
     }
 }
