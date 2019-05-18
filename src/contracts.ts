@@ -111,6 +111,7 @@ export interface PackageJSON {
 export const SUPPORTED_COMMANDS = [
     'git-pull',
     'git-push',
+    'git-sync',
     'help',
     'new',
 ];
