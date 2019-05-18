@@ -45,7 +45,7 @@ export class EgoCommand extends CommandBase {
                     stdio: null,
                 });
 
-                spinner.text = `Pushing to '${R}' (${i + 1} / ${remotes.length}) ...`
+                spinner.text = `Pushing to '${R}' (${i + 1} / ${remotes.length}) ...`;
                 spawn('git', ['push', R], {
                     stdio: null,
                 });
