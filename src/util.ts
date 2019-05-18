@@ -20,6 +20,7 @@ import * as child_process from 'child_process';
 import * as deepMerge from 'deepmerge';
 import * as fs from 'fs-extra';
 import * as globalDirs from 'global-dirs';
+import * as ora from 'ora';
 import * as os from 'os';
 import * as path from 'path';
 import * as util from 'util';
@@ -29,6 +30,16 @@ import * as util from 'util';
  * Possible values for options of 'spawn()' function.
  */
 export type SpawnOptions = child_process.SpawnOptions | child_process.SpawnSyncOptionsWithBufferEncoding;
+
+/**
+ * An object with a custom, current working directory.
+ */
+export interface WithCWD {
+    /**
+     * The custom, current working directory.
+     */
+    cwd?: string;
+}
 
 
 /**
@@ -51,6 +62,60 @@ export function asArray<T = any>(val: T | T[], noEmpty = true): T[] {
 
         return true;
     });
+}
+
+
+/**
+ * Compares two values for sorting, by using a selector.
+ *
+ * @param {T} x The first value.
+ * @param {T} y The second value.
+ * @param {Function} selector The function, that selects the value to compare.
+ *
+ * @return {number} The soirt value.
+ */
+export function compareValuesBy<T, V>(x: T, y: T, selector: (i: T) => V): number {
+    const VAL_X = selector(x);
+    const VAL_Y = selector(y);
+
+    if (VAL_X !== VAL_Y) {
+        if (VAL_X < VAL_Y) {
+            return -1;
+        }
+
+        if (VAL_X > VAL_Y) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+/**
+ * Extracts the current working directory from an object.
+ *
+ * @param {WithCWD} obj The object with the data.
+ *
+ * @return {string} The extracted data.
+ */
+export function getCWD(obj: WithCWD): string {
+    if (_.isNil(obj)) {
+        obj = {} as any;
+    }
+
+    let cwd = toStringSafe(obj.cwd);
+
+    if ('' === cwd.trim()) {
+        cwd = process.cwd();
+    }
+
+    if (!path.isAbsolute(cwd)) {
+        cwd = path.join(
+            process.cwd(), cwd
+        );
+    }
+
+    return path.resolve(cwd);
 }
 
 /**
@@ -109,6 +174,8 @@ export function spawn(
     command: any, args?: any[],
     opts?: SpawnOptions,
 ): child_process.SpawnSyncReturns<Buffer> {
+    command = toStringSafe(command);
+
     if (_.isNil(args)) {
         args = [];
     }
@@ -121,7 +188,7 @@ export function spawn(
     }, opts || {} as any);
 
     const RESULT = child_process.spawnSync(
-        toStringSafe(command),
+        command,
         asArray(args, false).map(a => toStringSafe(a)),
         opts,
     );
@@ -131,7 +198,7 @@ export function spawn(
     }
 
     if (0 !== RESULT.status) {
-        process.exit(RESULT.status);
+        throw new Error(`'${command}' exited with code '${RESULT.status}'`);
     }
 
     return RESULT;
@@ -153,6 +220,10 @@ export function toStringSafe(val: any): string {
         return '';
     }
 
+    if (val instanceof Error) {
+        return `[${val.name}] '${val.message}'`;
+    }
+
     if (_.isFunction(val['toString'])) {
         return String(
             val.toString()
@@ -160,6 +231,38 @@ export function toStringSafe(val: any): string {
     }
 
     return util.inspect(val);
+}
+
+/**
+ * Executes an action for a spinner.
+ *
+ * @param {any} text The initial text.
+ * @param {Function} [action] The action to invoke.
+ *
+ * @return {TResult} The result of the action.
+ */
+export function withSpinner<TResult = any>(
+    text: any, action?: (spinner: ora.Ora) => TResult
+) {
+    text = toStringSafe(text);
+
+    const SPINNER = ora(text);
+    try {
+        SPINNER.start();
+
+        let result: TResult;
+        if (action) {
+            result = action(SPINNER);
+        }
+
+        SPINNER.succeed();
+
+        return result;
+    } catch (e) {
+        SPINNER.fail(text + ' => ' + toStringSafe(e));
+
+        throw e;
+    }
 }
 
 /**
