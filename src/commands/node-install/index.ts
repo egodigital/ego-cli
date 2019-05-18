@@ -69,10 +69,26 @@ export class EgoCommand extends CommandBase {
 
             spinner.text = `'npm install' executed`;
         });
+
+        if (ctx.args['a'] || ctx.args['audit']) {
+            withSpinner(`Executing 'npm audit fix' ...`, (spinner) => {
+                spawn('npm', ['audit', 'fix'], {
+                    cwd: ctx.cwd,
+                    stdio: null,
+                });
+
+                spinner.text = `'npm audit fix' executed`;
+            });
+        }
     }
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine('Example:    ego node-install');
+        writeLine(`Options:`);
+        writeLine(` -a, --audit  # Runs 'npm audit fix' after successful execution.`);
+        writeLine();
+
+        writeLine('Examples:    ego node-install');
+        writeLine('             ego node-install --audit');
     }
 }
