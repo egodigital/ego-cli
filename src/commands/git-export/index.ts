@@ -27,7 +27,7 @@ import { spawn, toStringSafe, withSpinner, writeLine } from '../../util';
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = "Clones a repository and removes the '.git' subfolder.";
+    public readonly description = "Clones a repository to the working directory and removes the '.git' subfolder.";
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
@@ -48,7 +48,7 @@ export class EgoCommand extends CommandBase {
             spinner.text = `Repository '${REPO_URL}' cloned`;
         });
 
-        withSpinner(`Removing '.git' directory ...`, (spinner) => {
+        withSpinner(`Removing '.git' folder ...`, (spinner) => {
             const GIT_FOLDER = path.resolve(
                 path.join(
                     ctx.cwd, '.git'
@@ -65,9 +65,9 @@ export class EgoCommand extends CommandBase {
             }
 
             if (fs.existsSync(GIT_FOLDER)) {
-                spinner.warn(`'.git' directory could not be removed!`);
+                spinner.warn(`'.git' folder could not be removed!`);
             } else {
-                spinner.text = `'.git' directory removed`;
+                spinner.text = `'.git' folder removed`;
             }
         });
 
