@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import { Command, CommandExecuteContext, PackageJSON, SUPPORTED_COMMANDS } from './contracts';
+import { Command, CommandExecuteContext, PackageJSON, REGEX_COMMAND_NAME } from './contracts';
 import { showHelp } from './help';
 import { toStringSafe, writeLine } from './util';
 
@@ -63,8 +63,8 @@ import { toStringSafe, writeLine } from './util';
         process.exit(4);
     }
 
-    if (SUPPORTED_COMMANDS.indexOf(COMMAND_NAME) < 0) {
-        console.warn(`Unknown '${COMMAND_NAME}' command!`);
+    if (!REGEX_COMMAND_NAME.test(COMMAND_NAME)) {
+        console.warn(`Invalid command name ('${COMMAND_NAME}')!`);
 
         process.exit(5);
     }
@@ -75,7 +75,7 @@ import { toStringSafe, writeLine } from './util';
         )
     );
     if (!fs.existsSync(MODULE_FILE)) {
-        console.warn(`Module '${MODULE_FILE}' not found!`);
+        console.warn(`Unknown command '${COMMAND_NAME}'!`);
 
         process.exit(6);
     }

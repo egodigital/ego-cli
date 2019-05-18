@@ -99,6 +99,14 @@ export type CommandShowHelpResult = void | null | undefined | number;
  */
 export interface PackageJSON {
     /**
+     * The display name of the app.
+     */
+    displayName: string;
+    /**
+     * The app's name.
+     */
+    name: string;
+    /**
      * The version.
      */
     version: string;
@@ -106,15 +114,9 @@ export interface PackageJSON {
 
 
 /**
- * The list of supported commands.
+ * Regular expression for testing for a valid command name.
  */
-export const SUPPORTED_COMMANDS = [
-    'git-pull',
-    'git-push',
-    'git-sync',
-    'help',
-    'new',
-];
+export const REGEX_COMMAND_NAME = /^([a-z]|\-){1,}$/i;
 
 
 /**

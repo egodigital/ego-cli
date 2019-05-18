@@ -243,7 +243,7 @@ export function toStringSafe(val: any): string {
  */
 export function withSpinner<TResult = any>(
     text: any, action?: (spinner: ora.Ora) => TResult
-) {
+): TResult {
     text = toStringSafe(text);
 
     const SPINNER = ora(text);
@@ -270,7 +270,7 @@ export function withSpinner<TResult = any>(
  *
  * @param {any} msg The message to write.
  */
-export function write(msg: any) {
+export function write(msg: any): void {
     process.stdout.write(
         toStringSafe(msg)
     );
@@ -281,7 +281,7 @@ export function write(msg: any) {
  *
  * @param {any} [msg] The (optional) message to write.
  */
-export function writeLine(msg: any = '') {
+export function writeLine(msg: any = ''): void {
     process.stdout.write(
         toStringSafe(msg) + os.EOL
     );

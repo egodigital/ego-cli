@@ -18,7 +18,7 @@
 import * as _ from 'lodash';
 import * as fs from 'fs';
 import * as path from 'path';
-import { Command, CommandBase, CommandExecuteContext, CommandShowHelpContext, SUPPORTED_COMMANDS } from '../../contracts';
+import { Command, CommandBase, CommandExecuteContext, CommandShowHelpContext, REGEX_COMMAND_NAME } from '../../contracts';
 import { toStringSafe, writeLine } from '../../util';
 
 
@@ -47,8 +47,8 @@ export class EgoCommand extends CommandBase {
                 ctx.exit(2);
             }
 
-            if (SUPPORTED_COMMANDS.indexOf(COMMAND_NAME) < 0) {
-                console.warn(`Unknown '${COMMAND_NAME}' command!`);
+            if (!REGEX_COMMAND_NAME.test(COMMAND_NAME)) {
+                console.warn(`Invalid command name ('${COMMAND_NAME}')!`);
 
                 ctx.exit(3);
             }
@@ -59,7 +59,7 @@ export class EgoCommand extends CommandBase {
                 )
             );
             if (!fs.existsSync(MODULE_FILE)) {
-                console.warn(`Module '${MODULE_FILE}' not found!`);
+                console.warn(`Unknown command '${COMMAND_NAME}'!`);
 
                 ctx.exit(4);
             }
