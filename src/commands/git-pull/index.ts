@@ -22,11 +22,11 @@ import { spawn, withSpinner, writeLine } from '../../util';
 
 
 /**
- * Git-Push command.
+ * Git-Pull command.
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = 'Pushes the current branch to all remotes.';
+    public readonly description = 'Pulls from all remotes to the current branch.';
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
@@ -39,12 +39,12 @@ export class EgoCommand extends CommandBase {
         for (let i = 0; i < remotes.length; i++) {
             const R = remotes[i];
 
-            withSpinner(`Pushing to '${R}' (${i + 1} / ${remotes.length}) ...`, (spinner) => {
-                spawn('git', ['push', R], {
+            withSpinner(`Pulling from '${R}' (${i + 1} / ${remotes.length}) ...`, (spinner) => {
+                spawn('git', ['pull', R], {
                     stdio: null,
                 });
 
-                spinner.text = `Pushed to '${R}' (${i + 1} / ${remotes.length})`;
+                spinner.text = `Pulled from '${R}' (${i + 1} / ${remotes.length})`;
             });
         }
 
@@ -55,6 +55,6 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine('Example:    ego git-push');
+        writeLine('Example:    ego git-pull');
     }
 }

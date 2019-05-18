@@ -109,6 +109,7 @@ export interface PackageJSON {
  * The list of supported commands.
  */
 export const SUPPORTED_COMMANDS = [
+    'git-pull',
     'git-push',
     'help',
     'new',
