@@ -31,6 +31,9 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
+        const STDIO = (ctx.args['v'] || ctx.args['verbose']) ?
+            'inherit' : null;
+
         const PACKAGE_JSON = path.resolve(
             path.join(
                 ctx.cwd, 'package.json'
@@ -64,7 +67,7 @@ export class EgoCommand extends CommandBase {
         withSpinner(`Executing 'npm install' ...`, (spinner) => {
             spawn('npm', ['install'], {
                 cwd: ctx.cwd,
-                stdio: null,
+                stdio: STDIO,
             });
 
             spinner.text = `'npm install' executed`;
@@ -75,7 +78,7 @@ export class EgoCommand extends CommandBase {
             withSpinner(`Executing 'npm update' ...`, (spinner) => {
                 spawn('npm', ['update'], {
                     cwd: ctx.cwd,
-                    stdio: null,
+                    stdio: STDIO,
                 });
 
                 spinner.text = `'npm update' executed`;
@@ -87,7 +90,7 @@ export class EgoCommand extends CommandBase {
             withSpinner(`Executing 'npm audit fix' ...`, (spinner) => {
                 spawn('npm', ['audit', 'fix'], {
                     cwd: ctx.cwd,
-                    stdio: null,
+                    stdio: STDIO,
                 });
 
                 spinner.text = `'npm audit fix' executed`;
@@ -98,8 +101,9 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -a, --audit   # Runs 'npm audit fix' after successful execution.`);
-        writeLine(` -u, --update  # Runs 'npm update' after successful execution.`);
+        writeLine(` -a, --audit    # Runs 'npm audit fix' after successful execution.`);
+        writeLine(` -u, --update   # Runs 'npm update' after successful execution.`);
+        writeLine(` -v, --verbose  # Verbose output.`);
         writeLine();
 
         writeLine(`Examples:    ego node-install`);
