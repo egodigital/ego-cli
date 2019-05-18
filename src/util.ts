@@ -24,6 +24,7 @@ import * as ora from 'ora';
 import * as os from 'os';
 import * as path from 'path';
 import * as util from 'util';
+import { default as chalk } from 'chalk';
 
 
 /**
@@ -89,6 +90,20 @@ export function compareValuesBy<T, V>(x: T, y: T, selector: (i: T) => V): number
     }
 
     return 0;
+}
+
+/**
+ * Handles a value as string and adds colors to each 'e.GO' expression inside it for console output.
+ *
+ * @param {any} [val] The (optional) input value.
+ *
+ * @return {string} The output value.
+ */
+export function eGO(val: any = 'e.GO'): string {
+    return toStringSafe(val).replace(
+        "e.GO",
+        `${chalk.reset() + chalk.blueBright('e') + chalk.reset('.') + chalk.blueBright('GO') + chalk.reset()}`
+    );
 }
 
 /**

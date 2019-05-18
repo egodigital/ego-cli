@@ -17,7 +17,7 @@
 
 import * as inquirer from 'inquirer';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { globalModuleExists, spawn, writeLine } from '../../util';
+import { eGO, globalModuleExists, spawn, writeLine } from '../../util';
 
 
 /**
@@ -50,7 +50,7 @@ export class EgoCommand extends CommandBase {
             const ANSWER = await inquirer.prompt([{
                 type: 'confirm',
                 name: 'ego_confirm',
-                message: 'Install e.GO generator for Yeoman?',
+                message: eGO('Install e.GO generator for Yeoman?'),
                 default: true,
             }]);
 

@@ -20,7 +20,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { default as chalk } from 'chalk';
 import { Command, PackageJSON } from './contracts';
-import { compareValuesBy, writeLine } from './util';
+import { compareValuesBy, eGO, writeLine } from './util';
 
 
 interface CommandInfo {
@@ -101,7 +101,7 @@ export function showHelp(app: PackageJSON): void {
                 }${
                 ' '.repeat(maxCommandNameLength - CMD.name.length)
                 }  # ${
-                CMD.object.description
+                eGO(CMD.object.description)
                 }`);
         }
     }
@@ -114,6 +114,6 @@ export function showHelp(app: PackageJSON): void {
  */
 export function showHelpHeader(app: PackageJSON): void {
     writeLine(`${app.displayName} (${app.name}) - Version ${app.version}`);
-    writeLine(`by ${chalk.blueBright('e') + chalk.reset('.') + chalk.blueBright('GO') + chalk.reset(' Digital GmbH <') + chalk.white('https://e-go-digital.com') + chalk.reset('>')}`);
+    writeLine(`by ${eGO() + chalk.reset(' Digital GmbH <') + chalk.white('https://e-go-digital.com') + chalk.reset('>')}`);
     writeLine();
 }

@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Command, CommandBase, CommandExecuteContext, CommandShowHelpContext, REGEX_COMMAND_NAME } from '../../contracts';
-import { toStringSafe, writeLine } from '../../util';
+import { eGO, toStringSafe, writeLine } from '../../util';
 
 
 /**
@@ -82,7 +82,7 @@ export class EgoCommand extends CommandBase {
             commandName = COMMAND_NAME;
         }
 
-        writeLine(command.description);
+        writeLine(eGO(command.description));
         writeLine(`Syntax:    ego ${commandName} [options]`);
         writeLine();
 
