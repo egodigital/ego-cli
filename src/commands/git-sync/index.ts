@@ -42,21 +42,19 @@ export class EgoCommand extends CommandBase {
             withSpinner(`Syncing with '${R}' (${i + 1} / ${remotes.length}) ...`, (spinner) => {
                 spinner.text = `Pulling from '${R}' (${i + 1} / ${remotes.length}) ...`;
                 spawn('git', ['pull', R], {
+                    cwd: ctx.cwd,
                     stdio: null,
                 });
 
                 spinner.text = `Pushing to '${R}' (${i + 1} / ${remotes.length}) ...`;
                 spawn('git', ['push', R], {
+                    cwd: ctx.cwd,
                     stdio: null,
                 });
 
                 spinner.text = `Synced with '${R}' (${i + 1} / ${remotes.length})`;
             });
         }
-
-        withSpinner('Finishing ...', (spinner) => {
-            spinner.text = 'Done';
-        });
     }
 
     /** @inheritdoc */

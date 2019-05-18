@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { spawn, toStringSafe, withSpinner, writeLine } from '../../util';
+import { spawn, withSpinner, writeLine } from '../../util';
 
 
 /**
@@ -27,54 +27,52 @@ import { spawn, toStringSafe, withSpinner, writeLine } from '../../util';
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = "Clones a repository to the working directory and removes the '.git' subfolder.";
+    public readonly description = "Removes the 'node_modules' subfolder and executes 'npm install'.";
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
-        const REPO_URL = toStringSafe(
-            ctx.args['_'][0]
-        ).trim();
-        if ('' === REPO_URL) {
-            console.warn('Please define the URL of the repository, that should be exported!');
+        const PACKAGE_JSON = path.resolve(
+            path.join(
+                ctx.cwd, 'package.json'
+            )
+        );
+        if (!fs.existsSync(PACKAGE_JSON)) {
+            console.warn(`'package.json' file not found!`);
 
             ctx.exit(1);
         }
 
-        withSpinner(`Cloning repository '${REPO_URL}' ...`, (spinner) => {
-            spawn('git', ['clone', REPO_URL, '.'], {
+        withSpinner(`Removing 'node_modules' folder ...`, (spinner) => {
+            const NODE_MODULES_FOLDER = path.resolve(
+                path.join(
+                    ctx.cwd, 'node_modules'
+                )
+            );
+
+            if (fs.existsSync(NODE_MODULES_FOLDER)) {
+                const STAT = fs.lstatSync(NODE_MODULES_FOLDER);
+                if (STAT.isDirectory()) {
+                    fs.removeSync(NODE_MODULES_FOLDER);
+                } else if (STAT.isSymbolicLink()) {
+                    fs.unlinkSync(NODE_MODULES_FOLDER);
+                }
+            }
+
+            spinner.text = `'node_modules' folder removed`;
+        });
+
+        withSpinner(`Executing 'npm install' ...`, (spinner) => {
+            spawn('npm', ['install'], {
                 cwd: ctx.cwd,
                 stdio: null,
             });
 
-            spinner.text = `Repository '${REPO_URL}' cloned`;
-        });
-
-        withSpinner(`Removing '.git' folder ...`, (spinner) => {
-            const GIT_FOLDER = path.resolve(
-                path.join(
-                    ctx.cwd, '.git'
-                )
-            );
-
-            if (fs.existsSync(GIT_FOLDER)) {
-                const STAT = fs.lstatSync(GIT_FOLDER);
-                if (STAT.isDirectory()) {
-                    fs.removeSync(GIT_FOLDER);
-                } else if (STAT.isSymbolicLink()) {
-                    fs.unlinkSync(GIT_FOLDER);
-                }
-            }
-
-            if (fs.existsSync(GIT_FOLDER)) {
-                spinner.warn(`'.git' folder could not be removed!`);
-            } else {
-                spinner.text = `'.git' folder removed`;
-            }
+            spinner.text = `'npm install' executed`;
         });
     }
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine('Example:    ego export https://github.com/egodigital/generator-ego');
+        writeLine('Example:    ego node-install');
     }
 }

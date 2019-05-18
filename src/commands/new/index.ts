@@ -42,7 +42,9 @@ export class EgoCommand extends CommandBase {
                 return;
             }
 
-            spawn('npm', ['install', '-g', 'yo']);
+            spawn('npm', ['install', '-g', 'yo'], {
+                cwd: ctx.cwd,
+            });
         }
 
         // e.GO generator installed?
@@ -58,11 +60,15 @@ export class EgoCommand extends CommandBase {
                 return;
             }
 
-            spawn('npm', ['install', '-g', 'generator-ego']);
+            spawn('npm', ['install', '-g', 'generator-ego'], {
+                cwd: ctx.cwd,
+            });
         }
 
         // run e.GO generator
-        spawn('yo', ['ego']);
+        spawn('yo', ['ego'], {
+            cwd: ctx.cwd,
+        });
     }
 
     /** @inheritdoc */
