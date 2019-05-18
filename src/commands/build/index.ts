@@ -66,7 +66,7 @@ export class EgoCommand extends CommandBase {
                 stdio: getSTDIO(ctx),
             });
 
-            spinner.text = `'npm run build' executed`;
+            spinner.succeed(`'npm run build' executed`);
         });
     }
 

@@ -36,7 +36,8 @@ export class EgoCommand extends CommandBase {
                 cwd: ctx.cwd,
                 verbose: ctx.verbose,
             });
-            spinner.text = remotes.length + ' remote(s) found';
+
+            spinner.succeed(remotes.length + ' remote(s) found');
         });
 
         for (let i = 0; i < remotes.length; i++) {
@@ -55,7 +56,7 @@ export class EgoCommand extends CommandBase {
                     stdio: getSTDIO(ctx),
                 });
 
-                spinner.text = `Synced with '${R}' (${i + 1} / ${remotes.length})`;
+                spinner.succeed(`Synced with '${R}' (${i + 1} / ${remotes.length})`);
             });
         }
     }

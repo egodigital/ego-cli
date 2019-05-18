@@ -46,7 +46,7 @@ export class EgoCommand extends CommandBase {
                 stdio: getSTDIO(ctx),
             });
 
-            spinner.text = `Repository '${REPO_URL}' cloned`;
+            spinner.succeed(`Repository '${REPO_URL}' cloned`);
         });
 
         withSpinner(`Removing '.git' folder ...`, (spinner) => {
@@ -68,7 +68,7 @@ export class EgoCommand extends CommandBase {
             if (fs.existsSync(GIT_FOLDER)) {
                 spinner.warn(`'.git' folder could not be removed!`);
             } else {
-                spinner.text = `'.git' folder removed`;
+                spinner.succeed(`'.git' folder removed`);
             }
         });
     }

@@ -17,7 +17,7 @@
 
 import * as inquirer from 'inquirer';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { eGO, getSTDIO, globalModuleExists, spawn, writeLine } from '../../util';
+import { eGO, getSTDIO, globalModuleExists, spawn, withSpinner, writeLine } from '../../util';
 
 
 /**
@@ -42,9 +42,13 @@ export class EgoCommand extends CommandBase {
                 return;
             }
 
-            spawn('npm', ['install', '-g', 'yo'], {
-                cwd: ctx.cwd,
-                stdio: getSTDIO(ctx),
+            withSpinner(`Installing Yeoman generator ...`, (spinner) => {
+                spawn('npm', ['install', '-g', 'yo'], {
+                    cwd: ctx.cwd,
+                    stdio: getSTDIO(ctx),
+                });
+
+                spinner.succeed('Yeoman generator installed');
             });
         }
 
@@ -61,9 +65,13 @@ export class EgoCommand extends CommandBase {
                 return;
             }
 
-            spawn('npm', ['install', '-g', 'generator-ego'], {
-                cwd: ctx.cwd,
-                stdio: getSTDIO(ctx),
+            withSpinner(eGO(`Installing e.GO generator for Yeoman ...`), (spinner) => {
+                spawn('npm', ['install', '-g', 'generator-ego'], {
+                    cwd: ctx.cwd,
+                    stdio: getSTDIO(ctx),
+                });
+
+                spinner.succeed(eGO(`e.GO generator for Yeoman installed`));
             });
         }
 
