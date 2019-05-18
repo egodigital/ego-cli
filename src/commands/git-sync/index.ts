@@ -18,7 +18,7 @@
 import * as _ from 'lodash';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
 import { getGitRemotes } from '../../git';
-import { spawn, withSpinner, writeLine } from '../../util';
+import { getSTDIO, spawn, withSpinner, writeLine } from '../../util';
 
 
 /**
@@ -32,7 +32,10 @@ export class EgoCommand extends CommandBase {
     public async execute(ctx: CommandExecuteContext): Promise<void> {
         let remotes: string[];
         withSpinner('Loading remotes ...', (spinner) => {
-            remotes = getGitRemotes();
+            remotes = getGitRemotes({
+                cwd: ctx.cwd,
+                verbose: ctx.verbose,
+            });
             spinner.text = remotes.length + ' remote(s) found';
         });
 
@@ -43,13 +46,13 @@ export class EgoCommand extends CommandBase {
                 spinner.text = `Pulling from '${R}' (${i + 1} / ${remotes.length}) ...`;
                 spawn('git', ['pull', R], {
                     cwd: ctx.cwd,
-                    stdio: null,
+                    stdio: getSTDIO(ctx),
                 });
 
                 spinner.text = `Pushing to '${R}' (${i + 1} / ${remotes.length}) ...`;
                 spawn('git', ['push', R], {
                     cwd: ctx.cwd,
-                    stdio: null,
+                    stdio: getSTDIO(ctx),
                 });
 
                 spinner.text = `Synced with '${R}' (${i + 1} / ${remotes.length})`;
@@ -59,6 +62,10 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine('Example:    ego git-sync');
+        writeLine(`Options:`);
+        writeLine(` -v, --verbose  # Verbose output.`);
+        writeLine();
+
+        writeLine(`Example:    ego git-sync`);
     }
 }

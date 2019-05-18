@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { spawn, withSpinner, writeLine } from '../../util';
+import { getSTDIO, spawn, withSpinner, writeLine } from '../../util';
 
 
 /**
@@ -31,9 +31,6 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
-        const STDIO = (ctx.args['v'] || ctx.args['verbose']) ?
-            'inherit' : null;
-
         const PACKAGE_JSON = path.resolve(
             path.join(
                 ctx.cwd, 'package.json'
@@ -67,7 +64,7 @@ export class EgoCommand extends CommandBase {
         withSpinner(`Executing 'npm install' ...`, (spinner) => {
             spawn('npm', ['install'], {
                 cwd: ctx.cwd,
-                stdio: STDIO,
+                stdio: getSTDIO(ctx),
             });
 
             spinner.text = `'npm install' executed`;
@@ -78,7 +75,7 @@ export class EgoCommand extends CommandBase {
             withSpinner(`Executing 'npm update' ...`, (spinner) => {
                 spawn('npm', ['update'], {
                     cwd: ctx.cwd,
-                    stdio: STDIO,
+                    stdio: getSTDIO(ctx),
                 });
 
                 spinner.text = `'npm update' executed`;
@@ -90,7 +87,7 @@ export class EgoCommand extends CommandBase {
             withSpinner(`Executing 'npm audit fix' ...`, (spinner) => {
                 spawn('npm', ['audit', 'fix'], {
                     cwd: ctx.cwd,
-                    stdio: STDIO,
+                    stdio: getSTDIO(ctx),
                 });
 
                 spinner.text = `'npm audit fix' executed`;

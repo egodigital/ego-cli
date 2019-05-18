@@ -94,10 +94,12 @@ import { toStringSafe, writeLine } from './util';
         process.exit(8);
     }
 
+    const ARGS = minimist(
+        process.argv.slice(3),
+    );
+
     const CTX: CommandExecuteContext = {
-        args: minimist(
-            process.argv.slice(3),
-        ),
+        args: ARGS,
         cwd: process.cwd(),
         exit: (code = 0) => {
             code = parseInt(
@@ -115,6 +117,7 @@ import { toStringSafe, writeLine } from './util';
         root: path.resolve(
             path.dirname(MODULE_FILE)
         ),
+        verbose: ARGS['v'] || ARGS['verbose'],
     };
 
     try {

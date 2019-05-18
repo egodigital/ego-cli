@@ -76,6 +76,10 @@ export interface CommandExecuteContext {
      * The root directory of the command.
      */
     readonly root: string;
+    /**
+     * Indicates if app runs in verbose mode or node.
+     */
+    readonly verbose: boolean;
 }
 
 /**

@@ -16,19 +16,19 @@
  */
 
 import * as _ from 'lodash';
-import { asArray, compareValuesBy, getCWD, spawn, WithCWD } from './util';
+import { asArray, compareValuesBy, getCWD, spawn, WithCWD, WithVerbose, getSTDIO } from './util';
 
 
 /**
  * Options for 'getGitBranches()' function.
  */
-export interface GetGitBranchesOptions extends WithCWD {
+export interface GetGitBranchesOptions extends WithCWD, WithVerbose {
 }
 
 /**
  * Options for 'getGitRemotes()' function.
  */
-export interface GetGitRemotesOptions extends WithCWD {
+export interface GetGitRemotesOptions extends WithCWD, WithVerbose {
 }
 
 
@@ -49,7 +49,7 @@ export function getGitBranches(opts?: GetGitBranchesOptions): string[] {
             'git', ['branch'],
             {
                 cwd: getCWD(opts),
-                stdio: null,
+                stdio: getSTDIO(opts),
             }
         ).output
     ).map((x) => {
@@ -89,7 +89,7 @@ export function getGitRemotes(opts?: GetGitRemotesOptions): string[] {
             'git', ['remote'],
             {
                 cwd: getCWD(opts),
-                stdio: null,
+                stdio: getSTDIO(opts),
             }
         ).output
     ).map((x) => {

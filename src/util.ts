@@ -42,6 +42,16 @@ export interface WithCWD {
     cwd?: string;
 }
 
+/**
+ * An object with a custom, verbose flag.
+ */
+export interface WithVerbose {
+    /**
+     * Verbose output or not.
+     */
+    verbose?: boolean;
+}
+
 
 /**
  * Keeps sure a value is an array.
@@ -131,6 +141,22 @@ export function getCWD(obj: WithCWD): string {
     }
 
     return path.resolve(cwd);
+}
+
+/**
+ * Returns the value for an spawn.stdio property.
+ *
+ * @param {WithVerbose} obj The object with a verbose flag.
+ *
+ * @return {child_process.StdioOptions} The value for the property.
+ */
+export function getSTDIO(obj: WithVerbose): child_process.StdioOptions {
+    if (_.isNil(obj)) {
+        obj = {} as any;
+    }
+
+    return obj.verbose ?
+        'inherit' : null;
 }
 
 /**

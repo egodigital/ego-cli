@@ -17,7 +17,7 @@
 
 import * as inquirer from 'inquirer';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { eGO, globalModuleExists, spawn, writeLine } from '../../util';
+import { eGO, getSTDIO, globalModuleExists, spawn, writeLine } from '../../util';
 
 
 /**
@@ -44,6 +44,7 @@ export class EgoCommand extends CommandBase {
 
             spawn('npm', ['install', '-g', 'yo'], {
                 cwd: ctx.cwd,
+                stdio: getSTDIO(ctx),
             });
         }
 
@@ -62,6 +63,7 @@ export class EgoCommand extends CommandBase {
 
             spawn('npm', ['install', '-g', 'generator-ego'], {
                 cwd: ctx.cwd,
+                stdio: getSTDIO(ctx),
             });
         }
 
@@ -73,6 +75,10 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine('Example:    ego new');
+        writeLine(`Options:`);
+        writeLine(` -v, --verbose  # Verbose output.`);
+        writeLine();
+
+        writeLine(`Example:    ego new`);
     }
 }

@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { spawn, toStringSafe, withSpinner, writeLine } from '../../util';
+import { getSTDIO, spawn, toStringSafe, withSpinner, writeLine } from '../../util';
 
 
 /**
@@ -43,7 +43,7 @@ export class EgoCommand extends CommandBase {
         withSpinner(`Cloning repository '${REPO_URL}' ...`, (spinner) => {
             spawn('git', ['clone', REPO_URL, '.'], {
                 cwd: ctx.cwd,
-                stdio: null,
+                stdio: getSTDIO(ctx),
             });
 
             spinner.text = `Repository '${REPO_URL}' cloned`;
@@ -75,6 +75,10 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine('Example:    ego export https://github.com/egodigital/generator-ego');
+        writeLine(`Options:`);
+        writeLine(` -v, --verbose  # Verbose output.`);
+        writeLine();
+
+        writeLine(`Example:    ego git-export https://github.com/egodigital/generator-ego`);
     }
 }
