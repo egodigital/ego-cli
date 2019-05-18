@@ -102,7 +102,7 @@ export function compareValuesBy<T, V>(x: T, y: T, selector: (i: T) => V): number
 export function eGO(val: any = 'e.GO'): string {
     return toStringSafe(val).replace(
         "e.GO",
-        `${chalk.reset() + chalk.blueBright('e') + chalk.reset('.') + chalk.blueBright('GO') + chalk.reset()}`
+        `${chalk.reset() + chalk.blueBright('e') + chalk.white('.') + chalk.blueBright('GO') + chalk.reset()}`
     );
 }
 
