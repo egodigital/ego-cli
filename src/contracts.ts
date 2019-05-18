@@ -109,15 +109,21 @@ export interface PackageJSON {
     /**
      * The display name of the app.
      */
-    displayName: string;
+    displayName?: string;
     /**
      * The app's name.
      */
-    name: string;
+    name?: string;
+    /**
+     * List of scripts.
+     */
+    scripts?: {
+        [name: string]: string
+    };
     /**
      * The version.
      */
-    version: string;
+    version?: string;
 }
 
 
