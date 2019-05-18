@@ -98,6 +98,7 @@ import { toStringSafe, writeLine } from './util';
         args: minimist(
             process.argv.slice(3),
         ),
+        cwd: process.cwd(),
         exit: (code = 0) => {
             code = parseInt(
                 toStringSafe(code)

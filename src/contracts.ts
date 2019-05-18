@@ -55,6 +55,10 @@ export interface CommandExecuteContext {
      */
     readonly args: ParsedArgs;
     /**
+     * The working directory.
+     */
+    readonly cwd: string;
+    /**
      * Exists the process.
      *
      * @param {number} code The custom, relative exit code. Default: 0
