@@ -83,6 +83,8 @@ export class EgoCommand extends CommandBase {
         }
 
         writeLine(eGO(command.description));
+        writeLine();
+
         writeLine(`Syntax:    ego ${commandName} [options]`);
         writeLine();
 

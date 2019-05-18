@@ -88,7 +88,7 @@ export class EgoCommand extends CommandBase {
         writeLine(` -a, --audit  # Runs 'npm audit fix' after successful execution.`);
         writeLine();
 
-        writeLine('Examples:    ego node-install');
-        writeLine('             ego node-install --audit');
+        writeLine(`Examples:    ego node-install`);
+        writeLine(`             ego node-install --audit`);
     }
 }
