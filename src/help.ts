@@ -32,4 +32,8 @@ export function showHelp(app: PackageJSON) {
     writeLine(`General options:`);
     writeLine(` -h, --help     # Prints this info and help screen`);
     writeLine(` -v, --version  # Prints the version of that app`);
+    writeLine();
+
+    writeLine(`Examples:    ego new`);
+    writeLine(`             ego help new`);
 }
