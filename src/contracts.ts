@@ -130,7 +130,7 @@ export interface PackageJSON {
 /**
  * Regular expression for testing for a valid command name.
  */
-export const REGEX_COMMAND_NAME = /^([a-z]|\-){1,}$/i;
+export const REGEX_COMMAND_NAME = /^([a-z0-9]|\-){1,}$/i;
 
 
 /**
