@@ -16,7 +16,6 @@
  */
 
 import * as _ from 'lodash';
-import * as fs from 'fs';
 import * as path from 'path';
 import { Command, CommandBase, CommandExecuteContext, CommandShowHelpContext, REGEX_COMMAND_NAME } from '../../contracts';
 import { eGO, exists, toStringSafe, writeLine } from '../../util';
