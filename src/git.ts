@@ -16,7 +16,7 @@
  */
 
 import * as _ from 'lodash';
-import { asArray, compareValuesBy, getCWD, spawn, WithCWD, WithVerbose, getSTDIO } from './util';
+import { asArray, compareValuesBy, getCWD, spawn, WithCWD, WithVerbose, getSTDIO, toStringSafe } from './util';
 
 
 /**
@@ -53,10 +53,11 @@ export function getGitBranches(opts?: GetGitBranchesOptions): string[] {
             }
         ).output
     ).map((x) => {
-        return x.split('\n');
+        return toStringSafe(x)
+            .split('\n');
     }).reduce((x, y) => {
         return x.concat(y);
-    }).sort((x, y) => {
+    }, []).sort((x, y) => {
         return compareValuesBy(x, y, (i) => {
             return i.trim()
                 .startsWith('* ') ? 0 : 1;
@@ -93,10 +94,11 @@ export function getGitRemotes(opts?: GetGitRemotesOptions): string[] {
             }
         ).output
     ).map((x) => {
-        return x.split('\n');
+        return toStringSafe(x)
+            .split('\n');
     }).reduce((x, y) => {
         return x.concat(y);
-    }).sort((x, y) => {
+    }, []).sort((x, y) => {
         return compareValuesBy(x, y, (i) => {
             return 'origin' === i.trim()
                 ? 0 : 1;
