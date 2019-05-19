@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { getSTDIO, spawn, withSpinner, writeLine } from '../../util';
+import { exists, getSTDIO, spawnAsync, withSpinnerAsync, writeLine } from '../../util';
 
 
 /**
@@ -36,21 +36,22 @@ export class EgoCommand extends CommandBase {
                 ctx.cwd, 'package.json'
             )
         );
-        if (!fs.existsSync(PACKAGE_JSON)) {
+        if (!(await exists(PACKAGE_JSON))) {
             console.warn(`'package.json' file not found!`);
 
             ctx.exit(1);
         }
 
-        withSpinner(`Removing 'node_modules' folder ...`, (spinner) => {
+        await withSpinnerAsync(`Removing 'node_modules' folder ...`, async (spinner) => {
             const NODE_MODULES_FOLDER = path.resolve(
                 path.join(
                     ctx.cwd, 'node_modules'
                 )
             );
 
-            if (fs.existsSync(NODE_MODULES_FOLDER)) {
-                const STAT = fs.lstatSync(NODE_MODULES_FOLDER);
+            if (await exists(NODE_MODULES_FOLDER)) {
+                const STAT = await fs.lstat(NODE_MODULES_FOLDER);
+
                 if (STAT.isDirectory()) {
                     fs.removeSync(NODE_MODULES_FOLDER);
                 } else if (STAT.isSymbolicLink()) {
@@ -61,8 +62,8 @@ export class EgoCommand extends CommandBase {
             spinner.succeed(`'node_modules' folder removed`);
         });
 
-        withSpinner(`Executing 'npm install' ...`, (spinner) => {
-            spawn('npm', ['install'], {
+        await withSpinnerAsync(`Executing 'npm install' ...`, async (spinner) => {
+            await spawnAsync('npm', ['install'], {
                 cwd: ctx.cwd,
                 stdio: getSTDIO(ctx),
             });
@@ -72,8 +73,8 @@ export class EgoCommand extends CommandBase {
 
         // npm update?
         if (ctx.args['u'] || ctx.args['uodate']) {
-            withSpinner(`Executing 'npm update' ...`, (spinner) => {
-                spawn('npm', ['update'], {
+            await withSpinnerAsync(`Executing 'npm update' ...`, async (spinner) => {
+                await spawnAsync('npm', ['update'], {
                     cwd: ctx.cwd,
                     stdio: getSTDIO(ctx),
                 });
@@ -84,8 +85,8 @@ export class EgoCommand extends CommandBase {
 
         // npm audit fix?
         if (ctx.args['a'] || ctx.args['audit']) {
-            withSpinner(`Executing 'npm audit fix' ...`, (spinner) => {
-                spawn('npm', ['audit', 'fix'], {
+            await withSpinnerAsync(`Executing 'npm audit fix' ...`, async (spinner) => {
+                await spawnAsync('npm', ['audit', 'fix'], {
                     cwd: ctx.cwd,
                     stdio: getSTDIO(ctx),
                 });

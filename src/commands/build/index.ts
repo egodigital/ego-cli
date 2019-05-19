@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { CommandBase, CommandExecuteContext, PackageJSON } from '../../contracts';
-import { getSTDIO, spawn, withSpinner, writeLine } from '../../util';
+import { exists, getSTDIO, spawnAsync, withSpinnerAsync, writeLine } from '../../util';
 
 
 /**
@@ -36,14 +36,14 @@ export class EgoCommand extends CommandBase {
                 ctx.cwd, 'package.json'
             )
         );
-        if (!fs.existsSync(PACKAGE_JSON_FILE)) {
+        if (!(await exists(PACKAGE_JSON_FILE))) {
             console.warn(`'package.json' file not found!`);
 
             ctx.exit(1);
         }
 
         const PACKAGE_JSON: PackageJSON = JSON.parse(
-            fs.readFileSync(
+            await fs.readFile(
                 PACKAGE_JSON_FILE, 'utf8'
             )
         );
@@ -60,8 +60,8 @@ export class EgoCommand extends CommandBase {
             ctx.exit(3);
         }
 
-        withSpinner(`Executing 'npm run build' ...`, (spinner) => {
-            spawn('npm', ['run', 'build'], {
+        await withSpinnerAsync(`Executing 'npm run build' ...`, async (spinner) => {
+            await spawnAsync('npm', ['run', 'build'], {
                 cwd: ctx.cwd,
                 stdio: getSTDIO(ctx),
             });

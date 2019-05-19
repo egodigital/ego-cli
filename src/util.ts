@@ -28,6 +28,29 @@ import { default as chalk } from 'chalk';
 
 
 /**
+ * Possible values for options of 'spawnAsync()' function.
+ */
+export type SpawnAsyncOptions = child_process.SpawnOptions;
+
+/**
+ * A result of a 'spawnAsync()' function call.
+ */
+export interface SpawnAsyncResult {
+    /**
+     * The exit code.
+     */
+    status: number;
+    /**
+     * The data of the standard error stream.
+     */
+    stderr: Buffer | null;
+    /**
+     * The data of the standard output stream.
+     */
+    stdout: Buffer | null;
+}
+
+/**
  * Possible values for options of 'spawn()' function.
  */
 export type SpawnOptions = child_process.SpawnOptions | child_process.SpawnSyncOptionsWithBufferEncoding;
@@ -75,7 +98,6 @@ export function asArray<T = any>(val: T | T[], noEmpty = true): T[] {
     });
 }
 
-
 /**
  * Compares two values for sorting, by using a selector.
  *
@@ -114,6 +136,25 @@ export function eGO(val: any = 'e.GO'): string {
         "e.GO",
         `${chalk.reset() + chalk.blueBright('e') + chalk.white('.') + chalk.blueBright('GO') + chalk.reset()}`
     );
+}
+
+/**
+ * Checks if a path exists.
+ *
+ * @param {fs.PathLike} p The path to check.
+ *
+ * @return {Promise<boolean>} The promise, that indicates, if path exists or not.
+ */
+export function exists(p: fs.PathLike): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+        try {
+            fs.exists(p, (doesExist) => {
+                resolve(doesExist);
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
 }
 
 /**
@@ -209,7 +250,7 @@ export function globalModuleExists(moduleId: string): boolean {
  * @param {any[]} [args] The (optional) arguments for the execution.
  * @param {SpawnOptions} [opts] Custom options.
  *
- * @return {child_process.SpawnSyncReturns<Buffer>} The result of an execution.
+ * @return {child_process.SpawnSyncReturns<Buffer>} The result of the execution.
  */
 export function spawn(
     command: any, args?: any[],
@@ -243,6 +284,112 @@ export function spawn(
     }
 
     return RESULT;
+}
+
+/**
+ * Spawns a new process (async).
+ *
+ * @param {any} command The command.
+ * @param {any[]} [args] The (optional) arguments for the execution.
+ * @param {SpawnAsyncOptions} [opts] Custom options.
+ *
+ * @return {Promise<SpawnAsyncResult>} The promise with the result of the execution.
+ */
+export function spawnAsync(
+    command: any, args?: any[],
+    opts?: SpawnAsyncOptions,
+): Promise<SpawnAsyncResult> {
+    return new Promise<SpawnAsyncResult>((resolve, reject) => {
+        try {
+            command = toStringSafe(command);
+
+            if (_.isNil(args)) {
+                args = [];
+            }
+
+            opts = deepMerge(<SpawnAsyncOptions>{
+                cwd: process.cwd(),
+                env: process.env,
+                stdio: 'inherit',
+            }, opts || {} as any);
+
+            const PS = child_process.spawn(
+                command, args,
+                opts,
+            );
+
+            PS.once('error', (err) => {
+                reject(err);
+            });
+
+            let stdout: Buffer;
+            if (!_.isNil(PS.stderr)) {
+                stdout = Buffer.alloc(0);
+
+                PS.stdout.on('data', (data) => {
+                    try {
+                        stdout = Buffer.concat([
+                            stdout, toBufferSafe(data)
+                        ]);
+                    } catch (e) {
+                        reject(e);
+                    }
+                });
+            }
+
+            let stderr: Buffer = null;
+            if (!_.isNil(PS.stderr)) {
+                stderr = Buffer.alloc(0);
+
+                PS.stderr.on('data', (data) => {
+                    try {
+                        stderr = Buffer.concat([
+                            stderr, toBufferSafe(data)
+                        ]);
+                    } catch (e) {
+                        reject(e);
+                    }
+                });
+            }
+
+            PS.once('close', (code) => {
+                if (0 === code) {
+                    resolve({
+                        status: code,
+                        stderr,
+                        stdout,
+                    });
+                } else {
+                    reject(
+                        new Error(`'${command}' exited with code '${code}'`)
+                    );
+                }
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+/**
+ * Converts data to a buffer (if needed).
+ *
+ * @param {any} data The input data.
+ *
+ * @return {Buffer} The output data.
+ */
+export function toBufferSafe(data: any): Buffer {
+    if (Buffer.isBuffer(data)) {
+        return data;
+    }
+
+    if (_.isNil(data)) {
+        return Buffer.alloc(0);
+    }
+
+    return new Buffer(
+        toStringSafe(data), 'utf8'
+    );
 }
 
 /**
@@ -294,6 +441,38 @@ export function withSpinner<TResult = any>(
         let result: TResult;
         if (action) {
             result = action(SPINNER);
+        }
+
+        SPINNER.succeed();
+
+        return result;
+    } catch (e) {
+        SPINNER.fail(text + ' => ' + toStringSafe(e));
+
+        throw e;
+    }
+}
+
+/**
+ * Executes an action for a spinner (async).
+ *
+ * @param {any} text The initial text.
+ * @param {Function} [action] The action to invoke.
+ *
+ * @return {Promise<TResult>} The promise with the result of the action.
+ */
+export async function withSpinnerAsync<TResult = any>(
+    text: any, action?: (spinner: ora.Ora) => PromiseLike<TResult>
+): Promise<TResult> {
+    text = toStringSafe(text);
+
+    const SPINNER = ora(text);
+    try {
+        SPINNER.start();
+
+        let result: TResult;
+        if (action) {
+            result = await action(SPINNER);
         }
 
         SPINNER.succeed();

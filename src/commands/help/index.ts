@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Command, CommandBase, CommandExecuteContext, CommandShowHelpContext, REGEX_COMMAND_NAME } from '../../contracts';
-import { eGO, toStringSafe, writeLine } from '../../util';
+import { eGO, exists, toStringSafe, writeLine } from '../../util';
 
 
 /**
@@ -58,7 +58,7 @@ export class EgoCommand extends CommandBase {
                     __dirname, '../', COMMAND_NAME, 'index.js'
                 )
             );
-            if (!fs.existsSync(MODULE_FILE)) {
+            if (!(await exists(MODULE_FILE))) {
                 console.warn(`Unknown command '${COMMAND_NAME}'!`);
 
                 ctx.exit(4);
@@ -109,7 +109,7 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine('Examples:    ego help new');
-        writeLine('             ego help');
+        writeLine(`Examples:    ego help new`);
+        writeLine(`             ego help`);
     }
 }

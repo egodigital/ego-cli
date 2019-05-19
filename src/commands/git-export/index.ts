@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { getSTDIO, spawn, toStringSafe, withSpinner, writeLine } from '../../util';
+import { exists, getSTDIO, spawnAsync, toStringSafe, withSpinnerAsync, writeLine } from '../../util';
 
 
 /**
@@ -40,8 +40,8 @@ export class EgoCommand extends CommandBase {
             ctx.exit(1);
         }
 
-        withSpinner(`Cloning repository '${REPO_URL}' ...`, (spinner) => {
-            spawn('git', ['clone', REPO_URL, '.'], {
+        await withSpinnerAsync(`Cloning repository '${REPO_URL}' ...`, async (spinner) => {
+            await spawnAsync('git', ['clone', REPO_URL, '.'], {
                 cwd: ctx.cwd,
                 stdio: getSTDIO(ctx),
             });
@@ -49,27 +49,24 @@ export class EgoCommand extends CommandBase {
             spinner.succeed(`Repository '${REPO_URL}' cloned`);
         });
 
-        withSpinner(`Removing '.git' folder ...`, (spinner) => {
+        await withSpinnerAsync(`Removing '.git' folder ...`, async (spinner) => {
             const GIT_FOLDER = path.resolve(
                 path.join(
                     ctx.cwd, '.git'
                 )
             );
 
-            if (fs.existsSync(GIT_FOLDER)) {
-                const STAT = fs.lstatSync(GIT_FOLDER);
+            if (await exists(GIT_FOLDER)) {
+                const STAT = await fs.lstat(GIT_FOLDER);
+
                 if (STAT.isDirectory()) {
-                    fs.removeSync(GIT_FOLDER);
+                    await fs.remove(GIT_FOLDER);
                 } else if (STAT.isSymbolicLink()) {
-                    fs.unlinkSync(GIT_FOLDER);
+                    await fs.unlink(GIT_FOLDER);
                 }
             }
 
-            if (fs.existsSync(GIT_FOLDER)) {
-                spinner.warn(`'.git' folder could not be removed!`);
-            } else {
-                spinner.succeed(`'.git' folder removed`);
-            }
+            spinner.succeed(`'.git' folder removed`);
         });
     }
 

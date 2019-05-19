@@ -21,7 +21,7 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 import { Command, CommandExecuteContext, PackageJSON, REGEX_COMMAND_NAME } from './contracts';
 import { showHelp } from './help';
-import { toStringSafe, writeLine } from './util';
+import { exists, toStringSafe, writeLine } from './util';
 
 
 (async () => {
@@ -74,7 +74,7 @@ import { toStringSafe, writeLine } from './util';
             __dirname, 'commands', COMMAND_NAME, 'index.js'
         )
     );
-    if (!fs.existsSync(MODULE_FILE)) {
+    if (!(await exists(MODULE_FILE))) {
         console.warn(`Unknown command '${COMMAND_NAME}'!`);
 
         process.exit(6);
