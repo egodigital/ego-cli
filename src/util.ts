@@ -493,7 +493,7 @@ export async function withSpinnerAsync<TResult = any>(
 ): Promise<TResult> {
     text = toStringSafe(text);
 
-    const SPINNER = ora();
+    const SPINNER = ora(text);
     await async(() => SPINNER.start());
 
     try {
