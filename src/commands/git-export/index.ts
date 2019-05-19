@@ -46,7 +46,7 @@ export class EgoCommand extends CommandBase {
                 stdio: getSTDIO(ctx),
             });
 
-            spinner.succeed(`Repository '${REPO_URL}' cloned`);
+            spinner.text = `Repository '${REPO_URL}' cloned`;
         });
 
         await withSpinnerAsync(`Removing '.git' folder ...`, async (spinner) => {
@@ -66,7 +66,7 @@ export class EgoCommand extends CommandBase {
                 }
             }
 
-            spinner.succeed(`'.git' folder removed`);
+            spinner.text = `'.git' folder removed`;
         });
     }
 

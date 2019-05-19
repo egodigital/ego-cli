@@ -435,9 +435,9 @@ export function withSpinner<TResult = any>(
     text = toStringSafe(text);
 
     const SPINNER = ora(text);
-    try {
-        SPINNER.start();
+    SPINNER.start();
 
+    try {
         let result: TResult;
         if (action) {
             result = action(SPINNER);
@@ -467,9 +467,9 @@ export async function withSpinnerAsync<TResult = any>(
     text = toStringSafe(text);
 
     const SPINNER = ora(text);
-    try {
-        SPINNER.start();
+    SPINNER.start();
 
+    try {
         let result: TResult;
         if (action) {
             result = await action(SPINNER);

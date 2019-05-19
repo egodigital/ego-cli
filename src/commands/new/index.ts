@@ -48,7 +48,7 @@ export class EgoCommand extends CommandBase {
                     stdio: getSTDIO(ctx),
                 });
 
-                spinner.succeed('Yeoman generator installed');
+                spinner.text = 'Yeoman generator installed';
             });
         }
 
@@ -71,7 +71,7 @@ export class EgoCommand extends CommandBase {
                     stdio: getSTDIO(ctx),
                 });
 
-                spinner.succeed(eGO(`e.GO generator for Yeoman installed`));
+                spinner.text = eGO(`e.GO generator for Yeoman installed`);
             });
         }
 

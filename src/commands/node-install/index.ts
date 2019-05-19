@@ -59,7 +59,7 @@ export class EgoCommand extends CommandBase {
                 }
             }
 
-            spinner.succeed(`'node_modules' folder removed`);
+            spinner.text = `'node_modules' folder removed`;
         });
 
         await withSpinnerAsync(`Executing 'npm install' ...`, async (spinner) => {
@@ -68,7 +68,7 @@ export class EgoCommand extends CommandBase {
                 stdio: getSTDIO(ctx),
             });
 
-            spinner.succeed(`'npm install' executed`);
+            spinner.text = `'npm install' executed`;
         });
 
         // npm update?
@@ -79,7 +79,7 @@ export class EgoCommand extends CommandBase {
                     stdio: getSTDIO(ctx),
                 });
 
-                spinner.succeed(`'npm update' executed`);
+                spinner.text = `'npm update' executed`;
             });
         }
 
@@ -91,7 +91,7 @@ export class EgoCommand extends CommandBase {
                     stdio: getSTDIO(ctx),
                 });
 
-                spinner.succeed(`'npm audit fix' executed`);
+                spinner.text = `'npm audit fix' executed`;
             });
         }
     }
