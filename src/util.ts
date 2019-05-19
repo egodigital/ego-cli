@@ -474,7 +474,7 @@ export function withSpinner<TResult = any>(
 
         return result;
     } catch (e) {
-        SPINNER.fail(text + ' => ' + toStringSafe(e));
+        SPINNER.fail(SPINNER.text + ' => ' + toStringSafe(e));
 
         throw e;
     } finally {
@@ -508,7 +508,7 @@ export async function withSpinnerAsync<TResult = any>(
 
         return result;
     } catch (e) {
-        await async(() => SPINNER.fail(text + ' => ' + toStringSafe(e)));
+        await async(() => SPINNER.fail(SPINNER.text + ' => ' + toStringSafe(e)));
 
         throw e;
     } finally {
