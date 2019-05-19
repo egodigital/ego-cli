@@ -99,6 +99,33 @@ export function asArray<T = any>(val: T | T[], noEmpty = true): T[] {
 }
 
 /**
+ * Runs an action async.
+ *
+ * @param {Function} action The action to invoke.
+ *
+ * @return {Promise<TResult>} The promise with the resumt of the action.
+ */
+export function async<TResult = any>(
+    action: (...args: any[]) => TResult,
+): Promise<TResult> {
+    return new Promise<TResult>((resolve, reject) => {
+        try {
+            process.nextTick(() => {
+                try {
+                    resolve(
+                        action()
+                    );
+                } catch (e) {
+                    reject(e);
+                }
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+/**
  * Compares two values for sorting, by using a selector.
  *
  * @param {T} x The first value.
@@ -466,8 +493,8 @@ export async function withSpinnerAsync<TResult = any>(
 ): Promise<TResult> {
     text = toStringSafe(text);
 
-    const SPINNER = ora(text);
-    SPINNER.start();
+    const SPINNER = ora();
+    await async(() => SPINNER.start());
 
     try {
         let result: TResult;
@@ -475,11 +502,11 @@ export async function withSpinnerAsync<TResult = any>(
             result = await action(SPINNER);
         }
 
-        SPINNER.succeed();
+        await async(() => SPINNER.succeed());
 
         return result;
     } catch (e) {
-        SPINNER.fail(text + ' => ' + toStringSafe(e));
+        await async(() => SPINNER.fail(text + ' => ' + toStringSafe(e)));
 
         throw e;
     }
