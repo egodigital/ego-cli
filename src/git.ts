@@ -20,6 +20,12 @@ import { asArray, compareValuesBy, getCWD, spawn, WithCWD, WithVerbose, getSTDIO
 
 
 /**
+ * Options for 'getCurrentGitBranch()' function.
+ */
+export interface GetCurrentGitBranchOptions extends WithCWD, WithVerbose {
+}
+
+/**
  * Options for 'getGitBranches()' function.
  */
 export interface GetGitBranchesOptions extends WithCWD, WithVerbose {
@@ -31,6 +37,27 @@ export interface GetGitBranchesOptions extends WithCWD, WithVerbose {
 export interface GetGitRemotesOptions extends WithCWD, WithVerbose {
 }
 
+
+/**
+ * Gets the current git branch.
+ *
+ * @param {GetCurrentGitBranchOptions} [opts] Custom options.
+ *
+ * @return {string} The name of the current branch.
+ */
+export function getCurrentGitBranch(opts?: GetCurrentGitBranchOptions): string {
+    return toStringSafe(
+        asArray(
+            spawn(
+                'git', ['rev-parse', '--abbrev-ref', 'HEAD'],
+                {
+                    cwd: getCWD(opts),
+                    stdio: getSTDIO(opts),
+                }
+            ).output
+        ).join('')
+    ).trim();
+}
 
 /**
  * Lists all branches of a git repository.
