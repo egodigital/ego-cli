@@ -113,7 +113,7 @@ export function showHelp(app: PackageJSON): void {
  * @param {PackageJSON} app The app information.
  */
 export function showHelpHeader(app: PackageJSON): void {
-    writeLine(`${app.displayName} (${app.name}) - Version ${app.version}`);
+    writeLine(`${eGO(app.displayName)} (${app.name}) - Version ${app.version}`);
     writeLine(`by ${eGO() + chalk.reset(' Digital GmbH <') + chalk.white('https://e-go-digital.com') + chalk.reset('>')}`);
     writeLine();
 }
