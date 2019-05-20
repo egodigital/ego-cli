@@ -16,7 +16,7 @@
  */
 
 import * as _ from 'lodash';
-import * as fs from 'fs';
+import * as fs from 'fs-extra';
 import * as minimist from 'minimist';
 import * as path from 'path';
 import { Command, CommandExecuteContext, PackageJSON, REGEX_COMMAND_NAME } from './contracts';
@@ -26,7 +26,7 @@ import { exists, toStringSafe, writeLine } from './util';
 
 (async () => {
     const APP: PackageJSON = JSON.parse(
-        fs.readFileSync(
+        await fs.readFile(
             path.resolve(
                 path.join(
                     __dirname, '../package.json'
@@ -40,7 +40,7 @@ import { exists, toStringSafe, writeLine } from './util';
         '--help' === process.argv[2];
 
     if (SHOW_HELP_SCREEN) {
-        showHelp(APP);
+        await showHelp(APP);
 
         process.exit(2);
     }

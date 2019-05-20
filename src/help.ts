@@ -35,7 +35,7 @@ interface CommandInfo {
  *
  * @param {PackageJSON} app The app information.
  */
-export function showHelp(app: PackageJSON): void {
+export async function showHelp(app: PackageJSON): Promise<void> {
     showHelpHeader(app);
 
     writeLine(`Syntax:    ego COMMAND [options]`);
@@ -59,14 +59,14 @@ export function showHelp(app: PackageJSON): void {
             path.join(__dirname, 'commands')
         );
 
-        for (const ITEM of fs.readdirSync(COMMANDS_DIR)) {
+        for (const ITEM of await fs.readdir(COMMANDS_DIR)) {
             const CMD_MODULE_FILE = require.resolve(
                 path.join(
                     COMMANDS_DIR, ITEM, 'index.js'
                 )
             );
 
-            const STAT = fs.statSync(CMD_MODULE_FILE);
+            const STAT = await fs.stat(CMD_MODULE_FILE);
             if (STAT.isFile()) {
                 const COMMAND_MODULE = require(CMD_MODULE_FILE);
 

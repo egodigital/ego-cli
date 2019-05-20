@@ -53,9 +53,9 @@ export class EgoCommand extends CommandBase {
                 const STAT = await fs.lstat(NODE_MODULES_FOLDER);
 
                 if (STAT.isDirectory()) {
-                    fs.removeSync(NODE_MODULES_FOLDER);
+                    await fs.remove(NODE_MODULES_FOLDER);
                 } else if (STAT.isSymbolicLink()) {
-                    fs.unlinkSync(NODE_MODULES_FOLDER);
+                    await fs.unlink(NODE_MODULES_FOLDER);
                 }
             }
 
