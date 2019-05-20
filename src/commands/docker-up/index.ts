@@ -25,7 +25,7 @@ import { spawn, writeLine } from '../../util';
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = "Shorthand for 'docker-compse up'.";
+    public readonly description = "Shorthand for 'docker-compose up'.";
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
