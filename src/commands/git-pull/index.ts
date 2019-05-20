@@ -31,7 +31,7 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
         let branch: string;
-        await withSpinnerAsync('Deteching current branch ...', async (spinner) => {
+        await withSpinnerAsync('Detecting current branch ...', async (spinner) => {
             branch = getCurrentGitBranch({
                 cwd: ctx.cwd,
                 verbose: ctx.verbose,
