@@ -61,7 +61,7 @@ export class EgoCommand extends CommandBase {
                 });
 
                 spinner.text = `Pushing to '${R}' (${i + 1} / ${remotes.length}) ...`;
-                await spawnAsync('git', ['push', R], {
+                await spawnAsync('git', ['push', R, branch], {
                     cwd: ctx.cwd,
                     stdio: getSTDIO(ctx),
                 });

@@ -17,7 +17,7 @@
 
 import * as _ from 'lodash';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { getGitRemotes } from '../../git';
+import { getCurrentGitBranch, getGitRemotes } from '../../git';
 import { getSTDIO, spawnAsync, withSpinnerAsync, writeLine } from '../../util';
 
 
@@ -30,6 +30,16 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
+        let branch: string;
+        await withSpinnerAsync('Deteching current branch ...', async (spinner) => {
+            branch = getCurrentGitBranch({
+                cwd: ctx.cwd,
+                verbose: ctx.verbose,
+            });
+
+            spinner.text = `Branch: '${branch}'`;
+        });
+
         let remotes: string[];
         await withSpinnerAsync('Loading remotes ...', async (spinner) => {
             remotes = getGitRemotes({
@@ -44,7 +54,7 @@ export class EgoCommand extends CommandBase {
             const R = remotes[i];
 
             await withSpinnerAsync(`Pushing to '${R}' (${i + 1} / ${remotes.length}) ...`, async (spinner) => {
-                await spawnAsync('git', ['push', R], {
+                await spawnAsync('git', ['push', R, branch], {
                     cwd: ctx.cwd,
                     stdio: getSTDIO(ctx),
                 });
