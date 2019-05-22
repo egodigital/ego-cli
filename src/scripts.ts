@@ -46,7 +46,9 @@ export function executeShellScriptCommand(
 
         // ${HOME_DIR}/.ego/${commandName}.${scriptExt}
         const SCRIPT_FILE = path.resolve(
-            os.homedir(), '.ego', commandName + '.' + scriptExt
+            path.join(
+                os.homedir(), '.ego', commandName + '.' + scriptExt
+            )
         );
         if (fs.existsSync(SCRIPT_FILE)) {
             spawn(SCRIPT_FILE, args, {
