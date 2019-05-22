@@ -51,10 +51,13 @@ export function executeShellScriptCommand(
             )
         );
         if (fs.existsSync(SCRIPT_FILE)) {
-            spawn(SCRIPT_FILE, args, {
-                cwd: process.cwd(),
-                env: process.env,
-            });
+            const STAT = fs.statSync(SCRIPT_FILE);
+            if (STAT.isFile()) {
+                spawn(SCRIPT_FILE, args, {
+                    cwd: process.cwd(),
+                    env: process.env,
+                });
+            }
 
             return true;
         }
