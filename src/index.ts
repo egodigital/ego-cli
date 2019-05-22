@@ -21,6 +21,7 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 import { Command, CommandExecuteContext, PackageJSON, REGEX_COMMAND_NAME } from './contracts';
 import { showHelp } from './help';
+import { executeShellScriptCommand } from './scripts';
 import { exists, toStringSafe, writeLine } from './util';
 
 
@@ -67,6 +68,11 @@ import { exists, toStringSafe, writeLine } from './util';
         console.warn(`Invalid command name ('${COMMAND_NAME}')!`);
 
         process.exit(5);
+    }
+
+    // bash script?
+    if (executeShellScriptCommand(COMMAND_NAME, process.argv.slice(3))) {
+        return;  // yes
     }
 
     const MODULE_FILE = require.resolve(

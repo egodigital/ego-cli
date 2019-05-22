@@ -18,6 +18,7 @@
 import * as _ from 'lodash';
 import * as path from 'path';
 import { Command, CommandBase, CommandExecuteContext, CommandShowHelpContext, REGEX_COMMAND_NAME } from '../../contracts';
+import { executeShellScriptCommand } from '../../scripts';
 import { eGO, exists, toStringSafe, writeLine } from '../../util';
 
 
@@ -50,6 +51,13 @@ export class EgoCommand extends CommandBase {
                 console.warn(`Invalid command name ('${COMMAND_NAME}')!`);
 
                 ctx.exit(3);
+            }
+
+            // bash script?
+            if (executeShellScriptCommand(COMMAND_NAME, ['--?'])) {
+                ctx.exit();
+
+                return;  // yes
             }
 
             const MODULE_FILE = require.resolve(
