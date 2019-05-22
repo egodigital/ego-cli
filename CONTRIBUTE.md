@@ -78,11 +78,18 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
+        // ctx.args => command line arguments, s. https://github.com/substack/minimist
+        // ctx.cwd => current working directory
+        // ctx.verbose => is '-v' / '--verbose' flag set or not
+
         writeLine('Hello, my-new-command!');
     }
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
+        // this is executed, if you run
+        // ego help my-new-command
+
         writeLine(`Options:`);
         writeLine(` -v, --verbose  # Verbose output.`);
         writeLine();
