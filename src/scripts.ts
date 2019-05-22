@@ -57,9 +57,9 @@ export function executeShellScriptCommand(
                     cwd: process.cwd(),
                     env: process.env,
                 });
-            }
 
-            return true;
+                return true;
+            }
         }
     }
 
