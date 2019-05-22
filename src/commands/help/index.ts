@@ -92,7 +92,7 @@ export class EgoCommand extends CommandBase {
         writeLine(eGO(command.description));
         writeLine();
 
-        writeLine(`Syntax:    ego ${commandName} [options]`);
+        writeLine(`Syntax:    ego ${commandName} ${command.syntax}`);
         writeLine();
 
         const CTX: CommandShowHelpContext = {

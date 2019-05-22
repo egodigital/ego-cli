@@ -44,6 +44,11 @@ export interface Command {
      * @return {CommandShowHelpResult|PromiseLike<CommandShowHelpResult>} The result.
      */
     readonly showHelp: (context: CommandShowHelpContext) => CommandShowHelpResult | PromiseLike<CommandShowHelpResult>;
+
+    /**
+     * Syntax description, which is shown on help screen.
+     */
+    readonly syntax: string;
 }
 
 /**
@@ -145,4 +150,7 @@ export abstract class CommandBase implements Command {
 
     /** @inheritdoc */
     public abstract showHelp(context: CommandShowHelpContext): Promise<CommandShowHelpResult>;
+
+    /** @inheritdoc */
+    public syntax = '[options]';
 }
