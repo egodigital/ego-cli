@@ -17,9 +17,10 @@
 
 import * as _ from 'lodash';
 import * as cliHighlight from 'cli-highlight';
-import { CommandBase, CommandExecuteContext } from '../../contracts';
+import * as fs from 'fs-extra';
+import { CommandBase, CommandExecuteContext, Storage, STORAGE_FILE, EGO_FOLDER } from '../../contracts';
 import { getStorage, normalizeStorageKey } from '../../storage';
-import { asArray, writeLine, toStringSafe } from '../../util';
+import { asArray, sortObjectByKeys, writeLine, toStringSafe } from '../../util';
 
 
 /**
@@ -32,9 +33,48 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
         await ctx.queue.add(async () => {
-            const STORAGE = getStorage();
+            const GLOBAL = ctx.args['g'] || ctx.args['global'];
+            const LOCAL = ctx.args['l'] || ctx.args['local'];
+            const TABLE = ctx.args['t'] || ctx.args['table'];
 
-            const LIST = ctx.args['l'] || ctx.args['list'];
+            const STORAGES: Storage[] = [];
+            const ADD_GLOBAL_STORAGE = () => {
+                STORAGES.push(
+                    getStorage()
+                );
+            };
+            const ADD_LOCAL_STORAGE = () => {
+                const LOCAL_STORAGE_FILE_PATH = ctx.getFullPath(
+                    EGO_FOLDER + '/' + STORAGE_FILE
+                );
+
+                if (fs.existsSync(LOCAL_STORAGE_FILE_PATH)) {
+                    const STAT = fs.statSync(LOCAL_STORAGE_FILE_PATH);
+                    if (STAT.isFile()) {
+                        STORAGES.push(
+                            JSON.parse(
+                                fs.readFileSync(
+                                    LOCAL_STORAGE_FILE_PATH,
+                                    'utf8',
+                                )
+                            )
+                        );
+                    }
+                }
+            };
+
+            if (!GLOBAL && !LOCAL) {
+                ADD_GLOBAL_STORAGE();
+                ADD_LOCAL_STORAGE();
+            } else {
+                if (GLOBAL) {
+                    ADD_GLOBAL_STORAGE();
+                }
+
+                if (LOCAL) {
+                    ADD_LOCAL_STORAGE();
+                }
+            }
 
             let keyFilter: (key: string) => boolean;
 
@@ -57,29 +97,37 @@ export class EgoCommand extends CommandBase {
             }
 
             let keysFound = false;
-            const FILTERED_STORAGE: any = {};
-            if (!_.isNil(STORAGE)) {
-                for (const KEY in STORAGE) {
+            let filteredStorage: any = {};
+            for (const S of STORAGES) {
+                if (!_.isObjectLike(S)) {
+                    continue;
+                }
+
+                for (const KEY in S) {
                     if (keyFilter(KEY)) {
-                        FILTERED_STORAGE[
+                        filteredStorage[
                             normalizeStorageKey(KEY)
-                        ] = STORAGE[KEY];
+                        ] = S[KEY];
                         keysFound = true;
                     }
                 }
             }
 
-            if (LIST) {
-                for (const KEY in FILTERED_STORAGE) {
+            filteredStorage = sortObjectByKeys(filteredStorage);
+
+            if (TABLE) {
+                for (const KEY in filteredStorage) {
                     writeLine(`${KEY}\t${JSON.stringify(
-                        FILTERED_STORAGE[KEY]
+                        filteredStorage[KEY]
                     )}`);
                 }
             } else {
                 if (keysFound) {
                     writeLine(
                         cliHighlight.highlight(JSON.stringify(
-                            FILTERED_STORAGE, null, 2
+                            filteredStorage,
+                            null,
+                            2
                         ), {
                                 'language': 'json',
                             })
@@ -92,14 +140,16 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -l, --list    # Outputs value(s) in a simple list.`);
+        writeLine(` -g, --global    # List only global values, if possible.`);
+        writeLine(` -l, --local     # List only local values, if possible.`);
+        writeLine(` -t, --table     # Outputs value(s) in a simple list.`);
         writeLine();
 
         writeLine(`Examples:    ego get`);
         writeLine(`             ego get email`);
-        writeLine(`             ego get username email --list`);
+        writeLine(`             ego get username email --table --local`);
     }
 
     /** @inheritdoc */
-    public readonly syntax = '[REGEX_FILTER*]';
+    public readonly syntax = '[REGEX_FILTER*] [options]';
 }
