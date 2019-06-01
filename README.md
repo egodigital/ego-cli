@@ -79,7 +79,7 @@ ego run test.js
 
 from the folder, that contains the file.
 
-You also can store it globally, inside the `.ego` subfolder, inside your user's home directory (`${HOME}/.ego/test.js`).
+You are also able to store it globally, inside the `.ego` subfolder, inside your user's home directory (`${HOME}/.ego/test.js`).
 
 ## Contribute
 
