@@ -2,7 +2,7 @@
 
 # ego-cli
 
-Command Line Interface, which is designed to handle Dev(Op) tasks much faster.
+Command Line Interface, which is designed to handle things, like Dev(Op) tasks, much faster.
 
 ## Install
 
