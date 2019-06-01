@@ -20,7 +20,7 @@ import * as fs from 'fs-extra';
 import * as minimist from 'minimist';
 import * as path from 'path';
 import * as pQueue from 'p-queue';
-import { Command, CommandExecuteContext, PackageJSON, REGEX_COMMAND_NAME } from './contracts';
+import { Command, CommandExecuteContext, EGO_FOLDER, PackageJSON, REGEX_COMMAND_NAME, Storage, STORAGE_FILE } from './contracts';
 import { showHelp } from './help';
 import { executeShellScriptCommand } from './scripts';
 import { getStorage, normalizeStorageKey } from './storage';
@@ -120,19 +120,50 @@ import { exists, toStringSafe, writeLine } from './util';
 
             process.exit(9 + code);
         },
-        get: (key: any, defaultValue?: any) => {
+        get: function (key: any, defaultValue?: any) {
             key = normalizeStorageKey(key);
 
-            const STORAGE = getStorage();
-            for (const PROP in STORAGE) {
-                if (key === PROP) {
-                    return STORAGE[PROP];
+            const STORAGES: Storage[] = [
+                getStorage()
+            ];
+
+            const LOCAL_STORAGE_FILE_PATH = this.getFullPath(
+                EGO_FOLDER + '/' + STORAGE_FILE
+            );
+
+            if (fs.existsSync(LOCAL_STORAGE_FILE_PATH)) {
+                const STAT = fs.statSync(LOCAL_STORAGE_FILE_PATH);
+                if (STAT.isFile()) {
+                    STORAGES.push(
+                        JSON.parse(
+                            fs.readFileSync(
+                                LOCAL_STORAGE_FILE_PATH,
+                                'utf8',
+                            )
+                        )
+                    );
                 }
             }
 
-            return defaultValue;
+            let value: any = defaultValue;
+
+            for (const S of STORAGES) {
+                if (!_.isObjectLike(S)) {
+                    continue;
+                }
+
+                for (const PROP in S) {
+                    const STORAGE_KEY = normalizeStorageKey(PROP);
+
+                    if (key === STORAGE_KEY) {
+                        value = S[PROP];
+                    }
+                }
+            }
+
+            return value;
         },
-        getFullPath: function(p: any) {
+        getFullPath: function (p: any) {
             p = toStringSafe(p);
             if (!path.isAbsolute(p)) {
                 p = path.join(
