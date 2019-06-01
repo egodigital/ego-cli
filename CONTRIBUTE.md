@@ -96,10 +96,13 @@ export class EgoCommand extends CommandBase {
 
         writeLine(`Example:    ego my-new-command`);
     }
+
+    /** @inheritdoc */
+    public readonly syntax = '[options]';  // Syntax, that is shown in help screen
 }
 ```
 
-To test the code, simply build the code by executing
+To test the code, simply build the app by executing
 
 ```bash
 npm run build
@@ -112,3 +115,11 @@ ego my-new-command
 ```
 
 The command should output `Hello, my-new-command!` to the shell, where you are currently working.
+
+To test the help screen, run
+
+```bash
+ego help my-new-command
+```
+
+which makes use of `showHelp()` method and `syntax` property in the `EgoCommand` class.
