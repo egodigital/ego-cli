@@ -43,3 +43,7 @@ ego my-command ARG1 ARG2
 ```
 
 All additional arguments, after `my-command`, will be passed to the shell / batch script.
+
+## Contribute
+
+The [contribution guide](./CONTRIBUTE.md) explains, how to implement a new command, work with the code and open a pull request.
