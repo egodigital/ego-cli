@@ -128,4 +128,4 @@ which makes use of `showHelp()` method and `syntax` property in the `EgoCommand`
 
 * commit your changes
 * sync them with your forked repository
-* open a [pull request](https://github.com/egodigital/ego-cli/pulls) from your branch to our `master`
+* open a [pull request](https://github.com/egodigital/ego-cli/pulls) from your branch to our [master](https://github.com/egodigital/ego-cli)
