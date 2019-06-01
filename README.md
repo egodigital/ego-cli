@@ -48,7 +48,7 @@ All additional arguments, after `my-command`, will be passed to the shell / batc
 
 With the help of `run` command, you can implement [Node.js]() based scripts.
 
-Create a `.js`, like `test.js`, and use the following skeleton:
+Create a `.js` file, like `test.js`, and use the following skeleton:
 
 ```javascript
 exports.execute = async (context) => {
