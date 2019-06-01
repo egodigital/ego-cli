@@ -103,13 +103,14 @@ export class EgoCommand extends CommandBase {
             cliHighlight.highlight(
                 `
     exports.execute = async (context) => {
-        // context.args     =>  List of command line arguments, s. https://www.npmjs.com/package/minimist
-        // context.cwd      =>  The full path of the current working directory
-        // context.package  =>  The 'package.json' file of the e.GO CLI
-        // context.queue    =>  A queue, that only executes 1 action at the same time, s. https://www.npmjs.com/package/p-queue
-        // context.require  =>  Allows to include a NPM module of the e.GO CLI
-        // context.values   =>  A key/value pair storage, that is available while the execution
-        // context.verbose  =>  Indicates, if script should output additional information or not
+        // context.args          =>  List of command line arguments, s. https://www.npmjs.com/package/minimist
+        // context.cwd           =>  The full path of the current working directory
+        // context.getFullPath   =>  Returns the full version of a path, based on the value of 'cwd'
+        // context.package       =>  The 'package.json' file of the e.GO CLI
+        // context.queue         =>  A queue, that only executes 1 action at the same time, s. https://www.npmjs.com/package/p-queue
+        // context.require       =>  Allows to include a NPM module of the e.GO CLI
+        // context.values        =>  A key/value pair storage, that is available while the execution
+        // context.verbose       =>  Indicates, if script should output additional information or not
 
         // docker utils
         const docker = context.require('./docker');

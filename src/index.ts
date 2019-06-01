@@ -132,6 +132,16 @@ import { exists, toStringSafe, writeLine } from './util';
 
             return defaultValue;
         },
+        getFullPath: function(p: any) {
+            p = toStringSafe(p);
+            if (!path.isAbsolute(p)) {
+                p = path.join(
+                    this.cwd, p
+                );
+            }
+
+            return path.resolve(p);
+        },
         name: COMMAND_NAME,
         package: APP,
         queue: new pQueue({

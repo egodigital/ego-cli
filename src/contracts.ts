@@ -80,6 +80,14 @@ export interface CommandExecuteContext {
      */
     get<TResult = any, TDefault = TResult>(key: any, defaultValue?: TResult): TResult | TDefault;
     /**
+     * Returns the full version of a path, based on the value for 'current working directory'.
+     *
+     * @param {any} p The input value.
+     *
+     * @return {string} The full path.
+     */
+    readonly getFullPath: (p: any) => string;
+    /**
      * The normalized name.
      */
     readonly name: string;

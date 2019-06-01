@@ -17,7 +17,8 @@
 
 import * as _ from 'lodash';
 import * as fs from 'fs-extra';
-import { CommandBase, CommandExecuteContext, Storage } from '../../contracts';
+import * as path from 'path';
+import { CommandBase, CommandExecuteContext, Storage, EGO_FOLDER, STORAGE_FILE } from '../../contracts';
 import { getStorageFile, normalizeStorageKey } from '../../storage';
 import { writeLine } from '../../util';
 
@@ -32,14 +33,14 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
         await ctx.queue.add(async () => {
-            const STORAGE_FILE_PATH = getStorageFile();
-
             const CONFIG_NAME = normalizeStorageKey(ctx.args['_'][0]);
             if ('' === CONFIG_NAME) {
                 console.warn('No config name defined!');
 
                 ctx.exit(1);
             }
+
+            const GLOBAL = ctx.args['g'] || ctx.args['global'];
 
             let configValue: any = undefined;
             if (ctx.args['_'].length > 1) {
@@ -51,12 +52,31 @@ export class EgoCommand extends CommandBase {
                 }
             }
 
+            let storageFilePath: string | false = false;
+            if (!GLOBAL) {
+                const LOCAL_EGO_DIR = ctx.getFullPath(EGO_FOLDER);
+                if (fs.existsSync(LOCAL_EGO_DIR)) {
+                    const STAT = fs.statSync(LOCAL_EGO_DIR);
+                    if (STAT.isDirectory()) {
+                        storageFilePath = path.resolve(
+                            path.join(
+                                LOCAL_EGO_DIR, STORAGE_FILE
+                            )
+                        );
+                    }
+                }
+            }
+
+            if (false === storageFilePath) {
+                storageFilePath = getStorageFile();
+            }
+
             let storage: Storage;
 
-            if (fs.existsSync(STORAGE_FILE_PATH)) {
+            if (fs.existsSync(storageFilePath)) {
                 storage = JSON.parse(
                     fs.readFileSync(
-                        STORAGE_FILE_PATH, 'utf8'
+                        storageFilePath, 'utf8'
                     )
                 );
             }
@@ -72,7 +92,7 @@ export class EgoCommand extends CommandBase {
             }
 
             fs.writeFileSync(
-                STORAGE_FILE_PATH,
+                storageFilePath,
                 JSON.stringify(
                     storage, null, 2
                 ),
@@ -83,8 +103,12 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
+        writeLine(`Options:`);
+        writeLine(` -g, --global    # Sets the value globally.`);
+        writeLine();
+
         writeLine(`Examples:    ego set email tanja.m@e-go-digital.com`);
-        writeLine(`             ego set email`);
+        writeLine(`             ego set email marcel.k@e-go-digital.com --global`);
     }
 
     /** @inheritdoc */
