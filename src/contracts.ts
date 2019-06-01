@@ -92,9 +92,21 @@ export interface CommandExecuteContext {
      */
     readonly queue: pQueue;
     /**
+     * Loads a module from (CLI) app context.
+     *
+     * @param {string} id The ID of the module.
+     *
+     * @return {TModule} The module.
+     */
+    require<TModule = any>(id: string): TModule;
+    /**
      * The root directory of the command.
      */
     readonly root: string;
+    /**
+     * A key/value pair storage, that is available while the execution.
+     */
+    readonly values: any;
     /**
      * Indicates if app runs in verbose mode or node.
      */
@@ -105,6 +117,18 @@ export interface CommandExecuteContext {
  * The result of an Command.#execute() invocation.
  */
 export type CommandExecuteResult = void | null | undefined | number;
+
+/**
+ * A command script module
+ */
+export interface CommandScriptModule {
+    /**
+     * Executes the script.
+     *
+     * @param {CommandExecuteContext} ctx The execution comand.
+     */
+    execute(ctx: CommandExecuteContext): void | number | PromiseLike<void | number>;
+}
 
 /**
  * Context for an Command.#showHelp() invocation.

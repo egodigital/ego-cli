@@ -138,9 +138,13 @@ import { exists, toStringSafe, writeLine } from './util';
             autoStart: true,
             concurrency: 1,
         }),
+        require: (id: any) => {
+            return require(toStringSafe(id));
+        },
         root: path.resolve(
             path.dirname(MODULE_FILE)
         ),
+        values: {},
         verbose: ARGS['v'] || ARGS['verbose'],
     };
 

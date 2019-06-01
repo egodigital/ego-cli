@@ -25,3 +25,21 @@ For example run the integrated [Yeoman generator](https://github.com/egodigital/
 ```bash
 ego new
 ```
+
+To list all available commands, simply run
+
+```bash
+ego
+```
+
+## Custom commands
+
+To implement a command, lets say `my-command`, create a `my-command.sh` (`my-command.cmd` on Windows) file inside the `.ego` subfolder of your home directory, give it enough rights to be executed and fill it with the code, you would like to execute.
+
+To execute the new command, simply run
+
+```bash
+ego my-command ARG1 ARG2
+```
+
+All additional arguments, after `my-command`, will be passed to the shell / batch script.
