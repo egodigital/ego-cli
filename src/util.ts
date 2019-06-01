@@ -212,6 +212,29 @@ export function getCWD(obj: WithCWD): string {
 }
 
 /**
+ * Returns the possible '.ego' folder inside the user's home directory.
+ *
+ * @param {boolean} [create] Create folder, if it does not exist.
+ *
+ * @return {string} The full path of the '.ego' folder.
+ */
+export function getEGOFolder(create = true): string {
+    const FOLDER_PATH = path.resolve(
+        path.join(
+            os.homedir(), '.ego'
+        )
+    );
+
+    if (create) {
+        if (!fs.existsSync(FOLDER_PATH)) {
+            fs.mkdirsSync(FOLDER_PATH);
+        }
+    }
+
+    return FOLDER_PATH;
+}
+
+/**
  * Returns the value for an spawn.stdio property.
  *
  * @param {WithVerbose} obj The object with a verbose flag.
@@ -268,6 +291,37 @@ export function globalModuleExists(moduleId: string): boolean {
     } catch {
         return false;
     }
+}
+
+/**
+ * Creates a clone of an object and sorts the keys.
+ *
+ * @param {any} obj The input object.
+ *
+ * @return {any} The output object.
+ */
+export function sortObjectByKeys<T = any>(obj: T): T {
+    if (_.isNil(obj)) {
+        return obj;
+    }
+
+    const CLONED_OBJ: any = {};
+    for (const KEY of Object.keys(obj).sort((x, y) => {
+        return compareValuesBy(x, y, i => {
+            return toStringSafe(i)
+                .toLowerCase()
+                .trim();
+        });
+    })) {
+        let value = obj[KEY];
+        if (_.isFunction(value)) {
+            value = value.bind(CLONED_OBJ);
+        }
+
+        CLONED_OBJ[KEY] = value;
+    }
+
+    return CLONED_OBJ;
 }
 
 /**
@@ -396,6 +450,26 @@ export function spawnAsync(
             reject(e);
         }
     });
+}
+
+/**
+ * Returns a value as boolean.
+ *
+ * @param {any} val The input value.
+ * @param {any} [defaultValue] The custom default value, if input value is (null) or (undefined).
+ *
+ * @return {boolean} The input value as boolean.
+ */
+export function toBooleanSafe(val: any, defaultValue?: any): boolean {
+    if (_.isBoolean(val)) {
+        return val;
+    }
+
+    if (_.isNil(defaultValue)) {
+        return !!defaultValue;
+    }
+
+    return !!val;
 }
 
 /**

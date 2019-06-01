@@ -19,9 +19,11 @@ import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import * as minimist from 'minimist';
 import * as path from 'path';
+import * as pQueue from 'p-queue';
 import { Command, CommandExecuteContext, PackageJSON, REGEX_COMMAND_NAME } from './contracts';
 import { showHelp } from './help';
 import { executeShellScriptCommand } from './scripts';
+import { getStorage } from './storage';
 import { exists, toStringSafe, writeLine } from './util';
 
 
@@ -118,8 +120,29 @@ import { exists, toStringSafe, writeLine } from './util';
 
             process.exit(9 + code);
         },
+        get: (key: any, defaultValue?: any) => {
+            key = toStringSafe(key)
+                .toLowerCase()
+                .trim();
+
+            const STORAGE = getStorage();
+            for (const PROP in STORAGE) {
+                const KEY_OF_STORAGE = PROP.toLowerCase()
+                    .trim();
+
+                if (key === KEY_OF_STORAGE) {
+                    return STORAGE[PROP];
+                }
+            }
+
+            return defaultValue;
+        },
         name: COMMAND_NAME,
         package: APP,
+        queue: new pQueue({
+            autoStart: true,
+            concurrency: 1,
+        }),
         root: path.resolve(
             path.dirname(MODULE_FILE)
         ),

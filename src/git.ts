@@ -16,7 +16,7 @@
  */
 
 import * as _ from 'lodash';
-import { asArray, compareValuesBy, getCWD, spawn, WithCWD, WithVerbose, getSTDIO, toStringSafe } from './util';
+import { asArray, compareValuesBy, getCWD, spawn, WithCWD, WithVerbose, toStringSafe } from './util';
 
 
 /**
@@ -52,7 +52,7 @@ export function getCurrentGitBranch(opts?: GetCurrentGitBranchOptions): string {
                 'git', ['rev-parse', '--abbrev-ref', 'HEAD'],
                 {
                     cwd: getCWD(opts),
-                    stdio: getSTDIO(opts),
+                    stdio: null,
                 }
             ).output
         ).join('')
@@ -76,7 +76,7 @@ export function getGitBranches(opts?: GetGitBranchesOptions): string[] {
             'git', ['branch'],
             {
                 cwd: getCWD(opts),
-                stdio: getSTDIO(opts),
+                stdio: null,
             }
         ).output
     ).map((x) => {
@@ -117,7 +117,7 @@ export function getGitRemotes(opts?: GetGitRemotesOptions): string[] {
             'git', ['remote'],
             {
                 cwd: getCWD(opts),
-                stdio: getSTDIO(opts),
+                stdio: null,
             }
         ).output
     ).map((x) => {

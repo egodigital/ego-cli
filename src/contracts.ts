@@ -16,6 +16,7 @@
  */
 
 import { ParsedArgs } from 'minimist';
+import * as pQueue from 'p-queue';
 
 
 /**
@@ -70,6 +71,15 @@ export interface CommandExecuteContext {
      */
     readonly exit: (code?: number) => void;
     /**
+     * Tries to return a value from the config storage.
+     *
+     * @param {any} key The key.
+     * @param {TDefault} [defaultValue] A custom default value.
+     *
+     * @return {TResult|TDefault} The value, if found.
+     */
+    get<TResult = any, TDefault = TResult>(key: any, defaultValue?: TResult): TResult | TDefault;
+    /**
      * The normalized name.
      */
     readonly name: string;
@@ -77,6 +87,10 @@ export interface CommandExecuteContext {
      * App information.
      */
     readonly package: PackageJSON;
+    /**
+     * A queue that allows only one operation at once.
+     */
+    readonly queue: pQueue;
     /**
      * The root directory of the command.
      */
@@ -131,11 +145,21 @@ export interface PackageJSON {
     version?: string;
 }
 
+/**
+ * A storage.
+ */
+export type Storage = { [name: string]: any };
+
 
 /**
  * Regular expression for testing for a valid command name.
  */
 export const REGEX_COMMAND_NAME = /^([a-z0-9]|\-){1,}$/i;
+
+/**
+ * The name of the storage file.
+ */
+export const STORAGE_FILE = '.storage';
 
 
 /**

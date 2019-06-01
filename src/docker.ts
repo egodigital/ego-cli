@@ -16,7 +16,7 @@
  */
 
 import * as _ from 'lodash';
-import { asArray, getCWD, spawn, WithCWD, WithVerbose, getSTDIO, toStringSafe } from './util';
+import { asArray, getCWD, spawn, WithCWD, WithVerbose, toStringSafe } from './util';
 
 
 /**
@@ -43,7 +43,7 @@ export function getRunningDockerContainers(opts?: GetRunningDockerContainers): s
             'docker', ['ps', '--format', '{{.ID}}'],
             {
                 cwd: getCWD(opts),
-                stdio: getSTDIO(opts),
+                stdio: null,
             }
         ).output
     ).map((x) => {
