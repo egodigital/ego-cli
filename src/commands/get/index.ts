@@ -83,4 +83,7 @@ export class EgoCommand extends CommandBase {
         writeLine(`             ego get email`);
         writeLine(`             ego get username email`);
     }
+
+    /** @inheritdoc */
+    public readonly syntax = '[REGEX_FILTER*]';
 }

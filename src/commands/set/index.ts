@@ -40,7 +40,7 @@ export class EgoCommand extends CommandBase {
             if ('' === CONFIG_NAME) {
                 console.warn('No config name defined!');
 
-                ctx.exit(2);
+                ctx.exit(1);
             }
 
             let configValue: any = undefined;
@@ -86,5 +86,9 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Examples:    ego set email tanja.m@e-go-digital.com`);
+        writeLine(`             ego set email`);
     }
+
+    /** @inheritdoc */
+    public readonly syntax = 'NAME [VALUE*]';
 }

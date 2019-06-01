@@ -78,4 +78,7 @@ export class EgoCommand extends CommandBase {
 
         writeLine(`Example:    ego git-export https://github.com/egodigital/generator-ego`);
     }
+
+    /** @inheritdoc */
+    public readonly syntax = 'URL [options]';
 }

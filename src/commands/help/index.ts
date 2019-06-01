@@ -119,4 +119,7 @@ export class EgoCommand extends CommandBase {
         writeLine(`Examples:    ego help new`);
         writeLine(`             ego help`);
     }
+
+    /** @inheritdoc */
+    public readonly syntax = '[COMMAND]';
 }
