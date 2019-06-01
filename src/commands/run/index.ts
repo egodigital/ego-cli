@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as cliHighlight from 'cli-highlight';
 import * as path from 'path';
 import { CommandBase, CommandExecuteContext, CommandScriptModule, } from '../../contracts';
-import { asArray, toStringSafe, writeLine } from '../../util';
+import { asArray, exists, getEGOFolder, toStringSafe, writeLine } from '../../util';
 
 
 /**
@@ -44,9 +44,22 @@ export class EgoCommand extends CommandBase {
         for (const SF of SCRIPT_FILES) {
             let scriptPath = SF;
             if (!path.isAbsolute(scriptPath)) {
-                scriptPath = path.join(
+                let newScriptPath = path.join(
                     ctx.cwd, scriptPath
                 );
+                if (!newScriptPath.endsWith('.js')) {
+                    newScriptPath += '.js';
+                }
+
+                if (!(await exists(newScriptPath))) {
+                    // try from '.ego' folder
+
+                    newScriptPath = path.join(
+                        getEGOFolder(), scriptPath
+                    );
+                }
+
+                scriptPath = newScriptPath;
             }
             scriptPath = require.resolve(scriptPath);
 
@@ -81,6 +94,8 @@ export class EgoCommand extends CommandBase {
         writeLine(`Examples:    ego run my-script.js`);
         writeLine(`             ego run my-script`);
         writeLine();
+        writeLine(`Relative paths will be mapped to the current working directory or the '.ego' subfolder inside the user's home directory.`);
+        writeLine();
         writeLine();
 
         writeLine(`Example script:`);
@@ -95,6 +110,15 @@ export class EgoCommand extends CommandBase {
         // context.require  =>  Allows to include a NPM module of the e.GO CLI
         // context.values   =>  A key/value pair storage, that is available while the execution
         // context.verbose  =>  Indicates, if script should output additional information or not
+
+        // docker utils
+        const docker = context.require('./docker');
+        // git utils
+        const git = context.require('./git');
+        // common app utils
+        const util = context.require('./util');
+
+        util.writeLine('Hello, from ' + __filename);
     };
 `,
                 {
