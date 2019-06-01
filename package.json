@@ -1,12 +1,13 @@
 {
   "name": "ego-cli",
   "displayName": "e.GO CLI",
-  "version": "0.40.0",
+  "version": "0.41.0",
   "description": "Command Line Interface, which is designed to handle things, like Dev(Ops) tasks, much faster.",
   "main": "dist/index.js",
   "private": false,
   "scripts": {
-    "build": "(rm -r ./dist || true) && tsc"
+    "build": "(rm -r ./dist || true) && tsc",
+    "deploy": "npm install && npm audit fix && npm run build && npm publish"
   },
   "bin": {
     "ego": "./bin/ego"
