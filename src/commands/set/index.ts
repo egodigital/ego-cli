@@ -109,6 +109,7 @@ export class EgoCommand extends CommandBase {
 
         writeLine(`Examples:    ego set email tanja.m@e-go-digital.com`);
         writeLine(`             ego set email marcel.k@e-go-digital.com --global`);
+        writeLine(`             ego set email`);
     }
 
     /** @inheritdoc */
