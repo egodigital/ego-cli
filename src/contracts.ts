@@ -176,6 +176,11 @@ export type Storage = { [name: string]: any };
 
 
 /**
+ * The name of an ego (sub)folder.
+ */
+export const EGO_FOLDER = '.ego';
+
+/**
  * Regular expression for testing for a valid command name.
  */
 export const REGEX_COMMAND_NAME = /^([a-z0-9]|\-){1,}$/i;
