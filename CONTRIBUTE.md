@@ -4,13 +4,13 @@
 
 ### Get the code
 
-Clone the repository
+Fork the repository https://github.com/egodigital/ego-cli, clone it
 
 ```bash
-git clone https://github.com/egodigital/ego-cli
+git clone https://github.com/YOUR-GITHUB-NAME/ego-cli
 ```
 
-and go to the root directory of the project
+go to the root directory of the project
 
 ```bash
 cd ego-cli
@@ -123,3 +123,9 @@ ego help my-new-command
 ```
 
 which makes use of `showHelp()` method and `syntax` property in the `EgoCommand` class.
+
+### Open pull request
+
+* commit your changes
+* sync them with your forked repository
+* open a [pull request](https://github.com/egodigital/ego-cli/pulls) from your branch to our `master`
