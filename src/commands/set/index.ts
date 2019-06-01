@@ -18,8 +18,8 @@
 import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import { CommandBase, CommandExecuteContext, Storage } from '../../contracts';
-import { getStorageFile } from '../../storage';
-import { toStringSafe, writeLine } from '../../util';
+import { getStorageFile, normalizeStorageKey } from '../../storage';
+import { writeLine } from '../../util';
 
 
 /**
@@ -34,9 +34,7 @@ export class EgoCommand extends CommandBase {
         await ctx.queue.add(async () => {
             const STORAGE_FILE_PATH = getStorageFile();
 
-            const CONFIG_NAME = toStringSafe(ctx.args['_'][0])
-                .toLowerCase()
-                .trim();
+            const CONFIG_NAME = normalizeStorageKey(ctx.args['_'][0]);
             if ('' === CONFIG_NAME) {
                 console.warn('No config name defined!');
 

@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { Storage, STORAGE_FILE } from './contracts';
-import { getEGOFolder, sortObjectByKeys } from './util';
+import { getEGOFolder, sortObjectByKeys, toStringSafe } from './util';
 
 
 /**
@@ -28,13 +28,24 @@ import { getEGOFolder, sortObjectByKeys } from './util';
  * @return {Storage} The storage.
  */
 export function getStorage(): Storage {
-    return sortObjectByKeys(
+    const STORAGE = sortObjectByKeys(
         JSON.parse(
             fs.readFileSync(
                 getStorageFile(), 'utf8'
             )
         )
     );
+
+    const NORMALIZED_STORAGE: Storage = {};
+    if (!_.isNil(STORAGE)) {
+        for (const KEY in STORAGE) {
+            NORMALIZED_STORAGE[
+                normalizeStorageKey(KEY)
+            ] = STORAGE[KEY];
+        }
+    }
+
+    return NORMALIZED_STORAGE;
 }
 
 /**
@@ -79,4 +90,36 @@ export function getStorageFile(create = true): string {
     }
 
     return STORAGE_FILE_PATH;
+}
+
+/**
+ * Normalizes a storage key.
+ *
+ * @param {any} key The input value.
+ *
+ * @return {string} The normalized value.
+ */
+export function normalizeStorageKey(key: any): string {
+    let normalizedKey = toStringSafe(key)
+        .toLowerCase()
+        .replace("\r", '')
+        .replace("\n", ' ')
+        .replace("\t", '    ')
+        .replace(' ', '_')
+        .replace('-', '_')
+        .trim();
+
+    while (normalizedKey.indexOf('__') > -1) {
+        normalizedKey = normalizedKey.replace('__', '_');
+    }
+
+    // remove leading and ending _ chars
+    while (normalizedKey.startsWith('_')) {
+        normalizedKey = normalizedKey.substr(1);
+    }
+    while (normalizedKey.endsWith('_')) {
+        normalizedKey = normalizedKey.substr(0, normalizedKey.length - 1);
+    }
+
+    return normalizedKey;
 }

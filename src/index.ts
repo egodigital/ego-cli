@@ -23,7 +23,7 @@ import * as pQueue from 'p-queue';
 import { Command, CommandExecuteContext, PackageJSON, REGEX_COMMAND_NAME } from './contracts';
 import { showHelp } from './help';
 import { executeShellScriptCommand } from './scripts';
-import { getStorage } from './storage';
+import { getStorage, normalizeStorageKey } from './storage';
 import { exists, toStringSafe, writeLine } from './util';
 
 
@@ -121,16 +121,11 @@ import { exists, toStringSafe, writeLine } from './util';
             process.exit(9 + code);
         },
         get: (key: any, defaultValue?: any) => {
-            key = toStringSafe(key)
-                .toLowerCase()
-                .trim();
+            key = normalizeStorageKey(key);
 
             const STORAGE = getStorage();
             for (const PROP in STORAGE) {
-                const KEY_OF_STORAGE = PROP.toLowerCase()
-                    .trim();
-
-                if (key === KEY_OF_STORAGE) {
+                if (key === PROP) {
                     return STORAGE[PROP];
                 }
             }

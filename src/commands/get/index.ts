@@ -18,7 +18,7 @@
 import * as _ from 'lodash';
 import * as cliHighlight from 'cli-highlight';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { getStorage } from '../../storage';
+import { getStorage, normalizeStorageKey } from '../../storage';
 import { asArray, writeLine, toStringSafe } from '../../util';
 
 
@@ -33,6 +33,8 @@ export class EgoCommand extends CommandBase {
     public async execute(ctx: CommandExecuteContext): Promise<void> {
         await ctx.queue.add(async () => {
             const STORAGE = getStorage();
+
+            const LIST = ctx.args['l'] || ctx.args['list'];
 
             let keyFilter: (key: string) => boolean;
 
@@ -59,29 +61,43 @@ export class EgoCommand extends CommandBase {
             if (!_.isNil(STORAGE)) {
                 for (const KEY in STORAGE) {
                     if (keyFilter(KEY)) {
-                        FILTERED_STORAGE[KEY] = STORAGE[KEY];
+                        FILTERED_STORAGE[
+                            normalizeStorageKey(KEY)
+                        ] = STORAGE[KEY];
                         keysFound = true;
                     }
                 }
             }
 
-            if (keysFound) {
-                writeLine(
-                    cliHighlight.highlight(JSON.stringify(
-                        FILTERED_STORAGE, null, 2
-                    ), {
-                            'language': 'json',
-                        })
-                );
+            if (LIST) {
+                for (const KEY in FILTERED_STORAGE) {
+                    writeLine(`${KEY}\t${JSON.stringify(
+                        FILTERED_STORAGE[KEY]
+                    )}`);
+                }
+            } else {
+                if (keysFound) {
+                    writeLine(
+                        cliHighlight.highlight(JSON.stringify(
+                            FILTERED_STORAGE, null, 2
+                        ), {
+                                'language': 'json',
+                            })
+                    );
+                }
             }
         });
     }
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
+        writeLine(`Options:`);
+        writeLine(` -l, --list    # Outputs value(s) in a simple list.`);
+        writeLine();
+
         writeLine(`Examples:    ego get`);
         writeLine(`             ego get email`);
-        writeLine(`             ego get username email`);
+        writeLine(`             ego get username email --list`);
     }
 
     /** @inheritdoc */
