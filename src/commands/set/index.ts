@@ -17,7 +17,7 @@
 
 import * as _ from 'lodash';
 import * as fs from 'fs-extra';
-import { CommandBase, CommandExecuteContext } from '../../contracts';
+import { CommandBase, CommandExecuteContext, Storage } from '../../contracts';
 import { getStorageFile } from '../../storage';
 import { toStringSafe, writeLine } from '../../util';
 
@@ -53,7 +53,7 @@ export class EgoCommand extends CommandBase {
                 }
             }
 
-            let storage: { [name: string]: any };
+            let storage: Storage;
 
             if (fs.existsSync(STORAGE_FILE_PATH)) {
                 storage = JSON.parse(
