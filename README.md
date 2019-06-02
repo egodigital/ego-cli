@@ -34,7 +34,7 @@ ego
 
 ## Available commands
 
-A (non complete) of some interesting commands:
+A (non complete) list of some interesting commands:
 
 ```
 build         # Shorthand for 'npm run build'.
