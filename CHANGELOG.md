@@ -1,10 +1,11 @@
 # Change Log (ego-cli)
 
-## 0.51.0
+## 0.51.1
 
 * added `ssl-new` command
 * added automatic support for HTTP server
 * fixed help screen of `git-checkout` command
+* bugfixes
 
 ## 0.50.0
 

@@ -1,7 +1,7 @@
 {
   "name": "ego-cli",
   "displayName": "e.GO CLI",
-  "version": "0.51.0",
+  "version": "0.51.1",
   "description": "Command Line Interface, which is designed to handle things, like Dev(Ops) tasks, much faster.",
   "main": "dist/index.js",
   "private": false,

@@ -65,7 +65,7 @@ export function createHttpServer(opts?: CreateHttpServerOptions): CreateHttpServ
     }
 
     let isHTTPs: boolean;
-    let server: http.Server | https.Server | false;
+    let server: http.Server | https.Server | false = false;
 
     const app = express();
 
