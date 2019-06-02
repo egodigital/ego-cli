@@ -1,5 +1,10 @@
 # Change Log (ego-cli)
 
+## 0.52.0
+
+* added `job` command
+* code cleanups and improvements
+
 ## 0.51.1
 
 * added `ssl-new` command

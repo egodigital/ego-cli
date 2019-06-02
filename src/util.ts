@@ -25,6 +25,7 @@ import * as mimeTypes from 'mime-types';
 import * as ora from 'ora';
 import * as os from 'os';
 import * as path from 'path';
+import * as readline from 'readline';
 import * as util from 'util';
 import { default as chalk } from 'chalk';
 
@@ -639,6 +640,32 @@ export function toStringSafe(val: any): string {
 }
 
 /**
+ * Waits for ENTER key (in the console).
+ *
+ * @param {any} [text] The custom prompt text.
+ */
+export function waitForEnter(text: any = ''): Promise<void> {
+    text = toStringSafe(text);
+
+    return new Promise<void>((resolve, reject) => {
+        try {
+            const INPUT = readline.createInterface({
+                input: process.stdin,
+                output: process.stdout,
+            });
+
+            INPUT.question(text, () => {
+                INPUT.close();
+
+                resolve();
+            });
+        } catch (e) {
+            reject(e);
+        }
+    });
+}
+
+/**
  * Executes an action for a spinner.
  *
  * @param {any} text The initial text.
@@ -714,6 +741,28 @@ export async function withSpinnerAsync<TResult = any>(
 export function write(msg: any): void {
     process.stdout.write(
         toStringSafe(msg)
+    );
+}
+
+/**
+ * Writes an output message to error stream.
+ *
+ * @param {any} msg The message to write.
+ */
+export function writeErr(msg: any): void {
+    process.stderr.write(
+        toStringSafe(msg)
+    );
+}
+
+/**
+ * Writes an (optional) output message to error stream and adds a new line.
+ *
+ * @param {any} [msg] The (optional) message to write.
+ */
+export function writeErrLine(msg: any = ''): void {
+    process.stderr.write(
+        toStringSafe(msg) + os.EOL
     );
 }
 

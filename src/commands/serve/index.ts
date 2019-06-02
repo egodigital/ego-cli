@@ -22,10 +22,9 @@ import * as fs from 'fs-extra';
 import * as htmlEntities from 'html-entities';
 import * as os from 'os';
 import * as path from 'path';
-import * as readline from 'readline';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
 import { createHttpServer } from '../../http';
-import { compareValuesBy, exists, getMimeType, getResourcePath, loadEJSAsync, withSpinnerAsync, writeLine, toStringSafe } from '../../util';
+import { compareValuesBy, exists, getMimeType, getResourcePath, loadEJSAsync, waitForEnter, withSpinnerAsync, writeLine, toStringSafe } from '../../util';
 
 
 interface DirectoryEntry {
@@ -388,24 +387,7 @@ export class EgoCommand extends CommandBase {
         // wait for ENTER
         writeLine();
         writeLine();
-        await (() => {
-            return new Promise<void>((resolve, reject) => {
-                try {
-                    const INPUT = readline.createInterface({
-                        input: process.stdin,
-                        output: process.stdout,
-                    });
-
-                    INPUT.question(`Press ENTER to stop ... `, () => {
-                        INPUT.close();
-
-                        resolve();
-                    });
-                } catch (e) {
-                    reject(e);
-                }
-            });
-        })();
+        await waitForEnter('Press <ENTER> to stop ...');
     }
 
     /** @inheritdoc */

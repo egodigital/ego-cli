@@ -154,6 +154,18 @@ export interface CommandShowHelpContext {
 export type CommandShowHelpResult = void | null | undefined | number;
 
 /**
+ * A job script module
+ */
+export interface JobScriptModule {
+    /**
+     * Executes the script.
+     *
+     * @param {CommandExecuteContext} ctx The execution comand.
+     */
+    execute(ctx: CommandExecuteContext): void | PromiseLike<void>;
+}
+
+/**
  * 'package.json' file.
  */
 export interface PackageJSON {
