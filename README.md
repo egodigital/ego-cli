@@ -49,6 +49,7 @@ git-sync      # Syncs the current branch with all remotes.
 new           # Starts the e.GO generator for Yeoman.
 node-install  # Removes the 'node_modules' subfolder and executes 'npm install'.
 run           # Runs one or more Node.js based script file(s).
+serve         # Starts a HTTP server that shares files via a web interface.
 ```
 
 ## Custom commands
