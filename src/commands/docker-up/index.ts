@@ -21,7 +21,7 @@ import { spawn, writeLine } from '../../util';
 
 
 /**
- * Docker-Stop command.
+ * Docker-Up command.
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */

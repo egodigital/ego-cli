@@ -21,7 +21,7 @@ import { eGO, getSTDIO, globalModuleExists, spawnAsync, withSpinnerAsync, writeL
 
 
 /**
- * e.GO Yeoman generator command.
+ * New command.
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */

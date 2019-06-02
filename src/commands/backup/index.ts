@@ -29,7 +29,7 @@ interface DirectoryEntry {
 
 
 /**
- * e.GO Yeoman generator command.
+ * Backup command.
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */

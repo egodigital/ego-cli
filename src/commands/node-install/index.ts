@@ -23,7 +23,7 @@ import { exists, getSTDIO, spawnAsync, withSpinnerAsync, writeLine } from '../..
 
 
 /**
- * Git-Pull command.
+ * Node-Install command.
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
