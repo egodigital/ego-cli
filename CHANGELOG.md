@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.48.0
+## 0.48.1
 
 * added `serve` command
 * bugfixes
