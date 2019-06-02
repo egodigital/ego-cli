@@ -77,10 +77,15 @@ export class EgoCommand extends CommandBase {
     public readonly description = '<A SHORT DESCRIPTION OF my-new-command>.';
 
     /** @inheritdoc */
-    public async execute(ctx: CommandExecuteContext): Promise<void> {
-        // ctx.args => command line arguments, s. https://github.com/substack/minimist
-        // ctx.cwd => current working directory
-        // ctx.verbose => is '-v' / '--verbose' flag set or not
+    public async execute(context: CommandExecuteContext): Promise<void> {
+        // context  =>  s. https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
+
+        // docker utils, s. https://egodigital.github.io/ego-cli/modules/_docker_.html
+        const docker = context.require('./docker');
+        // git utils, s. https://egodigital.github.io/ego-cli/modules/_git_.html
+        const git = context.require('./git');
+        // common app utils, s. https://egodigital.github.io/ego-cli/modules/_util_.html
+        const util = context.require('./util');
 
         writeLine('Hello, my-new-command!');
     }

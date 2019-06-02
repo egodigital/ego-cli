@@ -46,6 +46,7 @@ git-export    # Clones a repository to the working directory and removes the '.g
 git-pull      # Pulls from all remotes to the current branch.
 git-push      # Pushes the current branch to all remotes.
 git-sync      # Syncs the current branch with all remotes.
+job           # Executes one or more scripts periodically.
 new           # Starts the e.GO generator for Yeoman.
 node-install  # Removes the 'node_modules' subfolder and executes 'npm install'.
 run           # Runs one or more Node.js based script file(s).

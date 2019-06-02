@@ -39,15 +39,10 @@ export function executeShellScriptCommand(
     );
 
     if ('' !== commandName) {
-        let scriptExt = 'sh';
-        if ('win32' === process.platform) {
-            scriptExt = 'cmd';
-        }
-
         // ${HOME_DIR}/.ego/${commandName}.${scriptExt}
         const SCRIPT_FILE = path.resolve(
             path.join(
-                os.homedir(), '.ego', commandName + '.' + scriptExt
+                os.homedir(), '.ego', commandName + getShellScriptExtension()
             )
         );
         if (fs.existsSync(SCRIPT_FILE)) {
@@ -64,4 +59,17 @@ export function executeShellScriptCommand(
     }
 
     return false;
+}
+
+/**
+ * Returns the file extension for shell scripts for the current platform.
+ *
+ * @return {string} The extension.
+ */
+export function getShellScriptExtension(): string {
+    if ('win32' === process.platform) {
+        return '.cmd';
+    }
+
+    return '.sh';
 }

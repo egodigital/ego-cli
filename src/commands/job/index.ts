@@ -21,7 +21,9 @@ import * as cron from 'cron';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { CommandBase, CommandExecuteContext, JobScriptModule } from '../../contracts';
-import { asArray, getEGOFolder, toStringSafe, waitForEnter, writeErrLine, writeLine } from '../../util';
+import { EOL } from 'os';
+import { getShellScriptExtension } from '../../scripts';
+import { asArray, getEGOFolder, toStringSafe, waitForEnter, writeErrLine, writeLine, spawnAsync } from '../../util';
 
 
 /**
@@ -29,7 +31,7 @@ import { asArray, getEGOFolder, toStringSafe, waitForEnter, writeErrLine, writeL
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = "Executes one or more script periodically.";
+    public readonly description = "Executes one or more scripts periodically.";
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
@@ -57,6 +59,16 @@ export class EgoCommand extends CommandBase {
 
         const SCRIPT_FILES = ARGS.slice(0, ARGS.length - 1);
 
+        const APPEND_SCRIPT_EXTENSION = (filePath: string) => {
+            if (!filePath.endsWith(getShellScriptExtension())) {
+                if (!filePath.endsWith('.js')) {
+                    filePath += '.js';
+                }
+            }
+
+            return filePath;
+        };
+
         const JOBS: cron.CronJob[] = [];
         SCRIPT_FILES.forEach(sf => {
             let scriptFile = sf;
@@ -64,9 +76,8 @@ export class EgoCommand extends CommandBase {
                 let newScriptPath = path.join(
                     ctx.cwd, scriptFile
                 );
-                if (!newScriptPath.endsWith('.js')) {
-                    newScriptPath += '.js';
-                }
+
+                newScriptPath = APPEND_SCRIPT_EXTENSION(newScriptPath);
 
                 if (!fs.existsSync(newScriptPath)) {
                     // try from '.ego' folder
@@ -80,8 +91,18 @@ export class EgoCommand extends CommandBase {
             }
             scriptFile = require.resolve(scriptFile);
 
-            if (!scriptFile.endsWith('.js')) {
-                scriptFile += '.js';
+
+            scriptFile = APPEND_SCRIPT_EXTENSION(scriptFile);
+
+            let jobAction: () => Promise<void>;
+            if (scriptFile.endsWith(getShellScriptExtension())) {
+                jobAction = async () => {
+                    await this._executeShellScript(ctx, scriptFile);
+                };
+            } else {
+                jobAction = async () => {
+                    await this._executeScriptFile(ctx, scriptFile);
+                };
             }
 
             let isExecuting = false;
@@ -92,9 +113,9 @@ export class EgoCommand extends CommandBase {
                     if (isExecuting) {
                         return;
                     }
-                    isExecuting = true;
 
-                    this._executeScriptFile(ctx, scriptFile).catch((err) => {
+                    isExecuting = true;
+                    jobAction().catch((err) => {
                         writeErrLine(err);
                     }).finally(() => {
                         isExecuting = false;
@@ -110,7 +131,7 @@ export class EgoCommand extends CommandBase {
             JOBS.push(NEW_JOB);
         });
 
-        await waitForEnter('Press <ENTER> to stop ...');
+        await waitForEnter(`Press <ENTER> to stop ...${EOL}`);
 
         JOBS.forEach(j => {
             if (j.running) {
@@ -126,8 +147,11 @@ export class EgoCommand extends CommandBase {
         writeLine();
         writeLine(`Relative paths will be mapped to the current working directory or the '.ego' subfolder inside the user's home directory.`);
         writeLine();
+        writeLine(`It is also possible to run shell scripts (with .sh or .cmd extension).`);
+        writeLine();
         writeLine();
 
+        writeLine(`Example script:`);
         writeLine(
             cliHighlight.highlight(
                 `
@@ -163,6 +187,18 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public readonly syntax = '[JOB_FILE+] CRON_TAB';
 
+
+    private async _executeShellScript(
+        ctx: CommandExecuteContext, scriptFile: string
+    ) {
+        await spawnAsync(
+            scriptFile,
+            [],
+            {
+                cwd: ctx.cwd,
+            }
+        );
+    }
 
     private async _executeScriptFile(
         ctx: CommandExecuteContext, scriptFile: string

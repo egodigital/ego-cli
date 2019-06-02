@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.53.0
+
+* `job` command is now also able to execute shell scripts
+
 ## 0.52.0
 
 * added `job` command
