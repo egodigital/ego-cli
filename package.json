@@ -1,12 +1,13 @@
 {
   "name": "ego-cli",
   "displayName": "e.GO CLI",
-  "version": "0.45.0",
+  "version": "0.46.0",
   "description": "Command Line Interface, which is designed to handle things, like Dev(Ops) tasks, much faster.",
   "main": "dist/index.js",
   "private": false,
   "scripts": {
     "build": "(rm -r ./dist || true) && tsc",
+    "doc": "(rm -r ./doc || true) && (typedoc --out ./doc ./src)",
     "deploy": "npm install && npm audit fix && npm run build && npm publish"
   },
   "bin": {
@@ -61,6 +62,7 @@
     "@types/sanitize-filename": "^1.1.28",
     "@types/signale": "^1.2.1",
     "tslint": "^5.17.0",
+    "typedoc": "^0.14.2",
     "typescript": "3.4.5"
   }
 }

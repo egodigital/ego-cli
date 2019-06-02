@@ -124,6 +124,10 @@ ego help my-new-command
 
 which makes use of `showHelp()` method and `syntax` property in the `EgoCommand` class.
 
+### Documentation
+
+API documentation can be found [here](https://egodigital.github.io/ego-cli/).
+
 ### Open pull request
 
 * commit your changes
