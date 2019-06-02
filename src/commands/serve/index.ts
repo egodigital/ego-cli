@@ -292,7 +292,6 @@ export class EgoCommand extends CommandBase {
 
                             res.status(200)
                                 .header('Content-type', getMimeType(FILE_OR_FOLDER_PATH))
-                                .header('Content-length', toStringSafe(STAT.size))
                                 .header('Content-disposition', `attachment; filename="${path.basename(FILE_OR_FOLDER_PATH)}"`);
 
                             fs.createReadStream(FILE_OR_FOLDER_PATH)
