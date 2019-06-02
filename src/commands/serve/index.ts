@@ -166,7 +166,7 @@ export class EgoCommand extends CommandBase {
                                 const FILES: DirectoryEntry[] = [];
                                 const FOLDERS: DirectoryEntry[] = [];
                                 for (const ITEM of await fs.readdir(FILE_OR_FOLDER_PATH)) {
-                                    if (ITEM.startsWith('.')) {
+                                    if (ITEM.trim().startsWith('.')) {
                                         continue;  // must not start with '.'
                                     }
 
@@ -422,11 +422,12 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -p, --port     # The custom TCP port.`);
+        writeLine(` -p, --port     # The custom TCP port. Default: 5979`);
         writeLine(` -v, --verbose  # Verbose output.`);
         writeLine();
 
         writeLine(`Examples:    ego serve`);
+        writeLine(`             ego serve --port=23979`);
     }
 
 

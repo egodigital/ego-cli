@@ -94,13 +94,16 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
+        writeLine(` -d, --dot      # Also backup files and folders with leading dots.`);
         writeLine(` -v, --verbose  # Verbose output.`);
         writeLine();
 
         writeLine(`Config:`);
-        writeLine(` backup_dir  # The path to the target directory.`);
-        writeLine(`             # Relative paths will be mapped to the '.ego/.backups' subfolder`);
-        writeLine(`             # inside the user's home directory.`);
+        writeLine(` backup_dir   # The path to the target directory.`);
+        writeLine(`              # Relative paths will be mapped to the '.ego/.backups' subfolder`);
+        writeLine(`              # inside the user's home directory.`);
+        writeLine(` backup_dots  # Indicates if also files / files with leading dots`);
+        writeLine(`              ä should be handled (true) or not (false).`);
         writeLine();
 
         writeLine(`Example:    ego backup`);
@@ -115,6 +118,10 @@ export class EgoCommand extends CommandBase {
 
         src = path.resolve(src);
         dest = path.resolve(dest);
+
+        const BACKUP_DOTS = ctx.args['d'] ||
+            ctx.args['dot'] ||
+            ctx.get('backup_dots');
 
         // entering directory
         if (ctx.verbose) {
@@ -139,8 +146,8 @@ export class EgoCommand extends CommandBase {
             }
         }
 
-        const SRC_ENTRIES = await this._scanDir(src);
-        const DEST_ENTRIES = await this._scanDir(dest);
+        const SRC_ENTRIES = await this._scanDir(src, BACKUP_DOTS);
+        const DEST_ENTRIES = await this._scanDir(dest, BACKUP_DOTS);
 
         // extra files and dirs
         {
@@ -261,10 +268,16 @@ export class EgoCommand extends CommandBase {
         return name;
     }
 
-    private async _scanDir(dir): Promise<DirectoryEntry[]> {
+    private async _scanDir(dir: string, withDot: boolean): Promise<DirectoryEntry[]> {
         const ENTRIES: DirectoryEntry[] = [];
 
         for (const ITEM of await fs.readdir(dir)) {
+            if (ITEM.trim().startsWith('.')) {
+                if (!withDot) {
+                    continue;
+                }
+            }
+
             const FULL_PATH = path.resolve(
                 path.join(dir, ITEM)
             );
