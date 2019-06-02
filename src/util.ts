@@ -126,6 +126,26 @@ export function async<TResult = any>(
 }
 
 /**
+ * Colorizes a string for console output.
+ *
+ * @param {any} str The value to colorize.
+ * @param {any} color The color.
+ * @param {boolean} [reset] Do a reset at the end or not.
+ *
+ * @return {string} The colorized string.
+ */
+export function colorize(str: any, color: any = 'white', reset = true): string {
+    color = toStringSafe(color)
+        .trim();
+
+    return `${chalk[color](
+        toStringSafe(str)
+    )}${
+        reset ? chalk.reset() : ''
+        }`;
+}
+
+/**
  * Compares two values for sorting, by using a selector.
  *
  * @param {T} x The first value.
