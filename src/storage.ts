@@ -102,15 +102,16 @@ export function getStorageFile(create = true): string {
 export function normalizeStorageKey(key: any): string {
     let normalizedKey = toStringSafe(key)
         .toLowerCase()
-        .replace("\r", '')
-        .replace("\n", ' ')
-        .replace("\t", '    ')
-        .replace(' ', '_')
-        .replace('-', '_')
+        .split("\r").join('')
+        .split("\n").join(' ')
+        .split("\t").join('    ')
+        .split(' ').join('_')
+        .split('-').join('_')
         .trim();
 
     while (normalizedKey.indexOf('__') > -1) {
-        normalizedKey = normalizedKey.replace('__', '_');
+        normalizedKey = normalizedKey.split('__')
+            .join('_');
     }
 
     // remove leading and ending _ chars

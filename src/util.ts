@@ -18,8 +18,10 @@
 import * as _ from 'lodash';
 import * as child_process from 'child_process';
 import * as deepMerge from 'deepmerge';
+import * as ejs from 'ejs';
 import * as fs from 'fs-extra';
 import * as globalDirs from 'global-dirs';
+import * as mimeTypes from 'mime-types';
 import * as ora from 'ora';
 import * as os from 'os';
 import * as path from 'path';
@@ -179,8 +181,9 @@ export function compareValuesBy<T, V>(x: T, y: T, selector: (i: T) => V): number
  * @return {string} The output value.
  */
 export function eGO(val: any = 'e.GO'): string {
-    return toStringSafe(val).replace(
-        "e.GO",
+    return toStringSafe(val).split(
+        "e.GO"
+    ).join(
         `${chalk.reset() + chalk.blueBright('e') + chalk.white('.') + chalk.blueBright('GO') + chalk.reset()}`
     );
 }
@@ -255,6 +258,41 @@ export function getEGOFolder(create = true): string {
 }
 
 /**
+ * Returns the MIME type by file path.
+ *
+ * @param {any} p The (file) path.
+ *
+ * @return {string} The mime type.
+ */
+export function getMimeType(p: any): string {
+    const MIME_TYPE = mimeTypes.lookup(
+        toStringSafe(p)
+            .trim()
+    );
+
+    return false !== MIME_TYPE ?
+        MIME_TYPE : 'application/octet-stream';
+}
+
+/**
+ * Returns the full path inside the 'res' folder.
+ *
+ * @param {any} p The relative path.
+ *
+ * @return {string} The full path.
+ */
+export function getResourcePath(p: any): string {
+    p = toStringSafe(p)
+        .trim();
+
+    return path.resolve(
+        path.join(
+            __dirname, 'res', p
+        )
+    );
+}
+
+/**
  * Returns the value for an spawn.stdio property.
  *
  * @param {WithVerbose} obj The object with a verbose flag.
@@ -311,6 +349,64 @@ export function globalModuleExists(moduleId: string): boolean {
     } catch {
         return false;
     }
+}
+
+/**
+ * Loads an EJS template from 'res' folder.
+ *
+ * @param {any} p The relative path inside 'res/templates' without '.ejs' extension.
+ * @param {ejs.Data} [data] The optional data.
+ *
+ * @return {string} The rendered template.
+ */
+export function loadEJS(p: any, data?: ejs.Data): string {
+    return ejs.render(
+        loadResource('templates/' + toStringSafe(p).trim() + '.ejs')
+            .toString('utf8'),
+        data,
+    );
+}
+
+/**
+ * Loads an EJS template from 'res' folder.
+ *
+ * @param {any} p The relative path inside 'res/templates' without '.ejs' extension.
+ * @param {ejs.Data} [data] The optional data.
+ *
+ * @return {Promise<string>} The promise with the rendered template.
+ */
+export async function loadEJSAsync(p: any, data?: ejs.Data): Promise<string> {
+    return ejs.render(
+        (await loadResourceAsync('templates/' + toStringSafe(p).trim() + '.ejs'))
+            .toString('utf8'),
+        data,
+    );
+}
+
+/**
+ * Loads a file from 'res' folder.
+ *
+ * @param {æny} p The relative path of the resource.
+ *
+ * @return {Buffer} The loaded data.
+ */
+export function loadResource(p: any): Buffer {
+    return fs.readFileSync(
+        getResourcePath(p)
+    );
+}
+
+/**
+ * Loads a file from 'res' folder.
+ *
+ * @param {æny} p The relative path of the resource.
+ *
+ * @return {Promise<Buffer>} The promise with the loaded data.
+ */
+export async function loadResourceAsync(p: any): Promise<Buffer> {
+    return await fs.readFile(
+        getResourcePath(p)
+    );
 }
 
 /**
