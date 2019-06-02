@@ -25,7 +25,7 @@ import * as path from 'path';
 import * as readline from 'readline';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
 import { createHttpServer } from '../../http';
-import { compareValuesBy, exists, getMimeType, getResourcePath, loadEJSAsync, loadResourceAsync, withSpinnerAsync, writeLine, toStringSafe } from '../../util';
+import { compareValuesBy, exists, getMimeType, getResourcePath, loadEJSAsync, withSpinnerAsync, writeLine, toStringSafe } from '../../util';
 
 
 interface DirectoryEntry {
@@ -44,11 +44,13 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
-        const { host, https } = createHttpServer();
+        const { app, https, server } = createHttpServer({
+            forceHttp: ctx.args['h'] || ctx.args['http'],
+        });
 
-        host.disable('etag');
+        app.disable('etag');
 
-        host.use(async (req, res, next) => {
+        app.use(async (req, res, next) => {
             res.header('X-Powered-By', 'e.GO CLI');
             res.header('X-Tm-Mk', '1979-09-05 23:09');
 
@@ -57,35 +59,18 @@ export class EgoCommand extends CommandBase {
             return next();
         });
 
-        // CSS
-        const CSS_ROUTER = express.Router();
-        CSS_ROUTER.get('*', this._createFileHandler(ctx, 'css'));
-        host.use('/css', CSS_ROUTER);
+        // static resources
+        app.use('/css', express.static(getResourcePath('css')));
+        app.use('/font', express.static(getResourcePath('font')));
+        app.use('/fonts', express.static(getResourcePath('fonts')));
+        app.use('/img', express.static(getResourcePath('img')));
+        app.use('/js', express.static(getResourcePath('js')));
 
-        // JavaScript
-        const JAVASCRIPT_ROUTER = express.Router();
-        JAVASCRIPT_ROUTER.get('*', this._createFileHandler(ctx, 'js'));
-        host.use('/js', JAVASCRIPT_ROUTER);
-
-        // font
-        const FONT_ROUTER = express.Router();
-        FONT_ROUTER.get('*', this._createFileHandler(ctx, 'font'));
-        host.use('/font', FONT_ROUTER);
-
-        // fonts
-        const FONTS_ROUTER = express.Router();
-        FONTS_ROUTER.get('*', this._createFileHandler(ctx, 'fonts'));
-        host.use('/fonts', FONTS_ROUTER);
-
-        // images
-        const IMG_ROUTER = express.Router();
-        IMG_ROUTER.get('*', this._createFileHandler(ctx, 'img'));
-        host.use('/img', IMG_ROUTER);
-
+        // header and footer
         const HEADER = await loadEJSAsync('header');
         const FOOTER = await loadEJSAsync('footer');
 
-        host.get('/', async (req, res) => {
+        app.get('/', async (req, res) => {
             try {
                 const ROOT_DIR = path.resolve(
                     ctx.cwd
@@ -330,11 +315,11 @@ export class EgoCommand extends CommandBase {
         await withSpinnerAsync(`Starting host on port ${port} ...`, (spinner) => {
             return new Promise<void>((resolve, reject) => {
                 try {
-                    host.once('error', (err) => {
+                    server.once('error', (err) => {
                         reject(err);
                     });
 
-                    host.listen(port, () => {
+                    server.listen(port, () => {
                         spinner.text = `Host now running on port ${port}`;
 
                         resolve();
@@ -389,9 +374,9 @@ export class EgoCommand extends CommandBase {
                 IFACES.forEach(x => {
                     writeLine(`    ${SCHEME}://${
                         'IPv6' === x.family ? '[' : ''
-                    }${x.address}${
+                        }${x.address}${
                         'IPv6' === x.family ? ']' : ''
-                    }:${port}/`);
+                        }:${port}/`);
                 });
             }
 
@@ -426,35 +411,12 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
+        writeLine(` -h, --http     # Force in-secure HTTP or not.`);
         writeLine(` -p, --port     # The custom TCP port. Default: 5979`);
         writeLine(` -v, --verbose  # Verbose output.`);
         writeLine();
 
         writeLine(`Examples:    ego serve`);
         writeLine(`             ego serve --port=23979`);
-    }
-
-
-    private _createFileHandler(ctx: CommandExecuteContext, basePath: string): express.RequestHandler {
-        return async (req, res) => {
-            try {
-                if ('/' !== req.path) {
-                    const FILE_PATH = getResourcePath(basePath + req.path);
-
-                    const STAT = await fs.stat(FILE_PATH);
-                    if (STAT.isFile()) {
-                        const DATA = await loadResourceAsync(basePath + req.path);
-                        const MIME = getMimeType(FILE_PATH);
-
-                        return res.status(200)
-                            .header('Content-type', MIME)
-                            .send(DATA);
-                    }
-                }
-            } catch { }
-
-            return res.status(404)
-                .send();
-        };
     }
 }

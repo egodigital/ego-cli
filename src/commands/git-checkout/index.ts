@@ -81,8 +81,8 @@ export class EgoCommand extends CommandBase {
         writeLine(` -v, --verbose  # Verbose output.`);
         writeLine();
 
-        writeLine(`Example:    ego git-checkout dev`);
-        writeLine(`Example:    ego git-checkout dev --merge`);
+        writeLine(`Examples:    ego git-checkout dev`);
+        writeLine(`             ego git-checkout dev --merge`);
     }
 
     /** @inheritdoc */
