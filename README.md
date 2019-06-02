@@ -32,6 +32,24 @@ To list all available commands, simply run
 ego
 ```
 
+## Available commands
+
+A (non complete) of some interesting commands:
+
+```
+build         # Shorthand for 'npm run build'.
+docker-stop   # Stops all running Docker containers.
+docker-up     # Shorthand for 'docker-compose up'.
+git-checkout  # Checks out (to) a branch.
+git-export    # Clones a repository to the working directory and removes the '.git' subfolder.
+git-pull      # Pulls from all remotes to the current branch.
+git-push      # Pushes the current branch to all remotes.
+git-sync      # Syncs the current branch with all remotes.
+new           # Starts the e.GO generator for Yeoman.
+node-install  # Removes the 'node_modules' subfolder and executes 'npm install'.
+run           # Runs one or more Node.js based script file(s).
+```
+
 ## Custom commands
 
 To implement a command, lets say `my-command`, create a `my-command.sh` (`my-command.cmd` on Windows) file inside the `.ego` subfolder of your home directory, give it enough rights to be executed and fill it with the code, you would like to execute.
