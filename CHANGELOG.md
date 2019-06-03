@@ -1,6 +1,10 @@
 # Change Log (ego-cli)
 
-## 0.58.0
+## 0.59.0
+
+* `new` command now supports [yarn](https://yarnpkg.com/)
+
+## 0.58.1
 
 * `build` command now supports [yarn](https://yarnpkg.com/)
 

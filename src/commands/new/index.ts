@@ -29,6 +29,42 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
+        const USE_YARN = ctx.args['y'] ||
+            ctx.args['yarn'] ||
+            ctx.get('yarn');
+
+        let installYeomanAction: () => Promise<void>;
+        let installEGOGeneratorAction: () => Promise<void>;
+        if (USE_YARN) {
+            installYeomanAction = async () => {
+                await spawnAsync('yarn', ['global', 'add', 'yo'], {
+                    cwd: ctx.cwd,
+                    stdio: getSTDIO(ctx),
+                });
+            };
+
+            installEGOGeneratorAction = async () => {
+                await spawnAsync('yarn', ['global', 'add', 'generator-ego'], {
+                    cwd: ctx.cwd,
+                    stdio: getSTDIO(ctx),
+                });
+            };
+        } else {
+            installYeomanAction = async () => {
+                await spawnAsync('npm', ['install', '-g', 'yo'], {
+                    cwd: ctx.cwd,
+                    stdio: getSTDIO(ctx),
+                });
+            };
+
+            installEGOGeneratorAction = async () => {
+                await spawnAsync('npm', ['install', '-g', 'generator-ego'], {
+                    cwd: ctx.cwd,
+                    stdio: getSTDIO(ctx),
+                });
+            };
+        }
+
         // Yeoman installed?
         if (!globalModuleExists('yo')) {
             const ANSWER = await inquirer.prompt([{
@@ -43,10 +79,7 @@ export class EgoCommand extends CommandBase {
             }
 
             await withSpinnerAsync(`Installing Yeoman generator ...`, async (spinner) => {
-                await spawnAsync('npm', ['install', '-g', 'yo'], {
-                    cwd: ctx.cwd,
-                    stdio: getSTDIO(ctx),
-                });
+                await installYeomanAction();
 
                 spinner.text = 'Yeoman generator installed';
             });
@@ -66,10 +99,7 @@ export class EgoCommand extends CommandBase {
             }
 
             await withSpinnerAsync(eGO(`Installing e.GO generator for Yeoman ...`), async (spinner) => {
-                await spawnAsync('npm', ['install', '-g', 'generator-ego'], {
-                    cwd: ctx.cwd,
-                    stdio: getSTDIO(ctx),
-                });
+                await installEGOGeneratorAction();
 
                 spinner.text = eGO(`e.GO generator for Yeoman installed`);
             });
@@ -85,6 +115,11 @@ export class EgoCommand extends CommandBase {
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
         writeLine(` -v, --verbose  # Verbose output.`);
+        writeLine(` -y, --yarn     # Use yarn instead.`);
+        writeLine();
+
+        writeLine(`Config:`);
+        writeLine(` yarn   # Use yarn instead.`);
         writeLine();
 
         writeLine(`Example:    ego new`);

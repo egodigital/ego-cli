@@ -27,7 +27,7 @@ import { exists, getSTDIO, spawnAsync, withSpinnerAsync, writeLine } from '../..
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = "Removes the 'node_modules' subfolder and executes 'npm install'.";
+    public readonly description = "Removes the 'node_modules' subfolder and re-installs it.";
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {

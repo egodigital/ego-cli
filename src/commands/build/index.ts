@@ -27,7 +27,7 @@ import { exists, getSTDIO, spawnAsync, withSpinnerAsync, writeLine } from '../..
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = "Shorthand for 'npm run build'.";
+    public readonly description = "Builds the current project.";
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
@@ -88,8 +88,6 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -a, --audit    # Runs 'npm audit fix' after successful execution.`);
-        writeLine(` -u, --update   # Runs 'npm update' after successful execution.`);
         writeLine(` -v, --verbose  # Verbose output.`);
         writeLine(` -y, --yarn     # Use yarn instead.`);
         writeLine();
