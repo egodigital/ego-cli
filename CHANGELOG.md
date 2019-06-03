@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.58.0
+
+* `build` command now supports [yarn](https://yarnpkg.com/)
+
 ## 0.57.2
 
 * improved `serve` command

@@ -60,14 +60,29 @@ export class EgoCommand extends CommandBase {
             ctx.exit(3);
         }
 
-        await withSpinnerAsync(`Executing 'npm run build' ...`, async (spinner) => {
-            await spawnAsync('npm', ['run', 'build'], {
-                cwd: ctx.cwd,
-                stdio: getSTDIO(ctx),
-            });
+        const USE_YARN = ctx.args['y'] ||
+            ctx.args['yarn'] ||
+            ctx.get('yarn');
 
-            spinner.text = `'npm run build' executed`;
-        });
+        if (USE_YARN) {
+            await withSpinnerAsync(`Executing 'yarn run build' ...`, async (spinner) => {
+                await spawnAsync('yarn', ['run', 'build'], {
+                    cwd: ctx.cwd,
+                    stdio: getSTDIO(ctx),
+                });
+
+                spinner.text = `'yarn run build' executed`;
+            });
+        } else {
+            await withSpinnerAsync(`Executing 'npm run build' ...`, async (spinner) => {
+                await spawnAsync('npm', ['run', 'build'], {
+                    cwd: ctx.cwd,
+                    stdio: getSTDIO(ctx),
+                });
+
+                spinner.text = `'npm run build' executed`;
+            });
+        }
     }
 
     /** @inheritdoc */
@@ -76,6 +91,11 @@ export class EgoCommand extends CommandBase {
         writeLine(` -a, --audit    # Runs 'npm audit fix' after successful execution.`);
         writeLine(` -u, --update   # Runs 'npm update' after successful execution.`);
         writeLine(` -v, --verbose  # Verbose output.`);
+        writeLine(` -y, --yarn     # Use yarn instead.`);
+        writeLine();
+
+        writeLine(`Config:`);
+        writeLine(` yarn   # Use yarn instead.`);
         writeLine();
 
         writeLine(`Examples:    ego node-install`);
