@@ -148,7 +148,7 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Examples:    ego watch my-watcher.js`);
-        writeLine(`             ego watch my-watcher"`);
+        writeLine(`             ego watch my-watcher`);
         writeLine();
         writeLine(`Relative paths will be mapped to the current working directory or the '.ego' subfolder inside the user's home directory.`);
         writeLine();
