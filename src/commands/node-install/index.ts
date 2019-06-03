@@ -42,6 +42,58 @@ export class EgoCommand extends CommandBase {
             ctx.exit(1);
         }
 
+        const USE_YARN = ctx.args['y'] ||
+            ctx.args['yarn'] ||
+            ctx.get('yarn');
+
+        let installAction: () => Promise<void>;
+        let updateAction: () => Promise<void>;
+        if (USE_YARN) {
+            installAction = async () => {
+                await withSpinnerAsync(`Executing 'yarn install' ...`, async (spinner) => {
+                    await spawnAsync('yarn', ['install'], {
+                        cwd: ctx.cwd,
+                        stdio: getSTDIO(ctx),
+                    });
+
+                    spinner.text = `'yarn install' executed`;
+                });
+            };
+
+            updateAction = async () => {
+                await withSpinnerAsync(`Executing 'yarn upgrade' ...`, async (spinner) => {
+                    await spawnAsync('yarn', ['upgrade'], {
+                        cwd: ctx.cwd,
+                        stdio: getSTDIO(ctx),
+                    });
+
+                    spinner.text = `'yarn upgrade' executed`;
+                });
+            };
+        } else {
+            installAction = async () => {
+                await withSpinnerAsync(`Executing 'npm install' ...`, async (spinner) => {
+                    await spawnAsync('npm', ['install'], {
+                        cwd: ctx.cwd,
+                        stdio: getSTDIO(ctx),
+                    });
+
+                    spinner.text = `'npm install' executed`;
+                });
+            };
+
+            updateAction = async () => {
+                await withSpinnerAsync(`Executing 'npm update' ...`, async (spinner) => {
+                    await spawnAsync('npm', ['update'], {
+                        cwd: ctx.cwd,
+                        stdio: getSTDIO(ctx),
+                    });
+
+                    spinner.text = `'npm update' executed`;
+                });
+            };
+        }
+
         await withSpinnerAsync(`Removing 'node_modules' folder ...`, async (spinner) => {
             const NODE_MODULES_FOLDER = path.resolve(
                 path.join(
@@ -62,25 +114,11 @@ export class EgoCommand extends CommandBase {
             spinner.text = `'node_modules' folder removed`;
         });
 
-        await withSpinnerAsync(`Executing 'npm install' ...`, async (spinner) => {
-            await spawnAsync('npm', ['install'], {
-                cwd: ctx.cwd,
-                stdio: getSTDIO(ctx),
-            });
+        await installAction();
 
-            spinner.text = `'npm install' executed`;
-        });
-
-        // npm update?
-        if (ctx.args['u'] || ctx.args['uodate']) {
-            await withSpinnerAsync(`Executing 'npm update' ...`, async (spinner) => {
-                await spawnAsync('npm', ['update'], {
-                    cwd: ctx.cwd,
-                    stdio: getSTDIO(ctx),
-                });
-
-                spinner.text = `'npm update' executed`;
-            });
+        // update?
+        if (ctx.args['u'] || ctx.args['update']) {
+            await updateAction();
         }
 
         // npm audit fix?
@@ -100,11 +138,17 @@ export class EgoCommand extends CommandBase {
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
         writeLine(` -a, --audit    # Runs 'npm audit fix' after successful execution.`);
-        writeLine(` -u, --update   # Runs 'npm update' after successful execution.`);
+        writeLine(` -u, --update   # Runs 'update' after successful execution.`);
         writeLine(` -v, --verbose  # Verbose output.`);
+        writeLine(` -y, --yarn     # Use yarn instead.`);
+        writeLine();
+
+        writeLine(`Config:`);
+        writeLine(` yarn   # Use yarn instead.`);
         writeLine();
 
         writeLine(`Examples:    ego node-install`);
+        writeLine(`             ego node-install --yarn`);
         writeLine(`             ego node-install --audit`);
         writeLine(`             ego node-install --update --a`);
     }

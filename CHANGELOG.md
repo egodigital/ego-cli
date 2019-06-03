@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.55.0
+
+* `node-install` command is now able to run with [yarn](https://yarnpkg.com/)
+
 ## 0.54.2
 
 * added `watch` command
