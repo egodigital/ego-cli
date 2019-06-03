@@ -133,7 +133,7 @@ export interface CommandScriptModule {
     /**
      * Executes the script.
      *
-     * @param {CommandExecuteContext} ctx The execution comand.
+     * @param {CommandExecuteContext} ctx The execution context.
      */
     execute(ctx: CommandExecuteContext): void | number | PromiseLike<void | number>;
 }
@@ -160,9 +160,23 @@ export interface JobScriptModule {
     /**
      * Executes the script.
      *
-     * @param {CommandExecuteContext} ctx The execution comand.
+     * @param {CommandExecuteContext} ctx The execution context.
      */
     execute(ctx: CommandExecuteContext): void | PromiseLike<void>;
+}
+
+/**
+ * A file system watcher script module
+ */
+export interface WatcherScriptModule {
+    /**
+     * Executes the script.
+     *
+     * @param {string} path The path of the underliyng file system item.
+     * @param {string} event The name of the event.
+     * @param {WatcherExecuteContext} ctx The execution context.
+     */
+    execute(path: string, event: string, ctx: CommandExecuteContext): void | PromiseLike<void>;
 }
 
 /**

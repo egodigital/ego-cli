@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.54.0
+
+* added `watch` command
+
 ## 0.53.0
 
 * `job` command is now also able to execute shell scripts

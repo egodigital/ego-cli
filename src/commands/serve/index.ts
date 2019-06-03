@@ -388,6 +388,8 @@ export class EgoCommand extends CommandBase {
         writeLine();
         writeLine();
         await waitForEnter('Press <ENTER> to stop ...');
+
+        ctx.exit();
     }
 
     /** @inheritdoc */

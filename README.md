@@ -52,6 +52,7 @@ node-install  # Removes the 'node_modules' subfolder and executes 'npm install'.
 run           # Runs one or more Node.js based script file(s).
 serve         # Starts a HTTP server that shares files via a web interface.
 ssl-new       # Creates a new self-signed SSL certificate.
+watch         # Runs one or more scripts for file changes.
 ```
 
 ## Custom commands

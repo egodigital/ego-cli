@@ -1,7 +1,7 @@
 {
   "name": "ego-cli",
   "displayName": "e.GO CLI",
-  "version": "0.53.0",
+  "version": "0.54.0",
   "description": "Command Line Interface, which is designed to handle things, like Dev(Ops) tasks, much faster.",
   "main": "dist/index.js",
   "private": false,
@@ -45,6 +45,7 @@
   "homepage": "https://github.com/egodigital/ego-cli#readme",
   "dependencies": {
     "chalk": "^2.4.2",
+    "chokidar": "^3.0.1",
     "cli-highlight": "^2.1.1",
     "cron": "^1.7.1",
     "deepmerge": "^3.2.0",

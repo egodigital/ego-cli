@@ -17,21 +17,22 @@
 
 import * as _ from 'lodash';
 import * as cliHighlight from 'cli-highlight';
-import * as cron from 'cron';
+import * as chokidar from 'chokidar';
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import { CommandBase, CommandExecuteContext, JobScriptModule } from '../../contracts';
+import * as pQueue from 'p-queue';
+import { CommandBase, CommandExecuteContext, WatcherScriptModule } from '../../contracts';
 import { EOL } from 'os';
 import { getShellScriptExtension } from '../../scripts';
 import { asArray, getEGOFolder, toStringSafe, waitForEnter, writeErrLine, writeLine, spawnAsync } from '../../util';
 
 
 /**
- * Job command.
+ * Watch command.
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = "Executes one or more scripts periodically.";
+    public readonly description = "Runs one or more scripts for file changes.";
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
@@ -45,20 +46,6 @@ export class EgoCommand extends CommandBase {
             ctx.exit(1);
         }
 
-        if (ARGS.length < 2) {
-            console.warn('Define the period (cron tab), the script(s) should be executed in!');
-
-            ctx.exit(2);
-        }
-
-        let cronTab = toStringSafe(ARGS[ARGS.length - 1])
-            .trim();
-        if ('' === cronTab) {
-            cronTab = '0 * * * * *';
-        }
-
-        const SCRIPT_FILES = ARGS.slice(0, ARGS.length - 1);
-
         const APPEND_SCRIPT_EXTENSION = (filePath: string) => {
             if (!filePath.endsWith(getShellScriptExtension())) {
                 if (!filePath.endsWith('.js')) {
@@ -69,8 +56,8 @@ export class EgoCommand extends CommandBase {
             return filePath;
         };
 
-        const JOBS: cron.CronJob[] = [];
-        SCRIPT_FILES.forEach(sf => {
+        const WATCH_ACTIONS: ((ev: string, p: string) => Promise<void>)[] = [];
+        ARGS.forEach(sf => {
             let scriptFile = sf;
             if (!path.isAbsolute(scriptFile)) {
                 let newScriptPath = path.join(
@@ -91,61 +78,77 @@ export class EgoCommand extends CommandBase {
             }
             scriptFile = require.resolve(scriptFile);
 
-
             scriptFile = APPEND_SCRIPT_EXTENSION(scriptFile);
 
-            let jobAction: () => Promise<void>;
             if (scriptFile.endsWith(getShellScriptExtension())) {
-                jobAction = async () => {
-                    await this._executeShellScript(ctx, scriptFile);
-                };
+                WATCH_ACTIONS.push(
+                    async (ev, p) => {
+                        await this._executeShellScript(ctx, scriptFile, ev, p);
+                    }
+                );
             } else {
-                jobAction = async () => {
-                    await this._executeScriptFile(ctx, scriptFile);
-                };
+                WATCH_ACTIONS.push(
+                    async (ev, p) => {
+                        await this._executeScriptFile(ctx, scriptFile, ev, p);
+                    }
+                );
+            }
+        });
+
+        const WATCHER = chokidar.watch(ctx.cwd, {
+            cwd: ctx.cwd,
+        });
+
+        let isReady = false;
+        const QUEUE = new pQueue({
+            autoStart: true,
+            concurrency: 1,
+        });
+        const INVOKE_EVENT = (ev: string, p: string) => {
+            if (!isReady) {
+                return;
             }
 
-            let isExecuting = false;
-            const NEW_JOB = new cron.CronJob(
-                cronTab,
-                // onTick
-                () => {
-                    if (isExecuting) {
-                        return;
+            QUEUE.add(async () => {
+                for (const WA of WATCH_ACTIONS) {
+                    try {
+                        await WA(ev, p);
+                    } catch (e) {
+                        writeErrLine(e);
                     }
+                }
+            }).catch((err) => {
+                writeErrLine(err);
+            });
+        };
 
-                    isExecuting = true;
-                    jobAction().catch((err) => {
-                        writeErrLine(err);
-                    }).finally(() => {
-                        isExecuting = false;
-                    });
-                },
-                null,  // onComplete
-                true,  // start
-                null,  // timeZone
-                null,  // context
-                false,  // runOnInit
-            );
-
-            JOBS.push(NEW_JOB);
+        WATCHER.on('error', err => {
+            writeErrLine(err);
+        }).on('add', p => {
+            INVOKE_EVENT('file:add', p);
+        }).on('change', p => {
+            INVOKE_EVENT('file:change', p);
+        }).on('unlink', p => {
+            INVOKE_EVENT('file:unlink', p);
+        }).on('addDir', p => {
+            INVOKE_EVENT('dir:add', p);
+        }).on('unlinkDir', p => {
+            INVOKE_EVENT('dir:unlink', p);
+        }).on('ready', () => {
+            isReady = true;
         });
 
         await waitForEnter(`Press <ENTER> to stop ...${EOL}`);
 
-        JOBS.forEach(j => {
-            if (j.running) {
-                j.stop();
-            }
-        });
+        WATCHER.close();
 
         ctx.exit();
     }
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine(`Examples:    ego job my-job.js "0 * * * * *"`);
-        writeLine(`             ego job my-job  "* */15 * * * *"`);
+        writeLine(`Examples:    ego watch my-watcher.js`);
+        writeLine(`             ego watch my-watcher"`);
         writeLine();
         writeLine(`Relative paths will be mapped to the current working directory or the '.ego' subfolder inside the user's home directory.`);
         writeLine();
@@ -157,7 +160,7 @@ export class EgoCommand extends CommandBase {
         writeLine(
             cliHighlight.highlight(
                 `
-    exports.execute = async (context) => {
+    exports.execute = async (path, event, context) => {
         // context  =>  s. https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
 
         // context.args            =>  List of command line arguments, s. https://www.npmjs.com/package/minimist
@@ -176,7 +179,7 @@ export class EgoCommand extends CommandBase {
         // common app utils, s. https://egodigital.github.io/ego-cli/modules/_util_.html
         const util = context.require('./util');
 
-        util.writeLine('Hello, from ' + __filename);
+        util.writeLine(\`'\${path}' raised the '\${event}' event.\`);
     };
 `,
                 {
@@ -187,15 +190,16 @@ export class EgoCommand extends CommandBase {
     }
 
     /** @inheritdoc */
-    public readonly syntax = '[JOB_FILE+] CRON_TAB';
+    public readonly syntax = '[WATCHER_FILE+]';
 
 
     private async _executeShellScript(
-        ctx: CommandExecuteContext, scriptFile: string
+        ctx: CommandExecuteContext, scriptFile: string,
+        ev: string, p: string,
     ) {
         await spawnAsync(
             scriptFile,
-            [],
+            [p, ev],
             {
                 cwd: ctx.cwd,
             }
@@ -203,16 +207,17 @@ export class EgoCommand extends CommandBase {
     }
 
     private async _executeScriptFile(
-        ctx: CommandExecuteContext, scriptFile: string
+        ctx: CommandExecuteContext, scriptFile: string,
+        ev: string, p: string,
     ) {
         delete require.cache[scriptFile];
 
-        const SCRIPT_MODULE: JobScriptModule = require(scriptFile);
+        const SCRIPT_MODULE: WatcherScriptModule = require(scriptFile);
         if (SCRIPT_MODULE) {
             const EXECUTE = SCRIPT_MODULE.execute;
             if (EXECUTE) {
                 await Promise.resolve(
-                    EXECUTE.apply(SCRIPT_MODULE, [ctx])
+                    EXECUTE.apply(SCRIPT_MODULE, [p, ev, ctx])
                 );
             }
         }
