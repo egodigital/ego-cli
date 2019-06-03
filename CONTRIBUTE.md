@@ -80,12 +80,20 @@ export class EgoCommand extends CommandBase {
     public async execute(context: CommandExecuteContext): Promise<void> {
         // context  =>  s. https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
 
-        // docker utils, s. https://egodigital.github.io/ego-cli/modules/_docker_.html
-        const docker = context.require('./docker');
-        // git utils, s. https://egodigital.github.io/ego-cli/modules/_git_.html
-        const git = context.require('./git');
-        // common app utils, s. https://egodigital.github.io/ego-cli/modules/_util_.html
-        const util = context.require('./util');
+        if (ctx.args['v'] || ctx.args['verbose']) {
+            // -v or --verbose argument
+            // is defined, s. showHelp()
+
+            writeLine(`OK, you want some more output:`);
+            writeLine();
+            writeLine(`    Ich bin der Geist, der stets verneint!
+    Und das mit Recht; denn alles, was entsteht,
+    Ist wert, daß es zugrunde geht;
+    Drum besser wär's, daß nichts entstünde.
+    So ist denn alles, was ihr Sünde,
+    Zerstörung, kurz, das Böse nennt,
+    Mein eigentliches Element.`);
+        }
 
         writeLine('Hello, my-new-command!');
     }
