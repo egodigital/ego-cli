@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.54.0
+## 0.54.1
 
 * added `watch` command
 
