@@ -1,8 +1,10 @@
 # Change Log (ego-cli)
 
-## 0.56.0
+## 0.57.0
 
 * improved `serve` command
+* code cleanups and improvements
+* bugs fixed
 
 ## 0.55.0
 

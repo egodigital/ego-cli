@@ -270,6 +270,9 @@ export function getMimeType(p: any): string {
         .trim();
 
     switch (path.extname(p)) {
+        case '.js':
+            return 'text/javascript';
+
         case '.ts':
             return 'text/plain';
     }
