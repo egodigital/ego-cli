@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.56.0
+
+* improved `serve` command
+
 ## 0.55.0
 
 * `node-install` command is now able to run with [yarn](https://yarnpkg.com/)

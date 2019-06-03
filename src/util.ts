@@ -266,10 +266,15 @@ export function getEGOFolder(create = true): string {
  * @return {string} The mime type.
  */
 export function getMimeType(p: any): string {
-    const MIME_TYPE = mimeTypes.lookup(
-        toStringSafe(p)
-            .trim()
-    );
+    p = toStringSafe(p)
+        .trim();
+
+    switch (path.extname(p)) {
+        case '.ts':
+            return 'text/plain';
+    }
+
+    const MIME_TYPE = mimeTypes.lookup(p);
 
     return false !== MIME_TYPE ?
         MIME_TYPE : 'application/octet-stream';

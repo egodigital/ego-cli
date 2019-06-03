@@ -20,6 +20,7 @@ import * as express from 'express';
 import * as fileSize from 'filesize';
 import * as fs from 'fs-extra';
 import * as htmlEntities from 'html-entities';
+import { isBinaryFile } from 'isbinaryfile';
 import * as os from 'os';
 import * as path from 'path';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
@@ -225,6 +226,15 @@ export class EgoCommand extends CommandBase {
                                                 .trim();
                                         });
                                     })) {
+                                        let mimeType = getMimeType(F.path);
+                                        if ('application/octet-stream' === mimeType) {
+                                            try {
+                                                if (!(await isBinaryFile(F.path))) {
+                                                    mimeType = 'text/plain';
+                                                }
+                                            } catch { }
+                                        }
+
                                         content += `    <tr>
     <td class="ego-icon"><a href="/?p=${
                                             encodeURIComponent(
@@ -241,7 +251,7 @@ export class EgoCommand extends CommandBase {
                                             }</a></td>
     <td class="ego-type">${
                                             HTML_ENC.encode(
-                                                getMimeType(F.name)
+                                                mimeType
                                             )
                                             }</td>
     <td class="ego-size ego-file" title="${
@@ -274,9 +284,28 @@ export class EgoCommand extends CommandBase {
                                     .send(Buffer.from(HTML, 'utf8'));
                             }
 
+                            // send file ...
+
+                            let mimeType = getMimeType(FILE_OR_FOLDER_PATH);
+                            if ('application/octet-stream' === mimeType) {
+                                try {
+                                    if (!(await isBinaryFile(FILE_OR_FOLDER_PATH))) {
+                                        mimeType = 'text/plain';
+                                    }
+                                } catch { }
+                            }
+
                             res.status(200)
-                                .header('Content-type', getMimeType(FILE_OR_FOLDER_PATH))
-                                .header('Content-disposition', `attachment; filename="${path.basename(FILE_OR_FOLDER_PATH)}"`);
+                                .header('Content-type', mimeType);
+
+                            if (
+                                !mimeType.startsWith('text/') &&
+                                !mimeType.startsWith('image/') &&
+                                !mimeType.startsWith('video/') &&
+                                !mimeType.endsWith('/json')
+                            ) {
+                                res.header('Content-disposition', `attachment; filename="${path.basename(FILE_OR_FOLDER_PATH)}"`);
+                            }
 
                             fs.createReadStream(FILE_OR_FOLDER_PATH)
                                 .pipe(res);
