@@ -109,7 +109,7 @@ You are also able to store it globally, inside the `.ego` subfolder, inside your
 
 ## Contribute
 
-The [contribution guide](./CONTRIBUTE.md) explains, how to implement a new command, work with the code and open a pull request.
+The [contribution guide](./CONTRIBUTION.md) explains, how to implement a new command, work with the code and open a pull request.
 
 ## Copyright
 

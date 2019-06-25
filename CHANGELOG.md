@@ -1,5 +1,11 @@
 # Change Log (ego-cli)
 
+## 0.60.0
+
+* updated to `deepmerge@3.3.0`
+* updated to `ejs@2.6.2`
+* updated to `inquirer@6.4.1`
+
 ## 0.59.0
 
 * `new` command now supports [yarn](https://yarnpkg.com/)
