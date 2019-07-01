@@ -1,5 +1,11 @@
 # Change Log (ego-cli)
 
+## 0.61.0
+
+* updated to `fs-extra@8.1.0`
+* updated to `isbinaryfile@4.0.1`
+* fixes
+
 ## 0.60.0
 
 * updated to `deepmerge@3.3.0`

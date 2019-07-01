@@ -102,8 +102,8 @@ export class EgoCommand extends CommandBase {
         writeLine(` backup_dir   # The path to the target directory.`);
         writeLine(`              # Relative paths will be mapped to the '.ego/.backups' subfolder`);
         writeLine(`              # inside the user's home directory.`);
-        writeLine(` backup_dots  # Indicates if also files / files with leading dots`);
-        writeLine(`              ä should be handled (true) or not (false).`);
+        writeLine(` backup_dots  # Indicates if also directories / files with leading dots`);
+        writeLine(`              # should be handled (true) or not (false).`);
         writeLine();
 
         writeLine(`Example:    ego backup`);
