@@ -254,7 +254,7 @@ export class EgoCommand extends CommandBase {
     private _areFilesEqual(src: fs.Stats, dest: fs.Stats) {
         try {
             return src.size === dest.size &&
-                src.mtime.getUTCDate() === dest.mtime.getUTCDate();
+                src.mtime.toISOString() === dest.mtime.toISOString();
         } catch {
             return false;
         }

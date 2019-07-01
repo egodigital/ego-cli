@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.61.0
+## 0.61.1
 
 * updated to `fs-extra@8.1.0`
 * updated to `isbinaryfile@4.0.1`
