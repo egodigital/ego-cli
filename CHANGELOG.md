@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.62.0
+## 0.62.1
 
 * added `csv-split` command
 

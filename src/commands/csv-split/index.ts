@@ -221,7 +221,7 @@ export class EgoCommand extends CommandBase {
                                 fs.appendFileSync(
                                     currentFileName,
                                     Object.keys(data)
-                                        .join(separator) + NEW_LINE,
+                                        .join(separator),
                                     encoding,
                                 );
                             }
@@ -230,7 +230,7 @@ export class EgoCommand extends CommandBase {
                             fs.appendFileSync(
                                 currentFileName,
                                 Object.values(data)
-                                    .join(separator) + NEW_LINE,
+                                    .join(separator),
                                 encoding,
                             );
                         });
