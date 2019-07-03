@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.62.0
+
+* added `csv-split` command
+
 ## 0.61.1
 
 * updated to `fs-extra@8.1.0`
