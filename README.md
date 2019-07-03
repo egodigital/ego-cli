@@ -116,7 +116,7 @@ You are also able to store it globally, inside the `.ego` subfolder, inside your
 To start, create an `index.js` file with the following skeleton:
 
 ```javascript
-exports.GET = async (req, res) => {
+exports.GET = async function(req, res) {
     // s. https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
     const CONTEXT = this;
 
@@ -138,19 +138,19 @@ from that directory and open http://localhost:8080/api/ from browser to see the 
 To use other HTTP methods, like `POST`, `PUT` or `DELETE`, simply export functions with their names, in upper case characters:
 
 ```javascript
-exports.POST = async (req, res) => {
+exports.POST = async function(req, res) {
     // TODO: implement
 };
 
-exports.PUT = async (req, res) => {
+exports.PUT = async function(req, res) {
     // TODO: implement
 };
 
-exports.PATCH = async (req, res) => {
+exports.PATCH = async function(req, res) {
     // TODO: implement
 };
 
-exports.DELETE = async (req, res) => {
+exports.DELETE = async function(req, res) {
     // TODO: implement
 };
 ```
@@ -158,7 +158,7 @@ exports.DELETE = async (req, res) => {
 To handle any method, you only need to implement a `request` function:
 
 ```javascript
-exports.request = async (req, res) => {
+exports.request = async function(req, res) {
     // TODO: implement
 };
 ```

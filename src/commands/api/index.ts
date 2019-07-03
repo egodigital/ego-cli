@@ -219,7 +219,7 @@ export class EgoCommand extends CommandBase {
     // for other methods like 'post' or 'delete'
     // simply implement them by their names in upper case
     // characters ('POST' and/or 'DELETE', e.g.)
-    exports.GET = async (req, res) => {
+    exports.GET = async function(req, res) {
         // for 'req' and 'res'  =>  https://expressjs.com/
 
         // s. https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
@@ -231,7 +231,7 @@ export class EgoCommand extends CommandBase {
 
     // handle any HTTP method
     // and/or use as fallback
-    exports.request = async (req, res) => {
+    exports.request = async function(req, res) {
         return res.status(501)
             .send();
     };
