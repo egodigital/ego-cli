@@ -74,6 +74,9 @@ export class EgoCommand extends CommandBase {
         writeLine(` -s, --separator   # The column separator to use. Default: ,`);
         writeLine();
 
+        writeLine(`Relative paths will be mapped to the current working directory.`);
+        writeLine();
+
         writeLine(`Examples:    ego csv-split my-file.csv`);
         writeLine(`             ego csv-split my-file-1.csv my-file-2.csv --lines=5979`);
     }

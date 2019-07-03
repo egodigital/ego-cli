@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.63.0
+
+* added `api` command
+
 ## 0.62.1
 
 * added `csv-split` command

@@ -31,8 +31,10 @@ ego new
 A (non complete) list of some interesting commands:
 
 ```
+api           # Runs an Express.js based REST API from current directory.
 backup        # Backups the current directory.
 build         # Shorthand for 'npm run build'.
+csv-split     # Splits one or more (huge) CSV file(s) into separates parts.
 docker-stop   # Stops all running Docker containers.
 docker-up     # Shorthand for 'docker-compose up'.
 git-checkout  # Checks out (to) a branch.
@@ -106,6 +108,70 @@ ego run test.js
 from the folder, that contains the file.
 
 You are also able to store it globally, inside the `.ego` subfolder, inside your user's home directory (`${HOME}/.ego/test.js`).
+
+## API
+
+`api` command allows you to run a REST API, using [Express.js](https://expressjs.com/) framework, from current directory.
+
+To start, create an `index.js` file with the following skeleton:
+
+```javascript
+exports.GET = async (req, res) => {
+    return res.status(200)
+        .send('Hello, e.GO!');
+};
+```
+
+Run a host instace, by executing
+
+```bash
+ego api
+```
+
+from that directory and open http://localhost:8080/api/ from browser to see the result of the endpoint.
+
+### Other methods
+
+To use other HTTP methods, like `POST`, `PUT` or `DELETE`, simply export functions with their names, in upper case characters:
+
+```javascript
+exports.POST = async (req, res) => {
+    // TODO: implement
+};
+
+exports.PUT = async (req, res) => {
+    // TODO: implement
+};
+
+exports.PATCH = async (req, res) => {
+    // TODO: implement
+};
+
+exports.DELETE = async (req, res) => {
+    // TODO: implement
+};
+```
+
+To handle any method, you only need to implement a `request` function:
+
+```javascript
+exports.request = async (req, res) => {
+    // TODO: implement
+};
+```
+
+### Routes
+
+If you would like to implement an `/foo/bar` endpoint, you have to create on of the following files
+
+* `/foo/bar.js`
+* or `/foo/bar/index.js`
+
+Files with leading `_` will be ignored.
+
+### SSL
+
+Use `ssl-new` to generate a new, self-signed certificate.
 
 ## Contribute
 

@@ -25,7 +25,7 @@ import * as os from 'os';
 import * as path from 'path';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
 import { createHttpServer } from '../../http';
-import { compareValuesBy, exists, getMimeType, getResourcePath, loadEJSAsync, waitForEnter, withSpinnerAsync, writeLine, toStringSafe } from '../../util';
+import { compareValuesBy, exists, getMimeType, getResourcePath, loadEJSAsync, waitForEnter, withSpinnerAsync, writeErrLine, writeLine, toStringSafe } from '../../util';
 
 
 interface DirectoryEntry {
@@ -418,7 +418,15 @@ export class EgoCommand extends CommandBase {
         writeLine();
         await waitForEnter('Press <ENTER> to stop ...');
 
-        ctx.exit();
+        server.close((err) => {
+            if (err) {
+                writeErrLine(err);
+
+                ctx.exit(1);
+            } else {
+                ctx.exit();
+            }
+        });
     }
 
     /** @inheritdoc */
