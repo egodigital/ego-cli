@@ -459,7 +459,7 @@ export class EgoCommand extends CommandBase {
                 }
 
                 return res.status(401)
-                    .header('WWW-Authenticate', 'API by e.GO CLI')
+                    .header('WWW-Authenticate', 'Basic realm="API by e.GO CLI"')
                     .send();
             });
         }
