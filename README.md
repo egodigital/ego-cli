@@ -125,7 +125,7 @@ exports.GET = async function(req, res) {
 };
 ```
 
-Run a host instace, by executing
+Run a host instance, by executing
 
 ```bash
 ego api
