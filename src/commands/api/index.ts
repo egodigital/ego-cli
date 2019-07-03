@@ -174,14 +174,19 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -h, --http     # Force in-secure HTTP or not.`);
-        writeLine(` -p, --port     # The custom TCP port. Default: 8080`);
-        writeLine(` -r, --root     # Custom root directory. Default: current working directory`);
-        writeLine(` -v, --verbose  # Verbose output.`);
+        writeLine(` -b, --bearer      # Defines an optional 'Bearer' token for 'Authorization' request header.`);
+        writeLine(` -h, --http        # Force in-secure HTTP or not.`);
+        writeLine(` -p, --port        # The custom TCP port. Default: 8080`);
+        writeLine(` -pwd, --password  # The password for basic authorization.`);
+        writeLine(` -r, --root        # Custom root directory. Default: current working directory`);
+        writeLine(` -u, --user        # The user name for basic authorization.`);
+        writeLine(` -v, --verbose     # Verbose output.`);
         writeLine();
 
         writeLine(`Examples:    ego api`);
         writeLine(`             ego api --port=23979`);
+        writeLine(`             ego api --bearer=footoken`);
+        writeLine(`             ego api --user=tanja --password=19790905`);
         writeLine();
         writeLine();
 
@@ -300,6 +305,13 @@ export class EgoCommand extends CommandBase {
             return false;
         };
 
+        const PRINT_REQUEST_ERROR = (err: any, req: express.Request) => {
+            if (VERBOSE) {
+                writeErrLine();
+                writeErrLine(`API REQUEST ERROR [${req.method} :: ${req.path}] => ${toStringSafe(err)}`);
+            }
+        };
+
         if (VERBOSE) {
             route.use(async (req, res, next) => {
                 writeLine();
@@ -309,6 +321,92 @@ export class EgoCommand extends CommandBase {
                 }, null, 2));
 
                 return next();
+            });
+        }
+
+        let bearerToken = toStringSafe(ctx.args['b'])
+            .trim();
+        if ('' === bearerToken) {
+            bearerToken = toStringSafe(ctx.args['bearer'])
+                .trim();
+        }
+        if ('' !== bearerToken) {
+            // check for bearer token
+
+            route.use(async (req, res, next) => {
+                const AUTHORIZATION = toStringSafe(req.headers['authorization'])
+                    .trim();
+                if (AUTHORIZATION.toLowerCase().startsWith('bearer')) {
+                    const TOKEN = AUTHORIZATION.substr(6)
+                        .trim();
+
+                    if (TOKEN === bearerToken) {
+                        return next();  // matches
+                    }
+                }
+
+                return res.status(401)
+                    .send();
+            });
+        }
+
+        let username = toStringSafe(ctx.args['u']);
+        if ('' === username.trim()) {
+            username = toStringSafe(ctx.args['user']);
+        }
+
+        let password = toStringSafe(ctx.args['pwd']);
+        if ('' === password.trim()) {
+            password = toStringSafe(ctx.args['password']);
+        }
+
+        username = toStringSafe(username)
+            .toLowerCase()
+            .trim();
+        password = toStringSafe(password);
+        if ('' !== username || '' !== password.trim()) {
+            // check for user and password
+
+            route.use(async (req, res, next) => {
+                try {
+                    const AUTHORIZATION = toStringSafe(req.headers['authorization'])
+                        .trim();
+                    if (AUTHORIZATION.toLowerCase().startsWith('basic')) {
+                        const BASE64_USERNAME_AND_PASSWORD = AUTHORIZATION.substr(5)
+                            .trim();
+
+                        if ('' !== BASE64_USERNAME_AND_PASSWORD) {
+                            const USERNAME_AND_PASSWORD = Buffer.from(
+                                BASE64_USERNAME_AND_PASSWORD, 'base64'
+                            ).toString('utf8');
+
+                            let u: string;
+                            let p: string;
+
+                            const SEP = USERNAME_AND_PASSWORD.indexOf(':');
+                            if (SEP > -1) {
+                                u = USERNAME_AND_PASSWORD.substr(0, SEP);
+                                p = USERNAME_AND_PASSWORD.substr(SEP + 1);
+                            } else {
+                                u = USERNAME_AND_PASSWORD;
+                            }
+
+                            u = toStringSafe(u)
+                                .toLowerCase()
+                                .trim();
+                            p = toStringSafe(p);
+                            if (u === username && p === password) {
+                                return next();  // user & password match
+                            }
+                        }
+                    }
+                } catch (e) {
+                    PRINT_REQUEST_ERROR(e, req);
+                }
+
+                return res.status(401)
+                    .header('WWW-Authenticate', 'API by e.GO CLI')
+                    .send();
             });
         }
 
@@ -360,10 +458,7 @@ export class EgoCommand extends CommandBase {
                     endpoint.apply(ctx, arguments)
                 );
             } catch (e) {
-                if (VERBOSE) {
-                    writeErrLine();
-                    writeErrLine(`API REQUEST ERROR [${req.method} :: ${req.path}] => ${toStringSafe(e)}`);
-                }
+                PRINT_REQUEST_ERROR(e, req);
 
                 return res.status(500)
                     .header('Content-type', 'text/plain; charset=utf-8')
