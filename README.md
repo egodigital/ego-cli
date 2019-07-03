@@ -170,7 +170,21 @@ If you would like to implement an `/foo/bar` endpoint, you have to create on of 
 * `/foo/bar.js`
 * or `/foo/bar/index.js`
 
-Files with leading `_` will be ignored.
+Files with leading `_` will be ignored, if you want to use them for endpoints.
+
+### Bootstrap and shutdown scripts
+
+To define startup logic, create a `_bootstrap.js` at the root of your API directory:
+
+```javascript
+exports.execute = async (context, apiRouter, app) => {
+    // context    =>  https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
+    // apiRouter  =>  https://expressjs.com/en/guide/routing.html
+    // app        =>  https://expressjs.com/en/starter/hello-world.html
+};
+```
+
+You can do the same thing with a `_shutdown.js` file.
 
 ### SSL
 

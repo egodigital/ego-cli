@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.65.0
+
+* can define `/_bootstrap.js` and/or `/_shutdown_.js` files for `api` command now
+
 ## 0.64.1
 
 * can define bearer and/or username/password authorization for `api` command now

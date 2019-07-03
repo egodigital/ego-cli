@@ -35,8 +35,26 @@ interface ApiModule {
 interface ApiRequest extends express.Request {
 }
 
+interface BootstrapModule {
+    execute: (
+        ctx: CommandExecuteContext,
+        route: express.Router,
+        host: express.Express,
+    ) => any;
+}
+
+interface ShutdownModule {
+    execute: (
+        ctx: CommandExecuteContext,
+        route: express.Router,
+        host: express.Express,
+    ) => any;
+}
+
 
 const API_MODULE_PROPERTY = Symbol('API_MODULE_PROPERTY');
+const BOOTSTRAP_FILENAME = '_bootstrap.js';
+const SHUTDOWN_FILENAME = '_shutdown.js';
 
 
 /**
@@ -62,7 +80,7 @@ export class EgoCommand extends CommandBase {
         });
 
         const API_ROUTE = express.Router();
-        this.setupAPIRoute(ctx, API_ROUTE);
+        const ON_SHUTDOWN = await this.setupAPIRoute(ctx, API_ROUTE, app);
 
         app.use('/api', API_ROUTE);
 
@@ -160,6 +178,8 @@ export class EgoCommand extends CommandBase {
         writeLine();
         await waitForEnter('Press <ENTER> to stop ...');
 
+        await ON_SHUTDOWN();
+
         server.close((err) => {
             if (err) {
                 writeErrLine(err);
@@ -200,7 +220,7 @@ export class EgoCommand extends CommandBase {
     // simply implement them by their names in upper case
     // characters ('POST' and/or 'DELETE', e.g.)
     exports.GET = async (req, res) => {
-        // for 'req' and 'res' => https://expressjs.com/
+        // for 'req' and 'res'  =>  https://expressjs.com/
 
         // s. https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
         const CONTEXT = this;
@@ -227,10 +247,31 @@ export class EgoCommand extends CommandBase {
         writeLine(`  * /foo/bar/index.js`);
 
         writeLine();
-        writeLine(`Files with leading _ will be ignored.`);
+        writeLine(`Files with leading _ will be ignored, if you want to use them for endpoints.`);
+
+        writeLine();
+        writeLine(`To define startup logic, create a '_bootstrap.js' at the root of your API directory:`);
+        writeLine(
+            cliHighlight.highlight(
+                `
+    exports.execute = async (context, apiRouter, app) => {
+        // context    =>  https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
+        // apiRouter  =>  https://expressjs.com/en/guide/routing.html
+        // app        =>  https://expressjs.com/en/starter/hello-world.html
+    };
+`,
+                {
+                    language: 'javascript',
+                }
+            )
+        );
+        writeLine(`You can do the same thing with a '_shutdown.js' file.`);
     }
 
-    private setupAPIRoute(ctx: CommandExecuteContext, route: express.Router) {
+    private async setupAPIRoute(
+        ctx: CommandExecuteContext,
+        route: express.Router, app: express.Express,
+    ): Promise<() => any> {
         const VERBOSE = ctx.args['v'] || ctx.args['verbose'];
 
         // -r or --root
@@ -308,6 +349,15 @@ export class EgoCommand extends CommandBase {
             return false;
         };
 
+        const LOAD_SCRIPT_MODULE = async (scriptFile: string) => {
+            return await ctx.queue.add(async () => {
+                scriptFile = require.resolve(scriptFile);
+
+                delete require.cache[scriptFile];
+                return require(scriptFile);
+            });
+        };
+
         const PRINT_REQUEST_ERROR = (err: any, req: express.Request) => {
             if (VERBOSE) {
                 writeErrLine();
@@ -327,6 +377,7 @@ export class EgoCommand extends CommandBase {
             });
         }
 
+        // bearer token
         let bearerToken = toStringSafe(ctx.args['b'])
             .trim();
         if ('' === bearerToken) {
@@ -353,11 +404,11 @@ export class EgoCommand extends CommandBase {
             });
         }
 
+        // username and password for basic auth
         let username = toStringSafe(ctx.args['u']);
         if ('' === username.trim()) {
             username = toStringSafe(ctx.args['user']);
         }
-
         let password = toStringSafe(ctx.args['pwd']);
         if ('' === password.trim()) {
             password = toStringSafe(ctx.args['password']);
@@ -421,13 +472,27 @@ export class EgoCommand extends CommandBase {
                     .send();
             }
 
-            await ctx.queue.add(async () => {
-                delete require.cache[SCRIPT_FILE];
-                req[API_MODULE_PROPERTY] = require(SCRIPT_FILE);
-            });
+            req[API_MODULE_PROPERTY] = await LOAD_SCRIPT_MODULE(SCRIPT_FILE);
 
             return next();
         });
+
+        const BOOTSTRAP_FILE = path.join(
+            rootDir, BOOTSTRAP_FILENAME
+        );
+        if (await exists(BOOTSTRAP_FILE)) {
+            const BOOTSTRAP_MODULE: BootstrapModule = await LOAD_SCRIPT_MODULE(BOOTSTRAP_FILE);
+            if (BOOTSTRAP_MODULE.execute) {
+                // run bootstrap file
+
+                await Promise.resolve(
+                    BOOTSTRAP_MODULE.execute(
+                        ctx,
+                        route, app
+                    )
+                );
+            }
+        }
 
         // handle request
         route.all('/*', async function (req: ApiRequest, res: express.Response) {
@@ -470,5 +535,24 @@ export class EgoCommand extends CommandBase {
                     ));
             }
         });
+
+        return async () => {
+            const SHUTDOWN_FILE = path.join(
+                rootDir, SHUTDOWN_FILENAME
+            );
+            if (await exists(SHUTDOWN_FILE)) {
+                const SHUTDOWN_MODULE: ShutdownModule = await LOAD_SCRIPT_MODULE(SHUTDOWN_FILE);
+                if (SHUTDOWN_MODULE.execute) {
+                    // run shutdown file
+
+                    await Promise.resolve(
+                        SHUTDOWN_MODULE.execute(
+                            ctx,
+                            route, app
+                        )
+                    );
+                }
+            }
+        };
     }
 }
