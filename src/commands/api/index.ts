@@ -202,6 +202,9 @@ export class EgoCommand extends CommandBase {
     exports.GET = async (req, res) => {
         // for 'req' and 'res' => https://expressjs.com/
 
+        // s. https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
+        const CONTEXT = this;
+
         return res.status(200)
             .send('Hello, e.GO!');
     };

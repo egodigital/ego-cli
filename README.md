@@ -117,6 +117,9 @@ To start, create an `index.js` file with the following skeleton:
 
 ```javascript
 exports.GET = async (req, res) => {
+    // s. https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
+    const CONTEXT = this;
+
     return res.status(200)
         .send('Hello, e.GO!');
 };

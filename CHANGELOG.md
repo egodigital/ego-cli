@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.64.0
+## 0.64.1
 
 * can define bearer and/or username/password authorization for `api` command now
 
