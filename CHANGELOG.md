@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.65.2
+## 0.65.4
 
 * can define `/_bootstrap.js` and/or `/_shutdown_.js` files for `api` command now
 * (bug)fixes

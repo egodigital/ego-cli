@@ -132,7 +132,7 @@ export class EgoCommand extends CommandBase {
 
         // -q / --quote
         let quote: string;
-        if (_.isNil(ctx.args['q']) && _.isNil(ctx.args['q'])) {
+        if (_.isNil(ctx.args['q']) && _.isNil(ctx.args['quote'])) {
             quote = '"';
         } else {
             if (!_.isNil(ctx.args['q'])) {
