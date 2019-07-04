@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.66.0
+
+* added `-bu` and `--base-url` options for `api` command
+
 ## 0.65.4
 
 * can define `/_bootstrap.js` and/or `/_shutdown_.js` files for `api` command now

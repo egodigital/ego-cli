@@ -80,9 +80,35 @@ export class EgoCommand extends CommandBase {
         });
 
         const API_ROUTE = express.Router();
-        const ON_SHUTDOWN = await this.setupAPIRoute(ctx, API_ROUTE, app);
+        {
+            let baseUrl: string;
+            if (_.isNil(ctx.args['bu']) && _.isNil(ctx.args['base-url'])) {
+                baseUrl = '/api';
+            } else {
+                baseUrl = toStringSafe(ctx.args['bu']);
+                if ('' === baseUrl.trim()) {
+                    baseUrl = toStringSafe(ctx.args['base-url']);
+                }
+            }
 
-        app.use('/api', API_ROUTE);
+            baseUrl = toStringSafe(baseUrl)
+                .split(path.sep).join('/')
+                .trim();
+            if (!baseUrl.startsWith('/')) {
+                baseUrl = '/' + baseUrl;
+            }
+            if (!baseUrl.endsWith('/')) {
+                baseUrl += '/';
+            }
+            baseUrl = baseUrl.split('/')
+                .map(x => x.trim())
+                .filter(x => '' !== x)
+                .join('/');
+
+            app.use(baseUrl, API_ROUTE);
+        }
+
+        const ON_SHUTDOWN = await this.setupAPIRoute(ctx, API_ROUTE, app);
 
         // TCP port
         let port = parseInt(
@@ -195,6 +221,7 @@ export class EgoCommand extends CommandBase {
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
         writeLine(` -b, --bearer      # Defines an optional 'Bearer' token for 'Authorization' request header.`);
+        writeLine(` -bu, --base-url   # Defines the base URL for the API. Default: '/api'`);
         writeLine(` -h, --http        # Force in-secure HTTP or not.`);
         writeLine(` -p, --port        # The custom TCP port. Default: 8080`);
         writeLine(` -pwd, --password  # The password for basic authorization.`);
@@ -350,12 +377,10 @@ export class EgoCommand extends CommandBase {
         };
 
         const LOAD_SCRIPT_MODULE = async (scriptFile: string) => {
-            return await ctx.queue.add(async () => {
-                scriptFile = require.resolve(scriptFile);
+            scriptFile = require.resolve(scriptFile);
 
-                delete require.cache[scriptFile];
-                return require(scriptFile);
-            });
+            delete require.cache[scriptFile];
+            return require(scriptFile);
         };
 
         const PRINT_REQUEST_ERROR = (err: any, req: express.Request) => {
