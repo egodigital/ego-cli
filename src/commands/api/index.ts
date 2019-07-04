@@ -80,8 +80,8 @@ export class EgoCommand extends CommandBase {
         });
 
         const API_ROUTE = express.Router();
+        let baseUrl: string;
         {
-            let baseUrl: string;
             if (_.isNil(ctx.args['bu']) && _.isNil(ctx.args['base-url'])) {
                 baseUrl = '/api';
             } else {
@@ -97,18 +97,18 @@ export class EgoCommand extends CommandBase {
             if (!baseUrl.startsWith('/')) {
                 baseUrl = '/' + baseUrl;
             }
-            if (!baseUrl.endsWith('/')) {
-                baseUrl += '/';
+            while (baseUrl.endsWith('/')) {
+                baseUrl = baseUrl.substr(0, baseUrl.length - 1)
+                    .trim();
             }
-            baseUrl = baseUrl.split('/')
+            baseUrl = '/' + baseUrl.split('/')
                 .map(x => x.trim())
                 .filter(x => '' !== x)
                 .join('/');
-
-            app.use(baseUrl, API_ROUTE);
         }
 
         const ON_SHUTDOWN = await this.setupAPIRoute(ctx, API_ROUTE, app);
+        app.use(baseUrl, API_ROUTE);
 
         // TCP port
         let port = parseInt(
@@ -190,13 +190,13 @@ export class EgoCommand extends CommandBase {
                         'IPv6' === x.family ? '[' : ''
                         }${x.address}${
                         'IPv6' === x.family ? ']' : ''
-                        }:${port}/`);
+                        }:${port}${baseUrl}${'/' !== baseUrl ? '/' : ''}`);
                 });
             }
 
             writeLine();
-            writeLine(`    ${SCHEME}://localhost:${port}/api/`);
-            writeLine(`    ${SCHEME}://127.0.0.1:${port}/api/`);
+            writeLine(`    ${SCHEME}://localhost:${port}${baseUrl}${'/' !== baseUrl ? '/' : ''}`);
+            writeLine(`    ${SCHEME}://127.0.0.1:${port}${baseUrl}${'/' !== baseUrl ? '/' : ''}`);
         }
 
         // wait for ENTER

@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.66.0
+## 0.66.1
 
 * added `-bu` and `--base-url` options for `api` command
 
