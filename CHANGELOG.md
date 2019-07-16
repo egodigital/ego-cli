@@ -1,5 +1,11 @@
 # Change Log (ego-cli)
 
+## 0.67.0
+
+* updated to `chokidar@3.0.2`
+* updated to `isbinaryfile@4.0.2`
+* updated to `lodash@4.17.14`
+
 ## 0.66.1
 
 * added `-bu` and `--base-url` options for `api` command
