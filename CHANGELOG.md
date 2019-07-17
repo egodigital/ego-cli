@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.69.0
+
+* added `pull-request` command
+
 ## 0.68.2
 
 * added `aptdate` command

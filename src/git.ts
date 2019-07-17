@@ -37,6 +37,18 @@ export interface GetGitBranchesOptions extends WithCWD, WithVerbose {
 export interface GetGitRemotesOptions extends WithCWD, WithVerbose {
 }
 
+/**
+ * Options for 'getGitRemoteUrl()' function.
+ */
+export interface GetGitRemoteUrlOptions extends WithCWD, WithVerbose {
+}
+
+/**
+ * Options for 'hasGitChanges()' function.
+ */
+export interface HasGitChangesOptions extends WithCWD, WithVerbose {
+}
+
 
 /**
  * Gets the current git branch.
@@ -133,4 +145,68 @@ export function getGitRemotes(opts?: GetGitRemotesOptions): string[] {
     }).map(r => {
         return r.trim();
     }).filter(r => '' !== r);
+}
+
+/**
+ * Tries to return the remote URL of a git repository.
+ *
+ * @param {string} [remote] The name of the remote. Default: 'origin'.
+ * @param {GetGitRemoteUrlOptions} [opts] Custom options.
+ *
+ * @return {string|false} The remote URL or (false) if not possible.
+ */
+export function getGitRemoteUrl(remote?: string, opts?: GetGitRemoteUrlOptions): string | false {
+    remote = toStringSafe(remote)
+        .trim();
+    if ('' === remote) {
+        remote = 'origin';
+    }
+
+    if (_.isNil(opts)) {
+        opts = {} as any;
+    }
+
+    const REMOTE_URL = asArray(
+        spawn('git', ['remote', 'get-url', remote], {
+            stdio: null
+        }).output
+    ).map(x => toStringSafe(x).trim())
+        .filter(x => '' !== x)
+        .join('')
+        .trim();
+
+    if ('' === REMOTE_URL) {
+        return false;
+    }
+
+    return REMOTE_URL;
+}
+
+/**
+ * Checks if a git repository has uncommited changes or not.
+ *
+ * @param {HasGitChangesOptions} [opts] Custom options.
+ *
+ * @return {boolean} Has uncomitted changes or not.
+ */
+export function hasGitChanges(opts?: HasGitChangesOptions): boolean {
+    if (_.isNil(opts)) {
+        opts = {} as any;
+    }
+
+    return asArray(
+        spawn(
+            'git', ['status', '-s'],
+            {
+                cwd: getCWD(opts),
+                stdio: null,
+            }
+        ).output
+    ).map((x) => {
+        return toStringSafe(x)
+            .split('\n');
+    }).reduce((x, y) => {
+        return x.concat(y);
+    }, []).filter(x => '' !== x.trim())
+        .length > 0;
 }
