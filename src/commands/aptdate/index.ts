@@ -64,7 +64,7 @@ export class EgoCommand extends CommandBase {
                 stdio: getSTDIO(ctx),
             });
 
-            spinner.text = `'apt-get update' executed`;
+            spinner.text = `'apt-get -y update' executed`;
         });
 
         // apt-get upgrade
@@ -74,7 +74,7 @@ export class EgoCommand extends CommandBase {
                 stdio: getSTDIO(ctx),
             });
 
-            spinner.text = `'apt-get upgrade' executed`;
+            spinner.text = `'apt-get -y upgrade' executed`;
         });
 
         // apt-get autoremove
@@ -84,7 +84,7 @@ export class EgoCommand extends CommandBase {
                 stdio: getSTDIO(ctx),
             });
 
-            spinner.text = `'apt-get autoremove' executed`;
+            spinner.text = `'apt-get -y autoremove' executed`;
         });
     }
 
