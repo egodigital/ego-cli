@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.68.0
+## 0.68.1
 
 * added `aptdate` command
 

@@ -16,6 +16,7 @@
  */
 
 import * as _ from 'lodash';
+const isRoot = require('is-root');
 import { CommandBase, CommandExecuteContext } from '../../contracts';
 import { getSTDIO, spawnAsync, withSpinnerAsync, writeLine } from '../../util';
 
@@ -33,6 +34,12 @@ export class EgoCommand extends CommandBase {
             console.warn("You only can run the command with linux and 'apt-get'!");
 
             ctx.exit(1);
+        }
+
+        if (!isRoot()) {
+            console.warn("You require root privileges (sudo)!");
+
+            ctx.exit(3);
         }
 
         await withSpinnerAsync(`Checking for 'apt-get' ...`, async (spinner) => {
