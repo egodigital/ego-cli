@@ -31,6 +31,7 @@ ego new
 A (non complete) list of some interesting commands:
 
 ```
+aptdate       # Runs 'apt-get update', 'apt-get upgrade' and 'apt-get autoremove' in one command.
 api           # Runs an Express.js based REST API from current directory.
 backup        # Backups the current directory.
 build         # Shorthand for 'npm run build'.

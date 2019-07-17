@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.68.0
+
+* added `aptdate` command
+
 ## 0.67.0
 
 * updated to `chokidar@3.0.2`
