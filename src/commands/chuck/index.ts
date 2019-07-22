@@ -25,7 +25,7 @@ const lib = require('http')
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = 'Print a random Chuck Norris joke. Jep it is true! Just try it 😎ego';
+    public readonly description = 'Print a random Chuck Norris joke. Jep it is true! Just try it 😎';
 
     /** @inheritdoc */
     public async execute(context: CommandExecuteContext): Promise<void> {
