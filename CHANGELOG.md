@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.70.0
+
+* added `chuck` command.
+
 ## 0.69.0
 
 * added `pull-request` command
