@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.70.3
+## 0.70.4
 
 * added `public-ip` command.
 
