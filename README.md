@@ -47,8 +47,8 @@ git-sync      # Syncs the current branch with all remotes.
 job           # Executes one or more scripts periodically.
 new           # Starts the e.GO generator for Yeoman.
 node-install  # Removes the 'node_modules' subfolder and executes 'npm install'.
-pull-request  # Starts a pull request (Azure DevOps) for the branch of the current git repository.
 public-ip     # Print public ipv4 and ipv6 ip address.
+pull-request  # Starts a pull request (Azure DevOps) for the branch of the current git repository.
 run           # Runs one or more Node.js based script file(s).
 serve         # Starts a HTTP server that shares files via a web interface.
 ssl-new       # Creates a new self-signed SSL certificate.
