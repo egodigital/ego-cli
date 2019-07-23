@@ -86,7 +86,7 @@ export class EgoCommand extends CommandBase {
         writeLine(`               If you provide a first and a last name please divide them by "-".`);
         writeLine(` -i, --id    # Print a specific joke `);
 
-        writeLine(`Example:     ego chuck`);
+        writeLine(`Examples:    ego chuck`);
         writeLine(`             ego chuck --name Ole-Mustermann`);
         writeLine(`             ego chuck -n Ole`);
         writeLine(`             ego chuck -i 15`);
