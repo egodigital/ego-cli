@@ -52,7 +52,7 @@ export class EgoCommand extends CommandBase {
         // ego help public-ip
         writeLine(`Example:    ego public-ip`);
     }
-
+    
     /** @inheritdoc */
     public readonly syntax = '[options]';  // Syntax, that is shown in help screen
 }
