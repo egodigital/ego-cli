@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.70.0
+## 0.70.1
 
 * added `chuck` command.
 

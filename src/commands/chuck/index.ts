@@ -81,10 +81,11 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
+        writeLine(` -i, --id    # Print a specific joke `);
         writeLine(` -n, --name  # You need a little confidence boost?`);
         writeLine(`               No problem, just write down your name.`);
         writeLine(`               If you provide a first and a last name please divide them by "-".`);
-        writeLine(` -i, --id    # Print a specific joke `);
+        writeLine();
 
         writeLine(`Examples:    ego chuck`);
         writeLine(`             ego chuck --name Ole-Mustermann`);
