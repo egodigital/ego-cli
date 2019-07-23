@@ -54,7 +54,7 @@ export class EgoCommand extends CommandBase {
                 url += '?firstName=' + encodeURIComponent(split[0]) + "&lastName= ";
                 url += "&escape=javascript";
             } else {
-                writeErrLine("DUDE! We need a fist AND a last name! Divided by \"-\" i.e. ego chuck -n Ole-Mustermann");
+                writeErrLine("DUDE! We need a first AND a last name! Divided by \"-\" i.e. ego chuck -n Ole-Mustermann");
 
                 context.exit(2);
             }
@@ -81,7 +81,7 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -i, --id    # Print a specific joke `);
+        writeLine(` -i, --id    # Print a specific joke.`);
         writeLine(` -n, --name  # You need a little confidence boost?`);
         writeLine(`               No problem, just write down your name.`);
         writeLine(`               If you provide a first and a last name please divide them by "-".`);
@@ -118,7 +118,7 @@ export class EgoCommand extends CommandBase {
     };
 
     private handleError(error: any) {
-        writeErrLine("OH BOY, somthing really bad happend, even Chuck Norris can't do anything about it...");
+        writeErrLine("OH BOY, something really bad happend, even Chuck Norris can't do anything about it...");
         writeErrLine("Maybe this can help him:");
         writeErrLine(error);
     }
