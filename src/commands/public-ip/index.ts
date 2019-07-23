@@ -20,33 +20,30 @@ import { writeLine } from '../../util';
 import * as publicIp from 'public-ip';
 
 /**
- * My-New-Command command
+ * Public-Ip command
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = 'Print public ipv4 and ipv6 ip address';
+    public readonly description = 'Print public ipv4 and ipv6 ip address.';
 
     /** @inheritdoc */
     public async execute(context: CommandExecuteContext): Promise<void> {
-        // context  =>  s. https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
-
         writeLine('Querying icanhazip.com service...');
 
         writeLine();
         try {
-            let ipv4 = await publicIp.v4({https: true});
+            let ipv4 = await publicIp.v4({ https: true });
             writeLine(`IPv4: ${ipv4}`);
         } catch (error) {
             writeLine(`No ipv4 address found. (Error: ${error.message})`);
         }
 
         try {
-            let ipv6 = await publicIp.v6({https: true});
+            let ipv6 = await publicIp.v6({ https: true });
             writeLine(`IPv6: ${ipv6}`);
         } catch (error) {
             writeLine(`No ipv6 address found.`); // (Error: ${error.message})
         }
-
     }
 
     /** @inheritdoc */
