@@ -36,6 +36,7 @@ api           # Runs an Express.js based REST API from current directory.
 backup        # Backups the current directory.
 build         # Shorthand for 'npm run build'.
 csv-split     # Splits one or more (huge) CSV file(s) into separates parts.
+chuck         # Print a random Chuck Norris joke. Jep it is true! Just try it 😎
 docker-stop   # Stops all running Docker containers.
 docker-up     # Shorthand for 'docker-compose up'.
 git-checkout  # Checks out (to) a branch.
@@ -47,6 +48,7 @@ job           # Executes one or more scripts periodically.
 new           # Starts the e.GO generator for Yeoman.
 node-install  # Removes the 'node_modules' subfolder and executes 'npm install'.
 pull-request  # Starts a pull request (Azure DevOps) for the branch of the current git repository.
+public-ip     # Print public ipv4 and ipv6 ip address.
 run           # Runs one or more Node.js based script file(s).
 serve         # Starts a HTTP server that shares files via a web interface.
 ssl-new       # Creates a new self-signed SSL certificate.

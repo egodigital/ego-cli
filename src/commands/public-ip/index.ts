@@ -20,11 +20,11 @@ import { writeLine } from '../../util';
 import * as publicIp from 'public-ip';
 
 /**
- * My-New-Command command
+ * Public-Ip command
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = 'Print public ipv4 and ipv6 ip address';
+    public readonly description = 'Print public ipv4 and ipv6 ip address.';
 
     /** @inheritdoc */
     public async execute(context: CommandExecuteContext): Promise<void> {
@@ -46,7 +46,6 @@ export class EgoCommand extends CommandBase {
         } catch (error) {
             writeLine(`No ipv6 address found.`); // (Error: ${error.message})
         }
-
     }
 
     /** @inheritdoc */
@@ -55,7 +54,7 @@ export class EgoCommand extends CommandBase {
         // ego help public-ip
         writeLine(`Example:    ego public-ip`);
     }
-
+    
     /** @inheritdoc */
     public readonly syntax = '[options]';  // Syntax, that is shown in help screen
 }
