@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.70.3
+
+* added `public-ip` command.
+
 ## 0.70.2
 
 * added `chuck` command.
