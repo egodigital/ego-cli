@@ -1,5 +1,10 @@
 # Change Log (ego-cli)
 
+## 0.71.0
+
+* improved output of `chuck` command
+* updated to `sanitize-filename@^1.6.2`
+
 ## 0.70.4
 
 * added `public-ip` command.

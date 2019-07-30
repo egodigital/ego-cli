@@ -15,9 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+import * as lib from 'https';
+import { Ora } from 'ora';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { writeLine, writeErrLine } from '../../util';
-import * as lib from 'http';
+import { toStringSafe, withSpinnerAsync, writeLine, writeErrLine } from '../../util';
 
 
 /**
@@ -29,7 +30,7 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async execute(context: CommandExecuteContext): Promise<void> {
-        let url = "http://api.icndb.com/jokes/";
+        let url = "https://api.icndb.com/jokes/";
 
         if (context.args['i'] || context.args['id']) {
             const id = context.args.i ? context.args.i : context.args.id;
@@ -62,29 +63,33 @@ export class EgoCommand extends CommandBase {
             url += "?escape=javascript";
         }
 
-        try {
-            let response = JSON.parse(await this.getJoke(url));
-
-            if (response && response.type && response.type === "success") {
-                writeLine();
-                writeLine("[" + response.value.id + "]");
-                writeLine(response.value.joke);
-                writeLine();
-            } else {
-                this.handleError("Invalid Response");
-            }
-        } catch (error) {
-            this.handleError(error);
+        if (!context.args['e'] && !context.args['explicit']) {
+            url += "&exclude=[explicit]";
         }
+
+        await withSpinnerAsync(`Loading joke ...`, async (spinner) => {
+            try {
+                let response = JSON.parse(await this.getJoke(url));
+
+                if (response && response.type && response.type === "success") {
+                    spinner.succeed(`👊 [${response.value.id}] ${response.value.joke} 👊`);
+                } else {
+                    this.handleError(spinner, "Invalid Response");
+                }
+            } catch (error) {
+                this.handleError(spinner, error);
+            }
+        });
     }
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -i, --id    # Print a specific joke.`);
-        writeLine(` -n, --name  # You need a little confidence boost?`);
-        writeLine(`               No problem, just write down your name.`);
-        writeLine(`               If you provide a first and a last name please divide them by "-".`);
+        writeLine(` -e, --explicit  # Include explicit jokes.`);
+        writeLine(` -i, --id        # Print a specific joke.`);
+        writeLine(` -n, --name      # You need a little confidence boost?`);
+        writeLine(`                   No problem, just write down your name.`);
+        writeLine(`                   If you provide a first and a last name please divide them by "-".`);
         writeLine();
 
         writeLine(`Examples:    ego chuck`);
@@ -117,9 +122,7 @@ export class EgoCommand extends CommandBase {
         });
     };
 
-    private handleError(error: any) {
-        writeErrLine("OH BOY, something really bad happend, even Chuck Norris can't do anything about it...");
-        writeErrLine("Maybe this can help him:");
-        writeErrLine(error);
+    private handleError(spinner: Ora, error: any) {
+        spinner.fail(`OH BOY, something really bad happend, even Chuck Norris can't do anything about it ... Maybe this can help him: '${toStringSafe(error)}'`);
     }
 }
