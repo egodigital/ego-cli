@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.71.0
+## 0.71.1
 
 * improved output of `chuck` command
 * updated to `sanitize-filename@^1.6.2`

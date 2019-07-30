@@ -72,7 +72,7 @@ export class EgoCommand extends CommandBase {
                 let response = JSON.parse(await this.getJoke(url));
 
                 if (response && response.type && response.type === "success") {
-                    spinner.succeed(`👊 [${response.value.id}] ${response.value.joke} 👊`);
+                    spinner.text = `👊 [${response.value.id}] ${response.value.joke} 👊`;
                 } else {
                     this.handleError(spinner, "Invalid Response");
                 }
