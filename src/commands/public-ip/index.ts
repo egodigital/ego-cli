@@ -16,7 +16,7 @@
  */
 
 import { CommandBase, CommandExecuteContext } from '../../contracts';
-import { writeLine } from '../../util';
+import { withSpinnerAsync, writeLine } from '../../util';
 import * as publicIp from 'public-ip';
 
 /**
@@ -28,33 +28,31 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async execute(context: CommandExecuteContext): Promise<void> {
-        // context  =>  s. https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html
+        await withSpinnerAsync(`Querying IPv4 from 'icanhazip.com' service...`, async (spinner) => {
+            try {
+                let ipv4 = await publicIp.v4({ https: true });
+                spinner.text = `IPv4: ${ipv4}`;
+            } catch (error) {
+                spinner.text = `No ipv4 address found. (Error: ${error.message})`;
+                spinner.fail();
+            }
+        });
 
-        writeLine('Querying icanhazip.com service...');
-
-        writeLine();
-        try {
-            let ipv4 = await publicIp.v4({https: true});
-            writeLine(`IPv4: ${ipv4}`);
-        } catch (error) {
-            writeLine(`No ipv4 address found. (Error: ${error.message})`);
-        }
-
-        try {
-            let ipv6 = await publicIp.v6({https: true});
-            writeLine(`IPv6: ${ipv6}`);
-        } catch (error) {
-            writeLine(`No ipv6 address found.`); // (Error: ${error.message})
-        }
+        await withSpinnerAsync(`Querying IPv6 from 'icanhazip.com' service...`, async (spinner) => {
+            try {
+                let ipv6 = await publicIp.v6({ https: true });
+                spinner.text = `IPv6: ${ipv6}`;
+            } catch (error) {
+                spinner.fail(`No ipv6 address found. (Error: ${error.message}`);
+            }
+        });
     }
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        // this is executed, if you run
-        // ego help public-ip
         writeLine(`Example:    ego public-ip`);
     }
-    
+
     /** @inheritdoc */
-    public readonly syntax = '[options]';  // Syntax, that is shown in help screen
+    public readonly syntax = '[options]';
 }
