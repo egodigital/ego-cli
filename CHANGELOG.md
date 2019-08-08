@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.73.0
+
+* added `qr` command
+
 ## 0.72.0
 
 * improved output of `public-ip` command

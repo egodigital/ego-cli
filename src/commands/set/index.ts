@@ -104,7 +104,7 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -g, --global    # Sets the value globally.`);
+        writeLine(` -g, --global  # Sets the value globally.`);
         writeLine();
 
         writeLine(`Examples:    ego set email tanja.m@e-go-digital.com`);
