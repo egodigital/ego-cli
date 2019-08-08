@@ -131,7 +131,7 @@ export class EgoCommand extends CommandBase {
         writeLine(` -w, --width   # The width, in pixels. Default: 1024`);
         writeLine();
 
-        writeLine(`Examples:    ego qr "https://e-go-digital.com/"`);
+        writeLine(`Examples:    ego qr "https://e-go-digital.com"`);
         writeLine(`             ego qr "https://github.com/egodigital" --width=512`);
         writeLine(`             ego qr "https://github.com/egodigital/vscode-powertools" --margin=2`);
         writeLine(`             ego qr "https://github.com/egodigital/express-controllers" --scale=2`);
