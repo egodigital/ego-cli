@@ -28,7 +28,7 @@ import { exists, toStringSafe, withSpinnerAsync, writeLine } from '../../util';
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
-    public readonly description = "Creates an QR code image file from a text.";
+    public readonly description = "Creates an image file with a QR code from a text.";
 
     /** @inheritdoc */
     public async execute(ctx: CommandExecuteContext): Promise<void> {
