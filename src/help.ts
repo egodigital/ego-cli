@@ -17,10 +17,11 @@
 
 import * as _ from 'lodash';
 import * as fs from 'fs-extra';
+const levenshtein = require('js-levenshtein');
 import * as path from 'path';
 import { default as chalk } from 'chalk';
 import { Command, PackageJSON } from './contracts';
-import { compareValuesBy, eGO, writeLine } from './util';
+import { colorize, compareValuesBy, eGO, toStringSafe, writeLine } from './util';
 
 
 interface CommandInfo {
@@ -116,4 +117,48 @@ export function showHelpHeader(app: PackageJSON): void {
     writeLine(`${eGO(app.displayName)} (${app.name}) - Version ${app.version}`);
     writeLine(`by ${eGO() + chalk.reset(' Digital GmbH <') + chalk.white('https://e-go-digital.com') + chalk.reset('>')}`);
     writeLine();
+}
+
+/**
+ * Suggest a command.
+ *
+ * @param {any} cmd The name of the entered command.
+ */
+export async function suggestCommand(cmd: any) {
+    cmd = toStringSafe(cmd)
+        .toLowerCase()
+        .trim();
+
+    const COMMANDS_DIR = path.resolve(
+        path.join(__dirname, 'commands')
+    );
+
+    const COMMANDS: string[] = [];
+
+    for (const ITEM of await fs.readdir(COMMANDS_DIR)) {
+        const CMD_MODULE_FILE = require.resolve(
+            path.join(
+                COMMANDS_DIR, ITEM, 'index.js'
+            )
+        );
+
+        const STAT = await fs.stat(CMD_MODULE_FILE);
+        if (STAT.isFile()) {
+            const COMMAND_MODULE = require(CMD_MODULE_FILE);
+
+            const COMMAND_CLASS = COMMAND_MODULE.EgoCommand;
+            if (!_.isNil(COMMAND_CLASS)) {
+                COMMANDS.push(ITEM);
+            }
+        }
+    }
+
+    const NEAREST_CMD = COMMANDS.map(c => {
+        return {
+            distance: levenshtein(cmd, c),
+            name: c,
+        };
+    }).sort((x, y) => compareValuesBy(x, y, i => i.distance))[0];
+
+    console.warn(`❓❓❓ Command ${colorize(cmd)} not found! Did you mean ${colorize(NEAREST_CMD.name)}❓❓❓`);
 }

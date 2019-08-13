@@ -21,7 +21,7 @@ import * as minimist from 'minimist';
 import * as path from 'path';
 import * as pQueue from 'p-queue';
 import { Command, CommandExecuteContext, EGO_FOLDER, PackageJSON, REGEX_COMMAND_NAME, Storage, STORAGE_FILE } from './contracts';
-import { showHelp } from './help';
+import { showHelp, suggestCommand } from './help';
 import { executeShellScriptCommand } from './scripts';
 import { getStorage, normalizeStorageKey } from './storage';
 import { exists, toStringSafe, writeLine } from './util';
@@ -77,13 +77,13 @@ import { exists, toStringSafe, writeLine } from './util';
         return;  // yes
     }
 
-    const MODULE_FILE = require.resolve(
+    const MODULE_FILE = path.resolve(
         path.join(
             __dirname, 'commands', COMMAND_NAME, 'index.js'
         )
     );
     if (!(await exists(MODULE_FILE))) {
-        console.warn(`Unknown command '${COMMAND_NAME}'!`);
+        await suggestCommand(COMMAND_NAME);
 
         process.exit(6);
     }
