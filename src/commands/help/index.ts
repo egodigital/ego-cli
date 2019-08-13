@@ -18,6 +18,7 @@
 import * as _ from 'lodash';
 import * as path from 'path';
 import { Command, CommandBase, CommandExecuteContext, CommandShowHelpContext, REGEX_COMMAND_NAME } from '../../contracts';
+import { suggestCommand } from '../../help';
 import { executeShellScriptCommand } from '../../scripts';
 import { eGO, exists, toStringSafe, writeLine } from '../../util';
 
@@ -60,13 +61,13 @@ export class EgoCommand extends CommandBase {
                 return;  // yes
             }
 
-            const MODULE_FILE = require.resolve(
+            const MODULE_FILE = path.resolve(
                 path.join(
                     __dirname, '../', COMMAND_NAME, 'index.js'
                 )
             );
             if (!(await exists(MODULE_FILE))) {
-                console.warn(`Unknown command '${COMMAND_NAME}'!`);
+                await suggestCommand(COMMAND_NAME);
 
                 ctx.exit(4);
             }
