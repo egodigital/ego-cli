@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.74.0
+
+* suggestion, if an unknown command name is submitted
+
 ## 0.73.0
 
 * added `qr` command
