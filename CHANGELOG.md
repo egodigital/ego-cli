@@ -1,6 +1,10 @@
 # Change Log (ego-cli)
 
-## 0.74.0
+## 0.75.0
+
+* added `slack-post` command
+
+## 0.74.1
 
 * suggestion, if an unknown command name is submitted
 

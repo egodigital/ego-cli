@@ -52,6 +52,7 @@ pull-request  # Starts a pull request (Azure DevOps) for the branch of the curre
 qr            # Creates an image file with a QR code from a text.
 run           # Runs one or more Node.js based script file(s).
 serve         # Starts a HTTP server that shares files via a web interface.
+slack-post    # Posts a message to one or more Slack channels.
 ssl-new       # Creates a new self-signed SSL certificate.
 watch         # Runs one or more scripts for file changes.
 ```
