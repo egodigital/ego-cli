@@ -34,7 +34,7 @@ export class EgoCommand extends CommandBase {
         if ('' === MESSAGE) {
             console.warn(`Please define a message!`);
 
-            ctx.exit(2);
+            ctx.exit(1);
         }
 
         let slackToken = toStringSafe(ctx.args['t'])

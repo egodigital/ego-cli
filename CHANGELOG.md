@@ -1,8 +1,9 @@
 # Change Log (ego-cli)
 
-## 0.75.0
+## 0.75.1
 
 * added `slack-post` command
+* fixes
 
 ## 0.74.1
 
