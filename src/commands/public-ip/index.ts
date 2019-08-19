@@ -33,8 +33,7 @@ export class EgoCommand extends CommandBase {
                 let ipv4 = await publicIp.v4({ https: true });
                 spinner.text = `IPv4: ${ipv4}`;
             } catch (error) {
-                spinner.text = `No ipv4 address found. (Error: ${error.message})`;
-                spinner.fail();
+                spinner.fail(`No ipv4 address found. (Error: ${error.message})`);
             }
         });
 
