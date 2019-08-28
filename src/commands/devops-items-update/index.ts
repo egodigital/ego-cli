@@ -264,8 +264,8 @@ ${
         writeLine(` devops_user  # The Azure DevOps user name.`);
         writeLine();
 
-        writeLine(`Example:    ego devops-items-update 23979 --state=Active`);
-        writeLine(`            ego devops-items-update 5979 --assigned-to="Marcel Kloubert" --state=Active`);
+        writeLine(`Examples:    ego devops-items-update 23979 --state=Active`);
+        writeLine(`             ego devops-items-update 5979 --assigned-to="Marcel Kloubert" --state=Active`);
     }
 
     /** @inheritdoc */

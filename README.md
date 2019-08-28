@@ -37,7 +37,7 @@ backup               # Backups the current directory.
 build                # Shorthand for 'npm run build'.
 csv-split            # Splits one or more (huge) CSV file(s) into separates parts.
 chuck                # Print a random Chuck Norris joke. Jep it is true! Just try it 😎
-devops-items-update  # Stops all running Docker containers.
+devops-items-update  # Updates one or more Azure DevOps work items.
 docker-stop          # Stops all running Docker containers.
 docker-up            # Shorthand for 'docker-compose up'.
 git-checkout         # Checks out (to) a branch.
