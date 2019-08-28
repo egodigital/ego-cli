@@ -1,5 +1,11 @@
 # Change Log (ego-cli)
 
+## 0.76.0
+
+* added `devops-items-update` command
+* updated to `inquirer@^6.5.2`
+* updated to `sanitize-filename@^1.6.3`
+
 ## 0.75.2
 
 * added `slack-post` command
