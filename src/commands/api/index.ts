@@ -21,7 +21,7 @@ import * as express from 'express';
 import * as fs from 'fs-extra';
 import * as os from 'os';
 import * as path from 'path';
-import * as sanitizeFilename from 'sanitize-filename';
+const sanitizeFilename = require('sanitize-filename');
 import { CommandBase, CommandExecuteContext } from '../../contracts';
 import { createHttpServer } from '../../http';
 import { compareValuesBy, exists, toStringSafe, waitForEnter, withSpinnerAsync, writeErrLine, writeLine } from '../../util';

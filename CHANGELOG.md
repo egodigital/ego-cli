@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.76.1
+## 0.76.2
 
 * added `devops-items-update` command
 * updated to `inquirer@^6.5.2`
