@@ -1,5 +1,15 @@
 # Change Log (ego-cli)
 
+## 0.77.0
+
+* updated to `@slack/web-api@^5.2.1`,
+* updated to `chokidar@^3.2.2`,
+* updated to `cron@^1.7.2`,
+* updated to `csv-parser@^2.3.1`
+* updated to `ejs@^2.7.1`
+* updated to `filesize@^4.2.1`
+* updated to `qrcode@^1.4.2`
+
 ## 0.76.2
 
 * added `devops-items-update` command
