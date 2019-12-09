@@ -20,7 +20,7 @@ import * as cliHighlight from 'cli-highlight';
 import * as chokidar from 'chokidar';
 import * as fs from 'fs-extra';
 import * as path from 'path';
-import * as pQueue from 'p-queue';
+import PQueue from 'p-queue';
 import { CommandBase, CommandExecuteContext, WatcherScriptModule } from '../../contracts';
 import { EOL } from 'os';
 import { getShellScriptExtension } from '../../scripts';
@@ -100,7 +100,7 @@ export class EgoCommand extends CommandBase {
         });
 
         let isReady = false;
-        const QUEUE = new pQueue({
+        const QUEUE = new PQueue({
             autoStart: true,
             concurrency: 1,
         });

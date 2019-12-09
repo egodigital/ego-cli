@@ -1,10 +1,22 @@
 # Change Log (ego-cli)
 
+## 0.78.0
+
+* updated to `@slack/web-api@^5.6.0`
+* updated to `chokidar@^3.3.0`
+* updated to `cli-highlight@^2.1.4`
+* updated to `csv-parser@^2.3.2`
+* updated to `ejs@^2.7.4`
+* updated to `mime-types@^2.1.25`
+* updated to `minimist@^1.2.0`
+* updated to `p-queue@^6.2.1`
+* updated to `qrcode@^1.4.4`
+
 ## 0.77.0
 
-* updated to `@slack/web-api@^5.2.1`,
-* updated to `chokidar@^3.2.2`,
-* updated to `cron@^1.7.2`,
+* updated to `@slack/web-api@^5.2.1`
+* updated to `chokidar@^3.2.2`
+* updated to `cron@^1.7.2`
 * updated to `csv-parser@^2.3.1`
 * updated to `ejs@^2.7.1`
 * updated to `filesize@^4.2.1`

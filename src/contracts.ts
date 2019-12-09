@@ -16,7 +16,7 @@
  */
 
 import { ParsedArgs } from 'minimist';
-import * as pQueue from 'p-queue';
+import PQueue from 'p-queue';
 
 
 /**
@@ -98,7 +98,7 @@ export interface CommandExecuteContext {
     /**
      * A queue that allows only one operation at once.
      */
-    readonly queue: pQueue;
+    readonly queue: PQueue;
     /**
      * Loads a module from (CLI) app context.
      *

@@ -19,7 +19,7 @@ import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import * as minimist from 'minimist';
 import * as path from 'path';
-import * as pQueue from 'p-queue';
+import PQueue from 'p-queue';
 import { Command, CommandExecuteContext, EGO_FOLDER, PackageJSON, REGEX_COMMAND_NAME, Storage, STORAGE_FILE } from './contracts';
 import { showHelp, suggestCommand } from './help';
 import { executeShellScriptCommand } from './scripts';
@@ -175,7 +175,7 @@ import { exists, toStringSafe, writeLine } from './util';
         },
         name: COMMAND_NAME,
         package: APP,
-        queue: new pQueue({
+        queue: new PQueue({
             autoStart: true,
             concurrency: 1,
         }),
