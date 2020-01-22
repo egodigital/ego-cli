@@ -169,10 +169,10 @@ export class EgoCommand extends CommandBase {
                         }/_apis/wit/workitems?ids=${
                         encodeURIComponent(ID.toString())
                         }&api-version=5.1`, {
-                            headers: {
-                                'Authorization': `Basic ${Buffer.from(`${USER}:${PAT}`, 'utf8').toString('base64')}`,
-                            },
-                        });
+                        headers: {
+                            'Authorization': `Basic ${Buffer.from(`${USER}:${PAT}`, 'utf8').toString('base64')}`,
+                        },
+                    });
 
                     if (200 === RESPONSE.statusCode) {
                         const WORK_ITEMS: ListWorkItemsResult = JSON.parse(

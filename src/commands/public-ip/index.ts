@@ -30,7 +30,7 @@ export class EgoCommand extends CommandBase {
     public async execute(context: CommandExecuteContext): Promise<void> {
         await withSpinnerAsync(`Querying IPv4 from 'icanhazip.com' service...`, async (spinner) => {
             try {
-                let ipv4 = await publicIp.v4({ https: true });
+                let ipv4 = await publicIp.v4({ onlyHttps: true });
                 spinner.text = `IPv4: ${ipv4}`;
             } catch (error) {
                 spinner.fail(`No ipv4 address found. (Error: ${error.message})`);
@@ -39,7 +39,7 @@ export class EgoCommand extends CommandBase {
 
         await withSpinnerAsync(`Querying IPv6 from 'icanhazip.com' service...`, async (spinner) => {
             try {
-                let ipv6 = await publicIp.v6({ https: true });
+                let ipv6 = await publicIp.v6({ onlyHttps: true });
                 spinner.text = `IPv6: ${ipv6}`;
             } catch (error) {
                 spinner.fail(`No ipv6 address found. (Error: ${error.message}`);

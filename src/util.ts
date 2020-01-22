@@ -16,6 +16,7 @@
  */
 
 import * as _ from 'lodash';
+const chalk = require('chalk');
 import * as child_process from 'child_process';
 import * as deepMerge from 'deepmerge';
 import * as ejs from 'ejs';
@@ -27,7 +28,6 @@ import * as os from 'os';
 import * as path from 'path';
 import * as readline from 'readline';
 import * as util from 'util';
-import { default as chalk } from 'chalk';
 
 
 /**

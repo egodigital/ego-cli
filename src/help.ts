@@ -16,10 +16,10 @@
  */
 
 import * as _ from 'lodash';
+const chalk = require('chalk');
 import * as fs from 'fs-extra';
 const levenshtein = require('js-levenshtein');
 import * as path from 'path';
-import { default as chalk } from 'chalk';
 import { Command, PackageJSON } from './contracts';
 import { colorize, compareValuesBy, eGO, toStringSafe, writeLine } from './util';
 

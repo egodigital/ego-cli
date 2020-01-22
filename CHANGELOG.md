@@ -1,5 +1,22 @@
 # Change Log (ego-cli)
 
+## 0.79.0
+
+* updated to `@slack/web-api^5.7.0`
+* updated to `chalk^3.0.0`
+* updated to `chokidar^3.3.1`
+* updated to `cli-progress^3.5.0`
+* updated to `cron^1.8.1`
+* updated to `deepmerge^4.2.2`
+* updated to `ejs^3.0.1`
+* updated to `filesize^6.0.1`
+* updated to `global-dirs^2.0.1`
+* updated to `inquirer^7.0.3`
+* updated to `isbinaryfile^4.0.4`
+* updated to `mime-types^2.1.26`
+* updated to `ora^4.0.3`
+* updated to `public-ip^4.0.0`
+
 ## 0.78.0
 
 * updated to `@slack/web-api@^5.6.0`
