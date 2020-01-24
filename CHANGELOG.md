@@ -1,7 +1,8 @@
 # Change Log (ego-cli)
 
-## 0.79.0
+## 0.79.2
 
+* bug fixes
 * updated to `@slack/web-api^5.7.0`
 * updated to `chalk^3.0.0`
 * updated to `chokidar^3.3.1`

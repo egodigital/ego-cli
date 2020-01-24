@@ -17,7 +17,7 @@
 
 import * as _ from 'lodash';
 import * as cliHighlight from 'cli-highlight';
-import * as got from 'got';
+import got from 'got';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
 import { asArray, colorize, toStringSafe, withSpinnerAsync, writeLine } from '../../util';
 
