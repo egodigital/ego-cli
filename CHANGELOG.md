@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.81.0
+
+* can define output format in `qr` command now
+
 ## 0.80.2
 
 * added `git-delete` command

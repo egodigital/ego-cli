@@ -16,7 +16,6 @@
  */
 
 import * as _ from 'lodash';
-import * as fs from 'fs-extra';
 import * as path from 'path';
 const qrcode = require('qrcode');
 import { CommandBase, CommandExecuteContext } from '../../contracts';
@@ -78,10 +77,56 @@ export class EgoCommand extends CommandBase {
             width = 1024;
         }
 
-        const QRCODE_OPTIONS = {
+        let format = toStringSafe(ctx.args['f'])
+            .toLowerCase()
+            .trim();
+        if ('' === format) {
+            format = toStringSafe(ctx.args['format'])
+                .toLowerCase()
+                .trim();
+        }
+
+        let fileExt: string;
+        switch (format) {
+            case '':
+            case 's':
+            case 'svg':
+                {
+                    format = 'svg';
+                    fileExt = 'svg';
+                }
+                break;
+
+            case 'p':
+            case 'png':
+                {
+                    format = 'png';
+                    fileExt = 'png';
+                }
+                break;
+
+            case 't':
+            case 'text':
+            case 'txt':
+                {
+                    format = 'utf8';
+                    fileExt = 'txt';
+                }
+                break;
+
+            default:
+                {
+                    console.warn(`Wrong format '${format}'!`);
+
+                    ctx.exit(1);
+                }
+                break;
+        }
+
+        const QRCODE_OPTIONS: any = {
             margin,
             scale,
-            type: 'svg',
+            type: format,
             width,
         };
 
@@ -89,7 +134,7 @@ export class EgoCommand extends CommandBase {
         let outputFile: string;
         await withSpinnerAsync(`Searching for output filename ...`, async (spinner) => {
             const BASE_NAME = 'qrcode';
-            const FILE_EXT = '.svg';
+            const FILE_EXT = '.' + fileExt;
 
             let fileName = BASE_NAME + FILE_EXT;
             let i = 0;
@@ -111,13 +156,26 @@ export class EgoCommand extends CommandBase {
             spinner.text = `Found name for output file: '${fileName}'`;
         });
 
-        // write to (PNG) file
+        // write to output file
         await withSpinnerAsync(`Creating QR code with '${TEXT}' ...`, async (spinner) => {
-            await fs.writeFile(
-                outputFile,
-                await qrcode.toString(TEXT, QRCODE_OPTIONS),
-                'utf8'
-            );
+            await (() => {
+                return new Promise((resolve, reject) => {
+                    try {
+                        qrcode.toFile(
+                            outputFile, TEXT, QRCODE_OPTIONS,
+                            (err: any) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    resolve();
+                                }
+                            }
+                        );
+                    } catch (e) {
+                        reject(e);
+                    }
+                });
+            })();
 
             spinner.text = `Saved QR code with '${TEXT}' to '${outputFile}'`;
         });
@@ -126,13 +184,16 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
+        writeLine(` -f, --format  # The output format. Default: svg`);
+        writeLine(`               # Possible values: png, svg or txt`);
         writeLine(` -m, --margin  # The margin. Default: 4`);
         writeLine(` -s, --scale   # Scale factor (each factor is 1 pixel per dot). Default: 4`);
         writeLine(` -w, --width   # The width, in pixels. Default: 1024`);
         writeLine();
 
         writeLine(`Examples:    ego qr "https://e-go-digital.com"`);
-        writeLine(`             ego qr "https://github.com/egodigital" --width=512`);
+        writeLine(`             ego qr "https://enterprisecockpit.e-go-digital.com" --format=png`);
+        writeLine(`             ego qr "https://e-base.e-go-digital.com" --width=512`);
         writeLine(`             ego qr "https://github.com/egodigital/vscode-powertools" --margin=2`);
         writeLine(`             ego qr "https://github.com/egodigital/express-controllers" --scale=2`);
     }
