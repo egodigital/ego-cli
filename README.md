@@ -41,6 +41,7 @@ devops-items-update  # Updates one or more Azure DevOps work items.
 docker-stop          # Stops all running Docker containers.
 docker-up            # Shorthand for 'docker-compose up'.
 git-checkout         # Checks out (to) a branch.
+git-deletes          # Deletes local branches, except 'master' and the current one.
 git-export           # Clones a repository to the working directory and removes the '.git' subfolder.
 git-pull             # Pulls from all remotes to the current branch.
 git-push             # Pushes the current branch to all remotes.
