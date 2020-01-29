@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.80.0
+## 0.80.1
 
 * added `git-delete` command
 * updated to `cli-progress^3.6.0`

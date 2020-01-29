@@ -81,7 +81,9 @@ export class EgoCommand extends CommandBase {
         }
 
         let selectedBranches: string[];
-        if (!YES) {
+        if (YES) {
+            selectedBranches = DELETABLE_BRANCHES;
+        } else {
             // let the user select the branch(es)
 
             const CHECKBOX_SELECTIONS = await inquirer.prompt({
