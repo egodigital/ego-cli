@@ -1,8 +1,9 @@
 # Change Log (ego-cli)
 
-## 0.80.1
+## 0.80.2
 
 * added `git-delete` command
+* bug fixes
 * updated to `cli-progress^3.6.0`
 * updated to `cron^1.8.2`
 * updated to `got^10.3.0`
