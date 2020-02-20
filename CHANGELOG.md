@@ -1,5 +1,11 @@
 # Change Log (ego-cli)
 
+## 0.82.0
+
+* fixed handling errors in requests of `api` command
+* updated to `got^10.6.0`
+* updated to `p-queue^6.3.0`
+
 ## 0.81.0
 
 * can define output format in `qr` command now

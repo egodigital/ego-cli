@@ -547,7 +547,7 @@ export class EgoCommand extends CommandBase {
                         .send();
                 }
 
-                return Promise.resolve(
+                return await Promise.resolve(
                     endpoint.apply(ctx, arguments)
                 );
             } catch (e) {
