@@ -1,5 +1,10 @@
 # Change Log (ego-cli)
 
+## 0.83.0
+
+* added optional `default_target_branch` config setting for `pull-request` command
+* updated to `filesize^6.1.0`
+
 ## 0.82.0
 
 * fixed handling errors in requests of `api` command

@@ -64,6 +64,12 @@ export class EgoCommand extends CommandBase {
                 .trim();
         }
         if ('' === targetBranch) {
+            // try get default from config
+            targetBranch = toStringSafe(ctx.get('default_target_branch'))
+                .trim();
+        }
+        if ('' === targetBranch) {
+            // default
             targetBranch = 'master';
         }
 
@@ -200,6 +206,10 @@ export class EgoCommand extends CommandBase {
         writeLine(` -np, --no-push        # Indicates NOT pushing local changes to remote. Default: (false)`);
         writeLine(` -t, --target          # The name of the target branch. Default: master`);
         writeLine(` -v, --verbose         # Verbose output.`);
+        writeLine();
+
+        writeLine(`Config:`);
+        writeLine(` default_target_branch   # The name of the default target branch.`);
         writeLine();
 
         writeLine(`Examples:   ego pull-request`);
