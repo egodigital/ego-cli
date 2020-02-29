@@ -1,5 +1,10 @@
 # Change Log (ego-cli)
 
+## 0.84.0
+
+* added `rn-run` command
+* replaced [opn](https://www.npmjs.com/package/opn) with [open](https://www.npmjs.com/package/open)
+
 ## 0.83.0
 
 * added optional `default_target_branch` config setting for `pull-request` command

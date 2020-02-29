@@ -16,7 +16,7 @@
  */
 
 import * as _ from 'lodash';
-const opn = require('opn');
+import * as open from 'open';
 import { CommandBase, CommandExecuteContext } from '../../contracts';
 import { getCurrentGitBranch, getGitRemotes, getGitRemoteUrl, hasGitChanges } from '../../git';
 import { getSTDIO, spawnAsync, withSpinnerAsync, writeLine, toStringSafe } from '../../util';
@@ -190,7 +190,7 @@ export class EgoCommand extends CommandBase {
                     encodeURIComponent(targetBranch)
                     }`;
 
-                await opn(WEB_URL, {
+                await open(WEB_URL, {
                     wait: false,
                 });
 
