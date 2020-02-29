@@ -1,9 +1,10 @@
 # Change Log (ego-cli)
 
-## 0.84.1
+## 0.84.2
 
 * added `rn-run` command
 * replaced [opn](https://www.npmjs.com/package/opn) with [open](https://www.npmjs.com/package/open)
+* updated to `inquirer^7.0.5`
 
 ## 0.83.0
 

@@ -1,7 +1,7 @@
 {
   "name": "ego-cli",
   "displayName": "e.GO CLI",
-  "version": "0.84.1",
+  "version": "0.84.2",
   "description": "Command Line Interface, which is designed to handle things, like Dev(Ops) tasks, much faster.",
   "main": "dist/index.js",
   "private": false,
@@ -59,7 +59,7 @@
     "global-dirs": "^2.0.1",
     "got": "^10.6.0",
     "html-entities": "^1.2.1",
-    "inquirer": "^7.0.4",
+    "inquirer": "^7.0.5",
     "is-root": "^2.1.0",
     "isbinaryfile": "^4.0.4",
     "js-levenshtein": "^1.1.6",
@@ -88,11 +88,11 @@
     "@types/lodash": "^4.14.149",
     "@types/mime-types": "^2.1.0",
     "@types/minimist": "^1.2.0",
-    "@types/node": "^10.17.16",
+    "@types/node": "^10.17.17",
     "@types/progress-stream": "^2.0.0",
     "@types/signale": "^1.2.1",
     "tslint": "^6.0.0",
-    "typedoc": "^0.16.10",
-    "typescript": "^3.8.2"
+    "typedoc": "^0.16.11",
+    "typescript": "^3.8.3"
   }
 }
