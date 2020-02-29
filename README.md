@@ -52,6 +52,7 @@ node-install         # Removes the 'node_modules' subfolder and executes 'npm in
 public-ip            # Print public ipv4 and ipv6 ip address.
 pull-request         # Starts a pull request (Azure DevOps) for the branch of the current git repository.
 qr                   # Creates an image file with a QR code from a text.
+rn-run               # Runs the current React Native project.
 run                  # Runs one or more Node.js based script file(s).
 serve                # Starts a HTTP server that shares files via a web interface.
 slack-post           # Posts a message to one or more Slack channels.

@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.84.0
+## 0.84.1
 
 * added `rn-run` command
 * replaced [opn](https://www.npmjs.com/package/opn) with [open](https://www.npmjs.com/package/open)
