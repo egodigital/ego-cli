@@ -2,7 +2,7 @@
 
 ## 0.85.0
 
-* CLI required at least Node 10 and NPM 6 now
+* CLI requires at least Node 10 and NPM 6 now
 * updated to `@slack/web-api^5.8.0`
 * updated to `chokidar^3.4.0`
 * updated to `cli-progress^3.8.1`
