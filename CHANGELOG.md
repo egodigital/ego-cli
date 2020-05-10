@@ -1,5 +1,14 @@
 # Change Log (ego-cli)
 
+## 0.86.0
+
+* updated to `@slack/web-api^5.8.1`
+* updated to `chalk^4.0.0`
+* updated to `cli-progress^3.8.2`
+* updated to `fs-extra^9.0.0`
+* updated to `got^11.1.2`
+* updated to `p-queue^6.4.0`
+
 ## 0.85.0
 
 * CLI requires at least Node 10 and NPM 6 now
