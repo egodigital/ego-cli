@@ -55,7 +55,7 @@ export class EgoCommand extends CommandBase {
 
                 case 404:
                     moduleToExecute = ALTERNATIVE_NAME;
-                    spinner.warn(`Did not found module '${EGO_MODULE_NAME}', try ${ALTERNATIVE_NAME}...`);
+                    spinner.warn(`Did not find module '${EGO_MODULE_NAME}', try ${ALTERNATIVE_NAME}...`);
                     break;
 
                 default:
