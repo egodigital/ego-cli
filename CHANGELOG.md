@@ -1,6 +1,6 @@
 # Change Log (ego-cli)
 
-## 0.86.0
+## 0.86.1
 
 * added `create` command
 * added `rawArgs` property to [CommandExecuteContext](https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html) interface
