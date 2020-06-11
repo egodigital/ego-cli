@@ -3,6 +3,7 @@
 ## 0.85.0
 
 * added `create` command
+* added `rawArgs` property to [CommandExecuteContext](https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html) interface
 * updated to `@slack/web-api^5.10.0`
 * updated to `chokidar^3.4.0`
 * updated to `cli-progress^3.8.2`
