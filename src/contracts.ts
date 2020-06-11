@@ -100,6 +100,10 @@ export interface CommandExecuteContext {
      */
     readonly queue: PQueue;
     /**
+     * Raw List of arguments from the command line.
+     */
+    readonly rawArgs: ReadonlyArray<string>;
+    /**
      * Loads a module from (CLI) app context.
      *
      * @param {string} id The ID of the module.

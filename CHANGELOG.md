@@ -1,5 +1,16 @@
 # Change Log (ego-cli)
 
+## 0.86.0
+
+* added `create` command
+* added `rawArgs` property to [CommandExecuteContext](https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html) interface
+* updated to `@slack/web-api^5.10.0`
+* updated to `cli-progress^3.8.2`
+* updated to `csv-parser^2.3.3`
+* updated to `ejs^3.1.3`
+* updated to `open^7.0.4`
+* updated to `p-queue^6.4.0`
+
 ## 0.85.0
 
 * CLI requires at least Node 10 and NPM 6 now

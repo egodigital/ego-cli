@@ -102,12 +102,11 @@ import { exists, toStringSafe, writeLine } from './util';
         process.exit(8);
     }
 
-    const ARGS = minimist(
-        process.argv.slice(3),
-    );
+    const RAW_ARGS = process.argv.slice(3);
+    const PARSED_ARGS = minimist(RAW_ARGS);
 
     const CTX: CommandExecuteContext = {
-        args: ARGS,
+        args: PARSED_ARGS,
         cwd: process.cwd(),
         exit: (code = 0) => {
             code = parseInt(
@@ -179,6 +178,7 @@ import { exists, toStringSafe, writeLine } from './util';
             autoStart: true,
             concurrency: 1,
         }),
+        rawArgs: RAW_ARGS,
         require: (id: any) => {
             return require(toStringSafe(id));
         },
@@ -186,7 +186,7 @@ import { exists, toStringSafe, writeLine } from './util';
             path.dirname(MODULE_FILE)
         ),
         values: {},
-        verbose: ARGS['v'] || ARGS['verbose'],
+        verbose: PARSED_ARGS['v'] || PARSED_ARGS['verbose'],
     };
 
     try {

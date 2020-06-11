@@ -22,7 +22,7 @@ import { toStringSafe, withSpinnerAsync, writeLine, writeErrLine } from '../../u
 
 
 /**
- * chuck command
+ * Chuck command
  */
 export class EgoCommand extends CommandBase {
     /** @inheritdoc */
