@@ -254,8 +254,8 @@ ${
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -a, --assign-to  # Sets the new user, the item should be assigned to.`);
-        writeLine(` -s, --state      # The name of the new state, like 'Active'.`);
+        writeLine(` --a, --assign-to  # Sets the new user, the item should be assigned to.`);
+        writeLine(` --s, --state      # The name of the new state, like 'Active'.`);
         writeLine();
 
         writeLine(`Config:`);
@@ -264,8 +264,8 @@ ${
         writeLine(` devops_user  # The Azure DevOps user name.`);
         writeLine();
 
-        writeLine(`Examples:    ego devops-items-update 23979 --state=Active`);
-        writeLine(`             ego devops-items-update 5979 --assigned-to="Marcel Kloubert" --state=Active`);
+        writeLine(`Examples:  ego devops-items-update 23979 --state=Active`);
+        writeLine(`           ego devops-items-update 5979 --assigned-to="Marcel Kloubert" --state=Active`);
     }
 
     /** @inheritdoc */

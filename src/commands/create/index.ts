@@ -76,8 +76,8 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine(`Examples:    ego create react-app my-web-app`);
-        writeLine(`             ego create react-app-native my-mobile-app --template typescript`);
+        writeLine(`Examples:  ego create react-app my-web-app`);
+        writeLine(`           ego create react-app-native my-mobile-app --template typescript`);
     }
 
     /** @inheritdoc */

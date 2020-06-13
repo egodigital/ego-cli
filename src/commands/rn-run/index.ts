@@ -120,7 +120,7 @@ export class EgoCommand extends CommandBase {
         writeLine(`                        # Example: ios,android`);
         writeLine();
 
-        writeLine(`Examples:   ego rn-run --ios`);
-        writeLine(`            ego rn-run --i --a`);
+        writeLine(`Examples:  ego rn-run --ios`);
+        writeLine(`           ego rn-run -ia`);
     }
 }

@@ -77,6 +77,6 @@ export class EgoCommand extends CommandBase {
         writeLine(` -v, --verbose  # Verbose output.`);
         writeLine();
 
-        writeLine(`Example:    ego git-sync`);
+        writeLine(`Example:  ego git-sync`);
     }
 }

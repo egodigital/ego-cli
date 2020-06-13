@@ -203,8 +203,8 @@ export class EgoCommand extends CommandBase {
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
         writeLine(` -i, --ignore-changes  # Ignore uncommited local changes or not. Default: (false)`);
-        writeLine(` -np, --no-push        # Indicates NOT pushing local changes to remote. Default: (false)`);
-        writeLine(` -t, --target          # The name of the target branch. Default: master`);
+        writeLine(` --np, --no-push       # Indicates NOT pushing local changes to remote. Default: (false)`);
+        writeLine(` --t, --target         # The name of the target branch. Default: master`);
         writeLine(` -v, --verbose         # Verbose output.`);
         writeLine();
 
@@ -214,6 +214,6 @@ export class EgoCommand extends CommandBase {
 
         writeLine(`Examples:   ego pull-request`);
         writeLine(`            ego pull-request --target=dev`);
-        writeLine(`            ego pull-request --no-push --target=stage`);
+        writeLine(`            ego pull-request --np --target=stage`);
     }
 }

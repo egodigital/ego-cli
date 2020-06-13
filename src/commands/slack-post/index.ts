@@ -86,15 +86,15 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -c, --channels  # One or more channels to post to, separated by commas.`);
-        writeLine(` -t, --token     # The custom token of the (bot) user for the Slack Web API.`);
+        writeLine(` --c, --channels  # One or more channels to post to, separated by commas.`);
+        writeLine(` --t, --token     # The custom token of the (bot) user for the Slack Web API.`);
         writeLine();
 
         writeLine(`Config:`);
         writeLine(` slack_token  # The token of the (bot) user for the Slack Web API.`);
         writeLine();
 
-        writeLine(`Example:    ego slack-post "Hello, e.GO" --channels=ABCDEFGHI,JKLMNOPQR`);
+        writeLine(`Example:  ego slack-post "Hello, e.GO" --channels=ABCDEFGHI,JKLMNOPQR`);
     }
 
     /** @inheritdoc */

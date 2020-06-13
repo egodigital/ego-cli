@@ -65,20 +65,20 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -e, --escape      # The escape string to use. Default: quote string`);
-        writeLine(` -enc, --encoding  # The encoding to use. Default: utf8`);
-        writeLine(` -l, --lines       # Maximum number of lines per file. Default: 10000`);
-        writeLine(` -lf, --line-feed  # Use LF instead of CRLF for new lines. Default: (false)`);
-        writeLine(` -o, --out         # The output directory. Default: current working directory`);
-        writeLine(` -q, --quote       # Specifies a single-character string to denote a quoted string. Default: ,`);
-        writeLine(` -s, --separator   # The column separator to use. Default: ,`);
+        writeLine(` --e, --escape      # The escape string to use. Default: quote string`);
+        writeLine(` --enc, --encoding  # The encoding to use. Default: utf8`);
+        writeLine(` --l, --lines       # Maximum number of lines per file. Default: 10000`);
+        writeLine(` -lf, --line-feed   # Use LF instead of CRLF for new lines. Default: (false)`);
+        writeLine(` --o, --out         # The output directory. Default: current working directory`);
+        writeLine(` --q, --quote       # Specifies a single-character string to denote a quoted string. Default: ,`);
+        writeLine(` --s, --separator   # The column separator to use. Default: ,`);
         writeLine();
 
         writeLine(`Relative paths will be mapped to the current working directory.`);
         writeLine();
 
-        writeLine(`Examples:    ego csv-split my-file.csv`);
-        writeLine(`             ego csv-split my-file-1.csv my-file-2.csv --lines=5979`);
+        writeLine(`Examples:  ego csv-split my-file.csv`);
+        writeLine(`           ego csv-split my-file-1.csv my-file-2.csv --lines=5979`);
     }
 
     private async splitCSVFile(ctx: CommandExecuteContext, file: string, onProgess: progressStream.ProgressListener) {

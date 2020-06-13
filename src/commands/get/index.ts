@@ -140,14 +140,14 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -g, --global    # List only global values, if possible.`);
-        writeLine(` -l, --local     # List only local values, if possible.`);
-        writeLine(` -t, --table     # Outputs value(s) in a simple list.`);
+        writeLine(` -g, --global  # List only global values, if possible.`);
+        writeLine(` -l, --local   # List only local values, if possible.`);
+        writeLine(` -t, --table   # Outputs value(s) in a simple list.`);
         writeLine();
 
-        writeLine(`Examples:    ego get`);
-        writeLine(`             ego get email`);
-        writeLine(`             ego get username email --table --local`);
+        writeLine(`Examples:  ego get`);
+        writeLine(`           ego get email`);
+        writeLine(`           ego get username email -tl`);
     }
 
     /** @inheritdoc */

@@ -96,8 +96,7 @@ export class EgoCommand extends CommandBase {
         writeLine(` yarn   # Use yarn instead.`);
         writeLine();
 
-        writeLine(`Examples:    ego node-install`);
-        writeLine(`             ego node-install --audit`);
-        writeLine(`             ego node-install --update --a`);
+        writeLine(`Examples:  ego build`);
+        writeLine(`           ego build -y`);
     }
 }

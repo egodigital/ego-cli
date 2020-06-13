@@ -127,9 +127,9 @@ export class EgoCommand extends CommandBase {
         writeLine(` -y, --yes     # Do not ask the user to confirm the operation.`);
         writeLine();
 
-        writeLine(`Examples:    ego git-delete`);
-        writeLine(`             ego git-delete --yes`);
-        writeLine(`             ego git-delete --format="^(feature\\/)"`);
+        writeLine(`Examples:  ego git-delete`);
+        writeLine(`           ego git-delete -y`);
+        writeLine(`           ego git-delete --format="^(feature\\/)"`);
     }
 
     /** @inheritdoc */

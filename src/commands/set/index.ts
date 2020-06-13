@@ -107,9 +107,9 @@ export class EgoCommand extends CommandBase {
         writeLine(` -g, --global  # Sets the value globally.`);
         writeLine();
 
-        writeLine(`Examples:    ego set email tanja.m@e-go-digital.com`);
-        writeLine(`             ego set email marcel.k@e-go-digital.com --global`);
-        writeLine(`             ego set email`);
+        writeLine(`Examples:  ego set email tanja.m@e-go-digital.com`);
+        writeLine(`           ego set email marcel.k@e-go-digital.com --global`);
+        writeLine(`           ego set email`);
     }
 
     /** @inheritdoc */

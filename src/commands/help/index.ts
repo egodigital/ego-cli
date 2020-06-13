@@ -117,8 +117,8 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine(`Examples:    ego help new`);
-        writeLine(`             ego help`);
+        writeLine(`Examples:  ego help new`);
+        writeLine(`           ego help`);
     }
 
     /** @inheritdoc */

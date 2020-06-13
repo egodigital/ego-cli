@@ -184,18 +184,18 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -f, --format  # The output format. Default: svg`);
-        writeLine(`               # Possible values: png, svg or txt`);
-        writeLine(` -m, --margin  # The margin. Default: 4`);
-        writeLine(` -s, --scale   # Scale factor (each factor is 1 pixel per dot). Default: 4`);
-        writeLine(` -w, --width   # The width, in pixels. Default: 1024`);
+        writeLine(` --f, --format  # The output format. Default: svg`);
+        writeLine(`                # Possible values: png, svg or txt`);
+        writeLine(` --m, --margin  # The margin. Default: 4`);
+        writeLine(` --s, --scale   # Scale factor (each factor is 1 pixel per dot). Default: 4`);
+        writeLine(` --w, --width   # The width, in pixels. Default: 1024`);
         writeLine();
 
-        writeLine(`Examples:    ego qr "https://e-go-digital.com"`);
-        writeLine(`             ego qr "https://enterprisecockpit.e-go-digital.com" --format=png`);
-        writeLine(`             ego qr "https://e-base.e-go-digital.com" --width=512`);
-        writeLine(`             ego qr "https://github.com/egodigital/vscode-powertools" --margin=2`);
-        writeLine(`             ego qr "https://github.com/egodigital/express-controllers" --scale=2`);
+        writeLine(`Examples:  ego qr "https://e-go-digital.com"`);
+        writeLine(`           ego qr "https://enterprisecockpit.e-go-digital.com" --format=png`);
+        writeLine(`           ego qr "https://e-base.e-go-digital.com" --width=512`);
+        writeLine(`           ego qr "https://github.com/egodigital/vscode-powertools" --margin=2`);
+        writeLine(`           ego qr "https://github.com/egodigital/express-controllers" --scale=2`);
     }
 
     /** @inheritdoc */

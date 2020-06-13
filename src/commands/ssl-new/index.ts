@@ -99,11 +99,11 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -o, --overwrite     # Overwrite existing files or not.`);
-        writeLine(` -v, --verbose       # Verbose output.`);
+        writeLine(` -o, --overwrite  # Overwrite existing files or not.`);
+        writeLine(` -v, --verbose    # Verbose output.`);
         writeLine();
 
-        writeLine(`Examples:    ego ssl-new`);
-        writeLine(`             ego ssl-new -o`);
+        writeLine(`Examples:  ego ssl-new`);
+        writeLine(`           ego ssl-new -o`);
     }
 }

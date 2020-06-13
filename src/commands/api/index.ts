@@ -220,20 +220,20 @@ export class EgoCommand extends CommandBase {
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
-        writeLine(` -b, --bearer      # Defines an optional 'Bearer' token for 'Authorization' request header.`);
-        writeLine(` -bu, --base-url   # Defines the base URL for the API. Default: '/api'`);
-        writeLine(` -h, --http        # Force in-secure HTTP or not.`);
-        writeLine(` -p, --port        # The custom TCP port. Default: 8080`);
-        writeLine(` -pwd, --password  # The password for basic authorization.`);
-        writeLine(` -r, --root        # Custom root directory. Default: current working directory`);
-        writeLine(` -u, --user        # The user name for basic authorization.`);
-        writeLine(` -v, --verbose     # Verbose output.`);
+        writeLine(` --b, --bearer      # Defines an optional 'Bearer' token for 'Authorization' request header.`);
+        writeLine(` --bu, --base-url   # Defines the base URL for the API. Default: '/api'`);
+        writeLine(` -h, --http         # Force in-secure HTTP or not.`);
+        writeLine(` --p, --port        # The custom TCP port. Default: 8080`);
+        writeLine(` --pwd, --password  # The password for basic authorization.`);
+        writeLine(` --r, --root        # Custom root directory. Default: current working directory`);
+        writeLine(` --u, --user        # The user name for basic authorization.`);
+        writeLine(` -v, --verbose      # Verbose output.`);
         writeLine();
 
-        writeLine(`Examples:    ego api`);
-        writeLine(`             ego api --port=23979`);
-        writeLine(`             ego api --bearer=footoken`);
-        writeLine(`             ego api --user=tanja --password=19790905`);
+        writeLine(`Examples:  ego api`);
+        writeLine(`           ego api --port=23979`);
+        writeLine(`           ego api --bearer=footoken`);
+        writeLine(`           ego api --user=tanja --password=19790905`);
         writeLine();
         writeLine();
 

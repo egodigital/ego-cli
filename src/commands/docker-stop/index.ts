@@ -60,6 +60,6 @@ export class EgoCommand extends CommandBase {
         writeLine(` -v, --verbose  # Verbose output.`);
         writeLine();
 
-        writeLine(`Example:    ego docker-stop`);
+        writeLine(`Example:  ego docker-stop`);
     }
 }

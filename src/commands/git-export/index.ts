@@ -76,7 +76,7 @@ export class EgoCommand extends CommandBase {
         writeLine(` -v, --verbose  # Verbose output.`);
         writeLine();
 
-        writeLine(`Example:    ego git-export https://github.com/egodigital/generator-ego`);
+        writeLine(`Example:  ego git-export https://github.com/egodigital/generator-ego`);
     }
 
     /** @inheritdoc */

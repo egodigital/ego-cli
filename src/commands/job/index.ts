@@ -144,8 +144,8 @@ export class EgoCommand extends CommandBase {
 
     /** @inheritdoc */
     public async showHelp(): Promise<void> {
-        writeLine(`Examples:    ego job my-job.js "0 * * * * *"`);
-        writeLine(`             ego job my-job  "* */15 * * * *"`);
+        writeLine(`Examples:  ego job my-job.js "0 * * * * *"`);
+        writeLine(`           ego job my-job  "* */15 * * * *"`);
         writeLine();
         writeLine(`Relative paths will be mapped to the current working directory or the '.ego' subfolder inside the user's home directory.`);
         writeLine();

@@ -86,17 +86,17 @@ export class EgoCommand extends CommandBase {
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
         writeLine(` -e, --explicit  # Include explicit jokes.`);
-        writeLine(` -i, --id        # Print a specific joke.`);
-        writeLine(` -n, --name      # You need a little confidence boost?`);
-        writeLine(`                   No problem, just write down your name.`);
-        writeLine(`                   If you provide a first and a last name please divide them by "-".`);
+        writeLine(` --i, --id       # Print a specific joke.`);
+        writeLine(` --n, --name     # You need a little confidence boost?`);
+        writeLine(`                 # No problem, just write down your name.`);
+        writeLine(`                 # If you provide a first and a last name please divide them by "-".`);
         writeLine();
 
-        writeLine(`Examples:    ego chuck`);
-        writeLine(`             ego chuck --name Ole-Mustermann`);
-        writeLine(`             ego chuck -n Ole`);
-        writeLine(`             ego chuck -i 15`);
-        writeLine(`             ego chuck --id 15 -n Ole-Mustermann`);
+        writeLine(`Examples:  ego chuck`);
+        writeLine(`           ego chuck --name Ole-Mustermann`);
+        writeLine(`           ego chuck --n Ole`);
+        writeLine(`           ego chuck --i 15`);
+        writeLine(`           ego chuck --id 15 --n Ole-Mustermann`);
     }
 
     /** @inheritdoc */

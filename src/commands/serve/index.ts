@@ -433,11 +433,11 @@ export class EgoCommand extends CommandBase {
     public async showHelp(): Promise<void> {
         writeLine(`Options:`);
         writeLine(` -h, --http     # Force in-secure HTTP or not.`);
-        writeLine(` -p, --port     # The custom TCP port. Default: 5979`);
+        writeLine(` --p, --port    # The custom TCP port. Default: 5979`);
         writeLine(` -v, --verbose  # Verbose output.`);
         writeLine();
 
-        writeLine(`Examples:    ego serve`);
-        writeLine(`             ego serve --port=23979`);
+        writeLine(`Examples:  ego serve`);
+        writeLine(`           ego serve --port=23979`);
     }
 }

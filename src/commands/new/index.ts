@@ -122,6 +122,7 @@ export class EgoCommand extends CommandBase {
         writeLine(` yarn   # Use yarn instead.`);
         writeLine();
 
-        writeLine(`Example:    ego new`);
+        writeLine(`Examples:  ego new`);
+        writeLine(`           ego new -y`);
     }
 }

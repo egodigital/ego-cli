@@ -87,7 +87,7 @@ export class EgoCommand extends CommandBase {
         writeLine(` -f, --force    # Remove existing folder, if needed.`);
         writeLine();
 
-        writeLine(`Examples:    ego init`);
-        writeLine(`             ego init --force`);
+        writeLine(`Examples:  ego init`);
+        writeLine(`           ego init -f`);
     }
 }

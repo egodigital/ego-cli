@@ -106,7 +106,8 @@ export class EgoCommand extends CommandBase {
         writeLine(`              # should be handled (true) or not (false).`);
         writeLine();
 
-        writeLine(`Example:    ego backup`);
+        writeLine(`Examples:  ego backup`);
+        writeLine(`           ego backup -d`);
     }
 
 

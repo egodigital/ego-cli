@@ -1,9 +1,10 @@
 # Change Log (ego-cli)
 
-## 0.86.1
+## 0.86.2
 
 * added `create` command
 * added `rawArgs` property to [CommandExecuteContext](https://egodigital.github.io/ego-cli/interfaces/_contracts_.commandexecutecontext.html) interface
+* fixed help screens
 * updated to `@slack/web-api^5.10.0`
 * updated to `cli-progress^3.8.2`
 * updated to `csv-parser^2.3.3`
