@@ -1,5 +1,9 @@
 # Change Log (ego-cli)
 
+## 0.87.0
+
+* npm update
+
 ## 0.86.2
 
 * added `create` command
