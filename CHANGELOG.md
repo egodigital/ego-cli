@@ -1,5 +1,11 @@
 # Change Log (ego-cli)
 
+## 0.88.0
+
+* added `clock` command
+* [Node 12 or later](https://nodejs.org/en/blog/release/v12.0.0/) is required to run application now
+* npm update
+
 ## 0.87.0
 
 * npm update

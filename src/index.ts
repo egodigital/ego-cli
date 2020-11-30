@@ -15,6 +15,10 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
+// needs to be initialized at the beginning
+require('moment');
+require('moment-timezone');
+
 import * as _ from 'lodash';
 import * as fs from 'fs-extra';
 import * as minimist from 'minimist';

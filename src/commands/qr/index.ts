@@ -167,7 +167,7 @@ export class EgoCommand extends CommandBase {
                                 if (err) {
                                     reject(err);
                                 } else {
-                                    resolve();
+                                    resolve(undefined);
                                 }
                             }
                         );

@@ -37,6 +37,7 @@ backup               # Backups the current directory.
 build                # Shorthand for 'npm run build'.
 csv-split            # Splits one or more (huge) CSV file(s) into separates parts.
 chuck                # Print a random Chuck Norris joke. Jep it is true! Just try it 😎
+clock                # Shows the current time or a clock value of another timezone.
 create               # Runs an e.GO creator module on npm.
 devops-items-update  # Updates one or more Azure DevOps work items.
 docker-stop          # Stops all running Docker containers.

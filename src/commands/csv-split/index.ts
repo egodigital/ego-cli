@@ -191,7 +191,7 @@ export class EgoCommand extends CommandBase {
                             reject(err);
                         })
                         .once('end', () => {
-                            resolve();
+                            resolve(undefined);
                         })
                         .on('data', (data) => {
                             ++lines;
