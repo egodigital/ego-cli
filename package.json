@@ -1,12 +1,12 @@
 {
   "name": "ego-cli",
   "displayName": "e.GO CLI",
-  "version": "0.88.0",
+  "version": "0.88.1",
   "description": "Command Line Interface, which is designed to handle things, like Dev(Ops) tasks, much faster.",
   "main": "dist/index.js",
   "private": false,
   "scripts": {
-    "build": "del ./dist && tsc && (mkdir \"./dist/res\") && (cp -r ./src/res/* ./dist/res)",
+    "build": "del ./dist && tsc && make-dir ./dist/res && cpy --parents ./src/res ./dist/res",
     "doc": "del ./doc && (typedoc --out ./doc ./src)",
     "deploy": "npm install && npm audit fix && npm run build && npm publish"
   },
@@ -94,7 +94,9 @@
     "@types/node": "^12.12.6",
     "@types/progress-stream": "^2.0.1",
     "@types/signale": "^1.4.1",
+    "cpy-cli": "^3.1.1",
     "del-cli": "^3.0.1",
+    "make-dir-cli": "^2.0.0",
     "tslint": "^6.1.3",
     "typedoc": "^0.19.2",
     "typescript": "^4.1.2"
