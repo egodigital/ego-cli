@@ -4,7 +4,7 @@
 
 Command Line Interface, which is designed to handle things, like Dev(Op) tasks, much faster.
 
-> ⚠️⚠️⚠️ **This project is not maintained anymore. We will refactor the software and continue the work [here](https://github.com/egodigital/ego-cli)** ⚠️⚠️⚠️
+> ⚠️⚠️⚠️ **This project is not maintained anymore. We will refactor the software and continue the work [here](https://github.com/egomobile/ego-cli)** ⚠️⚠️⚠️
 
 ## Install
 
